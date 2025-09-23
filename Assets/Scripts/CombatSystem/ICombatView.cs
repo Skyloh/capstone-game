@@ -4,4 +4,5 @@ using UnityEngine;
 
 public interface ICombatView
 {
+    void ProcessUnit(CombatUnit selected_unit);
 }

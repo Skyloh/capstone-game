@@ -9,6 +9,7 @@ public class CombatModel
     private int m_turnCount; // what turn number is it?
     private int m_currentActiveTeam; // who is currently taking their actions?
 
+
     public Team GetTeam(int team_index)
     {
         if (team_index < 0 || team_index >= m_units.Length) 

@@ -42,12 +42,38 @@ public class Team
         return m_units[id].IsAlive() && m_isUnitActionable[id];
     }
 
-    public void ConsumeTurn(int id)
+    public bool HasActionableUnit()
+    {
+        for (int i = 0; i < m_units.Count; ++i)
+        {
+            if (CanUnitAct(i)) return true;
+        }
+
+        return false;
+    }
+
+    public void ConsumeTurnOfUnit(int id)
     {
         CheckBounds(id);
 
         m_isUnitActionable[id] = false;
     }
+
+    public void ConsumeTurnOfUnit(CombatUnit unit)
+    {
+        for (int i = 0; i < m_units.Count; ++i)
+        {
+            if (unit == m_units[i])
+            {
+                ConsumeTurnOfUnit(i);
+                return;
+            }
+        }
+
+        throw new System.ArgumentException("Unit not on given team!");
+    }
+
+    public int Count() => m_units.Count;
 
     private void CheckBounds(int id)
     {

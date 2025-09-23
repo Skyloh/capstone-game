@@ -7,7 +7,7 @@ public class CombatUnit
     private int m_maxHealth;
     private int m_currentHealth;
 
-    public event ChangeStat OnHealthChanged;
+    public event ChangeStat OnHealthChanged; // for View stuff.
 
     public CombatUnit(int m_hp, int c_hp)
     {
