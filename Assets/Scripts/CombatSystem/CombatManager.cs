@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class CombatManager : MonoBehaviour
     /// The combat model instance associated with this combat manager object. Tracks all relevant data 
     /// (units, teams, turn count, active team) that pertains to a combat encounter.
     /// </summary>
-    private CombatModel m_combatModel;
+    private ICombatModel m_combatModel;
     private ICombatView m_combatView;
 
     /*
@@ -39,7 +40,7 @@ public class CombatManager : MonoBehaviour
      * player: if no units actionable
      * AI: same as above
      * 
-     * FUNC: NextTurn(...)
+     * FUNC: CheckStateThenNext(...)
      * 
     */
 
@@ -50,7 +51,7 @@ public class CombatManager : MonoBehaviour
     public void AttemptSelectPlayerUnit(int player_unit_index)
     {
         // not valid: not player turn
-        if (m_combatModel.CurrentActiveTeam() != m_playerTeamID)
+        if (m_combatModel.CurrentActiveTeamIndex() != m_playerTeamID)
             return;
 
         var current_player_team = m_combatModel.GetTeam(m_playerTeamID);
@@ -65,41 +66,38 @@ public class CombatManager : MonoBehaviour
         m_combatView.ProcessUnit(selected_unit);
     }
 
-    // issue with this is how do we delay the displaying of information?
-    // we presumably could tie them to the view... or perhaps make them
-    // a part of the actions.
-    // changing of HP, changing of elements.
-    //
-    // we need to know who is performing the action, who are the targets, and what the action is
-    // complicated by the fact that some actions have subtargets (like the element weakness bar and the type and such)
-    // 1. have two different sets of units: one for unit state before action, one for unit state after action?
-
-    /* DATA WE NEED:
-     * 
-     * the unit performing the action (only 1 unit can perform an action at a time)
-     * the target(s) receiving the action
-     * a list of the action's various events:
-     * - changing health w/ an element (or Neutral if no element)
-     * - changing element(s) on a weakness bar
-     */
     public void PerformAction(ActionData action_information)
     {
-        // TODO do action stuff here
-        // kick off the View's animation?
-        // run the IEnumerator of the action's event data?
-        // think about this.
-
         // now that user has gone, consume their turn.
-        m_combatModel.GetTeam(m_combatModel.CurrentActiveTeam()).ConsumeTurnOfUnit(action_information.ActionUser);
+        m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).ConsumeTurnOfUnit(action_information.ActionUserIndex);
 
-        // call NextTurn() here?
+        StartCoroutine(IE_ResolveAbility(action_information));
+
+        // CheckStateThenNext is called upon ability completion
     }
 
-    // INVOKE STEP:
-    // after View is done displaying GUI effect OR ability timeline is done evaluating
-    public void NextTurn()
+    private IEnumerator IE_ResolveAbility(ActionData data)
     {
+        yield return data.Action.IE_ProcessAbility(data, m_combatModel, m_combatView);
 
+        CheckStateThenNext();
     }
 
+    public void CheckStateThenNext()
+    {
+        // check the state of battle
+        // TODO
+
+        // does current phase have any more actionable units? 
+        if (m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).HasActionableUnit())
+        {
+            // continue turn
+            // TODO, unifying AI decision-making and player selection
+        }
+        else
+        {
+            // next phase
+            StartCoroutine(m_combatView.NextPhase());
+        }
+    }
 }

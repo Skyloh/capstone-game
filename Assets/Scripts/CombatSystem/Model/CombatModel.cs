@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatModel
+public class CombatModel : ICombatModel
 {
     private Team[] m_units;
 
@@ -24,5 +24,5 @@ public class CombatModel
     }
 
     public int CurrentTurn() => m_turnCount;
-    public int CurrentActiveTeam() => m_currentActiveTeam;
+    public int CurrentActiveTeamIndex() => m_currentActiveTeam;
 }
