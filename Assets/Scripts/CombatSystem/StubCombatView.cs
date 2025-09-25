@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class StubCombatView : MonoBehaviour, ICombatView
 {
+    public void BeginUnitSelection()
+    {
+        Debug.Log("Begin unit selection stub.");
+    }
+
     public IEnumerator NextPhase()
     {
         Debug.Log("Next Phase stub.");

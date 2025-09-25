@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface ICombatView
 {
+    void BeginUnitSelection();
+
     void ProcessUnit(CombatUnit selected_unit);
 
     IEnumerator NextPhase(); // IEnumerator for the presumed delay between phases

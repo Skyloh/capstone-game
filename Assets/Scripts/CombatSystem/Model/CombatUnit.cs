@@ -1,33 +1,48 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 public class CombatUnit
 {
-    public delegate void ChangeStat(int current, int previous);
+    private readonly IDictionary<System.Type, IModule> m_modules;
 
-    private int m_maxHealth;
-    private int m_currentHealth;
-
-    public event ChangeStat OnHealthChanged; // for View stuff.
-
-    public CombatUnit(int m_hp, int c_hp)
+    public CombatUnit()
     {
-        m_maxHealth = m_hp;
-        m_currentHealth = c_hp;
+        m_modules = new Dictionary<System.Type, IModule>();
     }
 
-    public CombatUnit(int m_hp) : this(m_hp, m_hp) { }
-
-    public void SetHealth(int health)
+    #region Stub Unit Methods
+    // these aren't the final implementations of these methods. They need to be
+    // able to be constructed from a set of parameters given at the start of every combat.
+    public static CombatUnit MakePlayerUnit()
     {
-        int health_cache = m_currentHealth;
-
-        m_currentHealth = Mathf.Max(Mathf.Min(health, m_maxHealth), 0); // bounds-clamping health
-
-        OnHealthChanged?.Invoke(health, health_cache);
+        return new CombatUnit()
+            .AddModule(new HealthModule(15, 15))
+            .AddModule(new AffinityModule(AffinityType.None, AffinityType.None))
+            .AddModule(new StatusModule());
     }
 
-    public void ChangeHealth(int decrease_amount) => SetHealth(m_currentHealth - decrease_amount);
+    public static CombatUnit MakeEnemyUnit()
+    {
+        var weakness_bar = new List<AffinityType>() { AffinityType.None }; // STUB - randomly generate?
 
-    public bool IsAlive() => m_currentHealth > 0;
+        return new CombatUnit()
+            .AddModule(new HealthModule(15, 15))
+            .AddModule(new AffinityBarModule(weakness_bar))
+            .AddModule(new StatusModule());
+    }
+    #endregion
 
+    public CombatUnit AddModule(IModule module)
+    {
+        m_modules.Add(module.GetType(), module);
+        return this;
+    }
+
+    public bool TryGetModule<T>(out T module) where T : IModule
+    {
+        bool success = m_modules.TryGetValue(typeof(T), out var result);
+
+        module = (T)result;
+
+        return success;
+    }
 }

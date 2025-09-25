@@ -6,14 +6,14 @@ using UnityEngine;
 public class Team
 {
     private List<CombatUnit> m_units;
-    private List<bool> m_isUnitActionable;
+    private List<bool> m_hasUnitTakenTurn;
 
     private int m_teamId;
 
     public Team(CombatUnit[] units, int team_id)
     {
         m_units = units.ToList();
-        m_isUnitActionable = new List<bool>(m_units.Count);
+        m_hasUnitTakenTurn = new List<bool>(m_units.Count);
 
         ResetActionability();
 
@@ -24,7 +24,7 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; i++)
         {
-            m_isUnitActionable[i] = true;
+            m_hasUnitTakenTurn[i] = false;
         }
     }
 
@@ -39,7 +39,7 @@ public class Team
     {
         CheckBounds(id);
 
-        return m_units[id].IsAlive() && m_isUnitActionable[id];
+        return m_units[id].TryGetModule<HealthModule>(out var module) && module.IsAlive() && !m_hasUnitTakenTurn[id];
     }
 
     public bool HasActionableUnit()
@@ -56,7 +56,7 @@ public class Team
     {
         CheckBounds(id);
 
-        m_isUnitActionable[id] = false;
+        m_hasUnitTakenTurn[id] = true;
     }
 
     public void ConsumeTurnOfUnit(CombatUnit unit)
