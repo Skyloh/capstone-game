@@ -25,4 +25,15 @@ public class CombatModel : ICombatModel
 
     public int CurrentTurn() => m_turnCount;
     public int CurrentActiveTeamIndex() => m_currentActiveTeam;
+
+    public int IncActiveTeamIndex()
+    {
+        bool did_wrap = m_currentActiveTeam + 1 >= m_units.Length;
+
+        m_currentActiveTeam = (m_currentActiveTeam + 1) % m_units.Length;
+
+        if (did_wrap) m_turnCount++;
+
+        return m_turnCount;
+    }
 }

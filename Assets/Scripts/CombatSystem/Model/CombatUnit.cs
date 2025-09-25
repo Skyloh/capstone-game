@@ -12,6 +12,8 @@ public class CombatUnit
     #region Stub Unit Methods
     // these aren't the final implementations of these methods. They need to be
     // able to be constructed from a set of parameters given at the start of every combat.
+    //
+    // definitely a SO for units, right? like, a UnitData or something?
     public static CombatUnit MakePlayerUnit()
     {
         return new CombatUnit()

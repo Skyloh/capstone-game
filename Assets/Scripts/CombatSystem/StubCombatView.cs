@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StubCombatView : MonoBehaviour, ICombatView
@@ -9,9 +8,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
         Debug.Log("Begin unit selection stub.");
     }
 
-    public IEnumerator NextPhase()
+    public IEnumerator NextPhase(int phase_turn_number)
     {
-        Debug.Log("Next Phase stub.");
+        Debug.Log($"Next Phase stub. Turn count is {phase_turn_number}.");
 
         yield return null;
     }

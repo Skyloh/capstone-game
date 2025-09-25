@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TNRD;
 
@@ -15,8 +13,12 @@ public class CombatManager : MonoBehaviour
     private ICombatModel m_combatModel;
     [SerializeField] private SerializableInterface<ICombatView> m_combatView;
 
+
+
     // TODO init combat method
     // public void InitCombat() // makes model
+
+
 
     // definitely generalizable between player-controlled units and AI-controlled units
     // AttemptSelectUnit; kinda useless for AI since they will never pick when not their turn, and they will never
@@ -83,7 +85,7 @@ public class CombatManager : MonoBehaviour
         else
         {
             // next phase
-            StartCoroutine(m_combatView.Value.NextPhase());
+            StartCoroutine(m_combatView.Value.NextPhase(m_combatModel.IncActiveTeamIndex()));
         }
     }
 }

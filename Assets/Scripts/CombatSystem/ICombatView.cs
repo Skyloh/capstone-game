@@ -8,5 +8,5 @@ public interface ICombatView
 
     void ProcessUnit(CombatUnit selected_unit);
 
-    IEnumerator NextPhase(); // IEnumerator for the presumed delay between phases
+    IEnumerator NextPhase(int phase_turn_number); // IEnumerator for the presumed delay between phases
 }
