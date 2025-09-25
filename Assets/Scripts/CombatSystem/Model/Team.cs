@@ -10,9 +10,9 @@ public class Team
 
     private int m_teamId;
 
-    public Team(CombatUnit[] units, int team_id)
+    public Team(IList<CombatUnit> units, int team_id)
     {
-        m_units = units.ToList();
+        m_units = new List<CombatUnit>(units);
         m_hasUnitTakenTurn = new List<bool>(m_units.Count);
 
         ResetActionability();
@@ -37,9 +37,16 @@ public class Team
 
     public bool CanUnitAct(int id)
     {
+        // IsUnitAlive does bounds checking
+
+        return IsUnitAlive(id) && !m_hasUnitTakenTurn[id];
+    }
+
+    public bool IsUnitAlive(int id)
+    {
         CheckBounds(id);
 
-        return m_units[id].TryGetModule<HealthModule>(out var module) && module.IsAlive() && !m_hasUnitTakenTurn[id];
+        return m_units[id].TryGetModule<HealthModule>(out var module) && module.IsAlive();
     }
 
     public bool HasActionableUnit()
@@ -74,6 +81,8 @@ public class Team
     }
 
     public int Count() => m_units.Count;
+
+    public IReadOnlyList<CombatUnit> GetUnits() => m_units;
 
     private void CheckBounds(int id)
     {

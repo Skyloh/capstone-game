@@ -19,7 +19,8 @@ public class CombatUnit
         return new CombatUnit()
             .AddModule(new HealthModule(15, 15))
             .AddModule(new AffinityModule(AffinityType.None, AffinityType.None))
-            .AddModule(new StatusModule());
+            .AddModule(new StatusModule())
+            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility() }));
     }
 
     public static CombatUnit MakeEnemyUnit()
@@ -29,7 +30,8 @@ public class CombatUnit
         return new CombatUnit()
             .AddModule(new HealthModule(15, 15))
             .AddModule(new AffinityBarModule(weakness_bar))
-            .AddModule(new StatusModule());
+            .AddModule(new StatusModule())
+            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility() }));
     }
     #endregion
 

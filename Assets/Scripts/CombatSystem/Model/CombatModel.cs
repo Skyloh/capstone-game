@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class CombatModel : ICombatModel
 {
-    private Team[] m_units;
+    private readonly Team[] m_units;
 
     private int m_turnCount; // what turn number is it?
     private int m_currentActiveTeam; // who is currently taking their actions?
 
+    public CombatModel(IDictionary<int, IList<CombatUnit>> units)
+    {
+        m_units = new Team[units.Count];
+
+        int team_index = 0;
+        foreach (var entry in units)
+        {
+            m_units[0] = new Team(entry.Value, team_index++);
+        }
+
+        m_turnCount = 0;
+        m_currentActiveTeam = 0;
+    }
 
     public Team GetTeam(int team_index)
     {
@@ -17,6 +30,8 @@ public class CombatModel : ICombatModel
 
         return m_units[team_index];
     }
+
+    public int GetTeamCount() => m_units.Length;
 
     public CombatUnit GetUnitByIndex(int team_index, int unit_index)
     {

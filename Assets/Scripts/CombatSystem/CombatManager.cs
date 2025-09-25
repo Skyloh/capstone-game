@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using TNRD;
+using System.Linq;
+using System.Collections.Generic;
 
 public class CombatManager : MonoBehaviour
 {
@@ -13,12 +15,21 @@ public class CombatManager : MonoBehaviour
     private ICombatModel m_combatModel;
     [SerializeField] private SerializableInterface<ICombatView> m_combatView;
 
+    private CPUCore m_enemyCPU;
 
 
-    // TODO init combat method
-    // public void InitCombat() // makes model
+    // TODO: add arguments to this func for building a combat from SOs
+    public void InitCombat()
+    {
+        m_combatModel = new CombatModel(
+            new Dictionary<int, IList<CombatUnit>>()
+            {
+                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit() } },
+                { 1, new List<CombatUnit>() { CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit() } }
+            });
 
-
+        m_enemyCPU = new CPUCore(1, m_combatModel, PerformAction);
+    }
 
     // definitely generalizable between player-controlled units and AI-controlled units
     // AttemptSelectUnit; kinda useless for AI since they will never pick when not their turn, and they will never
@@ -64,7 +75,22 @@ public class CombatManager : MonoBehaviour
     public void CheckStateThenNext()
     {
         // check the state of battle
-        // TODO (check if any enemy alive or if all players are down)
+        for (int i = 0; i < m_combatModel.GetTeamCount(); ++i)
+        {
+            var team = m_combatModel.GetTeam(i);
+
+            for (int j = 0; j < team.Count(); ++j)
+            {
+                if (team.IsUnitAlive(i)) break;
+
+                // if we got here, that means we didn't break, which means no unit is alive
+                if (i == team.Count() - 1)
+                {
+                    // END GAME
+                    Debug.Log("GAME END IN " + (i == 0 ? "LOSS" : "VICTORY"));
+                }
+            }
+        }
 
         // does current phase have any more actionable units? 
         if (m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).HasActionableUnit())
@@ -79,7 +105,7 @@ public class CombatManager : MonoBehaviour
             else
             {
                 // Delegate to AI core for unit selection
-                // TODO m_enemyCPU.BeginUnitSelection();
+                m_enemyCPU.SelectNext();
             }
         }
         else
