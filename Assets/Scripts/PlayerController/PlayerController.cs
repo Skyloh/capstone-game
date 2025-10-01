@@ -1,10 +1,13 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f; // speed for player movement
     private Vector3 targetPosition;
     private bool isMoving = false;
+
+    public Tilemap collisionTilemap;
 
     void Start()
     {
@@ -41,9 +44,14 @@ public class PlayerController : MonoBehaviour
             if (move != Vector3.zero)
             {
                 // normalize to prevent diagonal movement from being >1 tile
-                move.Normalize();
-                targetPosition = transform.position + move;
-                isMoving = true;
+                //move.Normalize();
+
+                Vector3Int gridPos = collisionTilemap.WorldToCell(transform.position + move);
+                if (!collisionTilemap.HasTile(gridPos))
+                {
+                    targetPosition = transform.position + move;
+                    isMoving = true;
+                }
             }
         }
         else
