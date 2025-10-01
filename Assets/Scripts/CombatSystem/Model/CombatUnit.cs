@@ -1,9 +1,20 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// A light class that serves as a wrapper for a dictionary of data blocks
+/// that compose a unit in combat, such as Health, statuses, actions, etc.
+/// </summary>
 public class CombatUnit
 {
+    /// <summary>
+    /// The dictionary of module types to the reference of the module the unit
+    /// currently has. You can only have one module of a type at a time.
+    /// </summary>
     private readonly IDictionary<System.Type, IModule> m_modules;
 
+    /// <summary>
+    /// Initializes an empty combat unit.
+    /// </summary>
     public CombatUnit()
     {
         m_modules = new Dictionary<System.Type, IModule>();
@@ -35,12 +46,25 @@ public class CombatUnit
     }
     #endregion
 
+    /// <summary>
+    /// Builder method pattern for adding modules to a CombatUnit. Uses the module's type
+    /// to source the key for the dictionary.
+    /// </summary>
+    /// <param name="module"></param>
+    /// <returns></returns>
     public CombatUnit AddModule(IModule module)
     {
         m_modules.Add(module.GetType(), module);
         return this;
     }
 
+    /// <summary>
+    /// Attempts to get a module of the given type from the dictionary, returning true on success
+    /// and false on failure.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="module"></param>
+    /// <returns></returns>
     public bool TryGetModule<T>(out T module) where T : IModule
     {
         bool success = m_modules.TryGetValue(typeof(T), out var result);
