@@ -70,6 +70,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
         Debug.Log($"Next Phase stub. Turn count is {phase_turn_number}.");
 
         yield return null;
+
+
     }
 
     public void ProcessUnit(CombatUnit selected_unit)

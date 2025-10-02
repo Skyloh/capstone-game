@@ -53,7 +53,7 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; ++i)
         {
-            if (HasUnitTakenTurn(i)) return true;
+            if (!HasUnitTakenTurn(i)) return true;
         }
 
         return false;

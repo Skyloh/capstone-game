@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TNRD;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Defines a controller class that handles interoping between the model and view interfaces, tying combat flow together
@@ -58,11 +59,11 @@ public class CombatManager : MonoBehaviour
         m_combatModel = new CombatModel(
             new Dictionary<int, IList<CombatUnit>>()
             {
-                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit(), CombatUnit.MakePlayerUnit() } },
+                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit() } },
                 { 1, new List<CombatUnit>() { CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit() } }
             });
 
-        m_enemyCPU = new CPUCore(1, m_combatModel, PerformAction);
+        m_enemyCPU = new CPUCore(1, m_combatModel, this);
     }
 
     /// <summary>
@@ -107,7 +108,16 @@ public class CombatManager : MonoBehaviour
             return false;
         }
 
-        var selected_team = m_combatModel.GetTeam(team_index);
+        Team selected_team;
+        try
+        {
+            selected_team = m_combatModel.GetTeam(team_index);
+            selected_team.GetUnit(unit_index);
+        }
+        catch (IndexOutOfRangeException)
+        {
+            return false;
+        }
 
         if (selection_flags.HasFlag(SelectionFlags.Actionable) && selected_team.HasUnitTakenTurn(unit_index)
             || (selection_flags.HasFlag(SelectionFlags.Alive) && !selected_team.IsUnitAlive(unit_index)))
@@ -183,18 +193,37 @@ public class CombatManager : MonoBehaviour
             // if player turn active, pick next unit to go
             if (m_combatModel.CurrentActiveTeamIndex() == m_playerTeamID)
             {
+                Debug.LogWarning("SELECT AGAIN");
                 m_combatView.Value.BeginUnitSelection();
             }
             else
             {
                 // Delegate to AI core for unit selection
+                Debug.LogWarning("NEXT ENEMY");
                 m_enemyCPU.SelectNext();
             }
         }
         else
         {
+            Debug.LogWarning("NEXT PHASE");
             // next phase
-            StartCoroutine(m_combatView.Value.NextPhase(m_combatModel.IncActiveTeamIndex()));
+            StartCoroutine(IE_PhaseChange());
+        }
+    }
+
+    private IEnumerator IE_PhaseChange()
+    {
+        yield return m_combatView.Value.NextPhase(m_combatModel.IncActiveTeamIndex());
+
+        m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).ResetActionability();
+
+        if (m_combatModel.CurrentActiveTeamIndex() == m_playerTeamID)
+        {
+            m_combatView.Value.BeginUnitSelection();
+        }
+        else
+        {
+            m_enemyCPU.SelectNext();
         }
     }
 }
