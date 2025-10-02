@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; width: 1920px; height: 1080px;">
+        <ui:VisualElement name="SidePanel" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Shenanigans/SidePanel.png?fileID=21300000&amp;guid=b466935b700ba42959ce5a27e0c3d5e0&amp;type=3#SidePanel&quot;); -unity-background-scale-mode: scale-to-fit; width: 384px; height: 1085px; position: absolute; left: auto;" />
+        <ui:VisualElement style="flex-grow: 1; left: 1116px; background-image: url(&quot;project://database/Assets/UI%20Shenanigans/EnemyUI2.png?fileID=2800000&amp;guid=45bf76acef70e48799941a56d738541a&amp;type=3#EnemyUI2&quot;); width: 800px; height: 129px; top: auto;" />
+    </ui:VisualElement>
+</ui:UXML>
