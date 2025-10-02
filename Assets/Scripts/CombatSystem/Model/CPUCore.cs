@@ -23,7 +23,6 @@ public class CPUCore
 
         var unit = team.GetUnit(m_actingUnitIndex);
 
-        /*
         bool has_abilities = unit.TryGetModule<AbilityModule>(out var module);
 
         // if no abilities, they can't take a turn in combat.
@@ -31,13 +30,12 @@ public class CPUCore
 
         foreach (var ability in module.GetAbilities())
         {
-            // check decision criteria and pick a move
+            // TODO check decision criteria and pick a move
         }
-        */
 
-        var data = new ActionData();
+        var data = new ActionData() { UserTeamUnitIndex = (1, m_actingUnitIndex) }; // stub
 
-        // filling out targeting data (done in decision criteria check?)
+        // TODO: filling out targeting data (done in decision criteria check?)
 
         m_performActionCallback.Invoke(data);
     }

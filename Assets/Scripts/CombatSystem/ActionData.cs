@@ -14,9 +14,9 @@ public struct ActionData
     public IAbility Action;
 
     /// <summary>
-    /// The index of the user that performed this action.
+    /// The team/unit index of the user that performed this action.
     /// </summary>
-    public int ActionUserIndex;
+    public (int team_index, int unit_index) UserTeamUnitIndex;
 
     /// <summary>
     /// The indices of the targets of said action stored in a 

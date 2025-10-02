@@ -42,7 +42,7 @@ public class CombatUnit
             .AddModule(new HealthModule(15, 15))
             .AddModule(new AffinityBarModule(weakness_bar))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new EnemyStubAbility() }));
     }
     #endregion
 

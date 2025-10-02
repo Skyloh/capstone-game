@@ -74,22 +74,50 @@ public class CombatManager : MonoBehaviour
     /// sends control back to the View with the Model's data on the unit.
     /// </summary>
     /// <param name="player_unit_index"></param>
-    public void AttemptSelectPlayerUnit(int player_unit_index)
+    /// <returns>true if the unit was selected successfully, and false otherwise.</returns>
+    /*
+    public bool AttemptSelectPlayerUnit(int player_unit_index)
     {
         // not valid: not player turn
         if (m_combatModel.CurrentActiveTeamIndex() != m_playerTeamID)
-            return;
+            return false;
 
         var current_player_team = m_combatModel.GetTeam(m_playerTeamID);
 
         // not valid: already acted OR out-of-combat
         // PRECONDITION that the current team is the player team
-        if (!current_player_team.CanUnitAct(player_unit_index))
-            return;
+        if (!current_player_team.HasUnitTakenTurn(player_unit_index))
+            return false;
 
         // pass information about the current selected unit to the View
         var selected_unit = current_player_team.GetUnit(player_unit_index);
         m_combatView.Value.ProcessUnit(selected_unit);
+
+        return true;
+    }
+    */
+
+    public bool TrySelectUnit(int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
+    {
+        selected = null;
+        
+        if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == m_playerTeamID) 
+            || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != m_playerTeamID))
+        {
+            return false;
+        }
+
+        var selected_team = m_combatModel.GetTeam(team_index);
+
+        if (selection_flags.HasFlag(SelectionFlags.Actionable) && selected_team.HasUnitTakenTurn(unit_index)
+            || (selection_flags.HasFlag(SelectionFlags.Alive) && !selected_team.IsUnitAlive(unit_index)))
+        {
+            return false;
+        }
+
+        selected = selected_team.GetUnit(unit_index);
+
+        return true;
     }
 
     /// <summary>
@@ -102,7 +130,7 @@ public class CombatManager : MonoBehaviour
     public void PerformAction(ActionData action_information)
     {
         // now that user has gone, consume their turn.
-        m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).ConsumeTurnOfUnit(action_information.ActionUserIndex);
+        m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 
         StartCoroutine(IE_ResolveAbility(action_information));
 
@@ -178,7 +206,9 @@ public class CombatManager : MonoBehaviour
  * player: wait until user selects a unit, check to see if they're ok to go, deny if not and update View if OK
  * AI: automatically pick left-to-right
  * 
- * FUNC: AttempSelectPlayerUnit(...)
+ * FUNC: OLD AttempSelectPlayerUnit(...)
+ * View now calls TrySelectUnit(...) to see if the selected unit is alive, actionable, and an ally.
+ * This func gives the unit reference if correctly selected, so the control flow remains in the view.
  * 
  * decide what to do
  * player: wait until View hands back a unit's action OR reverts to previous step

@@ -11,6 +11,12 @@ public interface ICombatView
     /// </summary>
     void BeginUnitSelection();
 
+    // NOTE: THIS METHOD HAS DEBATABLE NECESSITY ON THIS INTERFACE
+    // This was intended to be used by the controller to pass flow back to the view,
+    // but since the view now just queries the controller instead of tossing flow,
+    // the controller doesnt need to call this method. Hence, it doesn't need to be 
+    // a promise in an interface.
+    //
     /// <summary>
     /// Defines a method that takes in a CombatUnit and is intended to update the View to display
     /// relevant properties about the unit in more detail. This is called on the player phase

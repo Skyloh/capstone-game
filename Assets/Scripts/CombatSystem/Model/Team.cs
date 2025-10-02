@@ -15,7 +15,7 @@ public class Team
         m_units = new List<CombatUnit>(units);
         m_hasUnitTakenTurn = new List<bool>(m_units.Count);
 
-        ResetActionability();
+        for (int i = 0; i< m_units.Count; i++) m_hasUnitTakenTurn.Add(false);
 
         m_teamId = team_id;
     }
@@ -35,11 +35,11 @@ public class Team
         return m_units[id];
     }
 
-    public bool CanUnitAct(int id)
+    public bool HasUnitTakenTurn(int id)
     {
-        // IsUnitAlive does bounds checking
+        CheckBounds(id);
 
-        return IsUnitAlive(id) && !m_hasUnitTakenTurn[id];
+        return m_hasUnitTakenTurn[id];
     }
 
     public bool IsUnitAlive(int id)
@@ -53,7 +53,7 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; ++i)
         {
-            if (CanUnitAct(i)) return true;
+            if (HasUnitTakenTurn(i)) return true;
         }
 
         return false;

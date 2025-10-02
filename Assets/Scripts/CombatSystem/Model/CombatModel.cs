@@ -16,7 +16,7 @@ public class CombatModel : ICombatModel
         int team_index = 0;
         foreach (var entry in units)
         {
-            m_units[0] = new Team(entry.Value, team_index++);
+            m_units[team_index] = new Team(entry.Value, team_index++);
         }
 
         m_turnCount = 0;
