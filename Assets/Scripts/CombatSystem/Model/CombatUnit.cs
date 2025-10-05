@@ -31,7 +31,7 @@ public class CombatUnit
             .AddModule(new HealthModule(15, 15))
             .AddModule(new AffinityModule(AffinityType.None, AffinityType.None))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility(), new AttackAbility() }));
     }
 
     public static CombatUnit MakeEnemyUnit()

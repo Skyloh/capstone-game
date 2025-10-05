@@ -24,6 +24,8 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; i++)
         {
+            // TODO: if status consumes turn, indicate it here?
+
             m_hasUnitTakenTurn[i] = false;
         }
     }
@@ -49,11 +51,16 @@ public class Team
         return m_units[id].TryGetModule<HealthModule>(out var module) && module.IsAlive();
     }
 
-    public bool HasActionableUnit()
+    // returns true if there is a unit that has not taken their turn yet
+    // but could (i.e. is actionable and alive).
+    public bool HasAvailableFreeUnit()
     {
         for (int i = 0; i < m_units.Count; ++i)
         {
-            if (!HasUnitTakenTurn(i)) return true;
+            if (!HasUnitTakenTurn(i) && IsUnitAlive(i))
+            {
+                return true;
+            }
         }
 
         return false;

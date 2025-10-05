@@ -54,49 +54,27 @@ public class CombatManager : MonoBehaviour
     /// Creates a model and an enemy CPU core from the basic CombatUnit.MakePlayer/EnemyUnit methods.
     /// Each team has 4 units of the respective initialization.
     /// </summary>
-    public void InitCombat()
+    public void InitCombat() // TODO split unit addition into a public method based off of a data SO or something
     {
-        m_combatModel = new CombatModel(
+        var unit_dict =
             new Dictionary<int, IList<CombatUnit>>()
             {
                 { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit() } },
                 { 1, new List<CombatUnit>() { CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit() } }
-            });
+            };
+
+        m_combatModel = new CombatModel(unit_dict);
+
+        foreach (var pair in unit_dict)
+        {
+            for (int i = 0; i < pair.Value.Count; i++)
+            {
+                m_combatView.Value.UpdateView(pair.Value[i], pair.Key, i);
+            }
+        }
 
         m_enemyCPU = new CPUCore(1, m_combatModel, this);
     }
-
-    /// <summary>
-    /// NOTE: Potentially abstractable between players and enemy ai.
-    /// 
-    /// The control flow method from the View to the Manager for when the player
-    /// selects a unit. Passes in the index of the chosen unit before testing if 
-    /// it is the player's turn to act and if the chosen unit can act. If both are true,
-    /// sends control back to the View with the Model's data on the unit.
-    /// </summary>
-    /// <param name="player_unit_index"></param>
-    /// <returns>true if the unit was selected successfully, and false otherwise.</returns>
-    /*
-    public bool AttemptSelectPlayerUnit(int player_unit_index)
-    {
-        // not valid: not player turn
-        if (m_combatModel.CurrentActiveTeamIndex() != m_playerTeamID)
-            return false;
-
-        var current_player_team = m_combatModel.GetTeam(m_playerTeamID);
-
-        // not valid: already acted OR out-of-combat
-        // PRECONDITION that the current team is the player team
-        if (!current_player_team.HasUnitTakenTurn(player_unit_index))
-            return false;
-
-        // pass information about the current selected unit to the View
-        var selected_unit = current_player_team.GetUnit(player_unit_index);
-        m_combatView.Value.ProcessUnit(selected_unit);
-
-        return true;
-    }
-    */
 
     public bool TrySelectUnit(int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
     {
@@ -168,25 +146,27 @@ public class CombatManager : MonoBehaviour
     public void CheckStateThenNext()
     {
         // check the state of battle
-        for (int i = 0; i < m_combatModel.GetTeamCount(); ++i)
+        for (int team_index = 0; team_index < m_combatModel.GetTeamCount(); ++team_index)
         {
-            var team = m_combatModel.GetTeam(i);
+            var team = m_combatModel.GetTeam(team_index);
 
-            for (int j = 0; j < team.Count(); ++j)
+            for (int unit_index = 0; unit_index < team.Count(); ++unit_index)
             {
-                if (team.IsUnitAlive(i)) break;
+                if (team.IsUnitAlive(unit_index)) break;
 
                 // if we got here, that means we didn't break, which means no unit is alive
-                if (i == team.Count() - 1)
+                if (unit_index == team.Count() - 1)
                 {
                     // END GAME
-                    Debug.Log("GAME END IN " + (i == 0 ? "LOSS" : "VICTORY"));
+                    Debug.LogError("GAME END IN " + (team_index == 0 ? "LOSS" : "VICTORY"));
+                    return;
                 }
             }
         }
 
         // does current phase have any more actionable units? 
-        if (m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).HasActionableUnit())
+        int current_team_index = m_combatModel.CurrentActiveTeamIndex();
+        if (m_combatModel.GetTeam(current_team_index).HasAvailableFreeUnit())
         {
             // continue turn
 
@@ -223,7 +203,7 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
-            m_enemyCPU.SelectNext();
+            m_enemyCPU.SelectNext(true); // mark a resetting of the enemy phase
         }
     }
 }

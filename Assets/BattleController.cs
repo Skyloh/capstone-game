@@ -55,4 +55,9 @@ public class BattleController : MonoBehaviour, ICombatView
     {
         throw new NotImplementedException();
     }
+
+    public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)
+    {
+        throw new NotImplementedException();
+    }
 }

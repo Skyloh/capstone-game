@@ -29,6 +29,10 @@ public class StubCombatView : MonoBehaviour, ICombatView
         m_data = data;
         m_hasData = data != string.Empty;
     }
+    public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)
+    {
+        Debug.Log("STUB VIEW UPDATE");
+    }
 
     public void BeginUnitSelection()
     {
@@ -54,7 +58,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 // we're on to the next phase.
                 m_selectedUserIndexWithinTeam = result;
 
-                ProcessUnit(selected); // NOTE: remove this from the interface?
+                ProcessUnit(selected);
                 yield break;
             }
 
@@ -74,7 +78,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
     }
 
-    public void ProcessUnit(CombatUnit selected_unit)
+    private void ProcessUnit(CombatUnit selected_unit)
     {
         var builder = new StringBuilder("Unit Processed:\n");
         if (selected_unit.TryGetModule<AbilityModule>(out var module))
@@ -229,6 +233,4 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
         m_manager.PerformAction(action_data);
     }
-
-
 }

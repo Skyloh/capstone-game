@@ -14,9 +14,9 @@ public class AffinityModule : IModule
         m_weaknessAffinity = weakness;
     }
 
-    public bool IsWeaknessAffinity(AffinityType incoming) => m_weaknessAffinity == incoming;
+    public AffinityType GetWeaknessAffinity() => m_weaknessAffinity;
 
-    public bool IsWeaponAffinity(AffinityType incoming) => m_weaponAffinity == incoming;
+    public AffinityType GetWeaponAffinity() => m_weaponAffinity;
 
 
     public void ChangeWeaponAffinity(AffinityType to_type)

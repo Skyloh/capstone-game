@@ -1,0 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class AbilityUtils
+{
+    public static int CalculateDamage(int base_damage, int max_damage)
+    {
+        return Mathf.FloorToInt((max_damage - base_damage) * Random.Range(0f, 1f) + base_damage);
+    }
+}
