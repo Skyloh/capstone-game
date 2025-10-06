@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class StubCombatView : MonoBehaviour, ICombatView
 {
+
+    [SerializeField] private CombatTestingScript m_unitViewPrefab;
+    [SerializeField] private Transform m_playerRow;
+    [SerializeField] private Transform m_enemyRow;
+
+    [Space(10)]
+
     [SerializeField] private CombatManager m_manager;
     [SerializeField] private InputField m_dataField;
 
@@ -31,7 +37,12 @@ public class StubCombatView : MonoBehaviour, ICombatView
     }
     public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)
     {
-        Debug.Log("STUB VIEW UPDATE");
+        var instance = GameObject.Instantiate(m_unitViewPrefab);
+
+        var parent = team_id == 0 ? m_playerRow : m_enemyRow;
+        instance.transform.SetParent(parent);
+
+        instance.MakeNew(new_unit, team_id, unit_index);
     }
 
     public void BeginUnitSelection()
