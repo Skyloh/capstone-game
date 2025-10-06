@@ -52,6 +52,8 @@ public class CPUCore
         }
 
         var data = new ActionData() { Action = chosen, UserTeamUnitIndex = (1, m_actingUnitIndex) }; // stub
+        // TODO fill out data using the RequiredTargets list. Make sure it's done from their perspective!
+        // e.g. "0" means allies of the enemies, so... keep that in mind
 
         // TODO: filling out targeting data (done in decision criteria check?)
 

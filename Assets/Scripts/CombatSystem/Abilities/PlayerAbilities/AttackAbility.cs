@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 public class AttackAbility : IAbility
@@ -10,18 +9,19 @@ public class AttackAbility : IAbility
     {
         Name = "Attack",
         Description = "Damages one enemy and Breaks.",
+        RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (min: 1, max: 1) } }, // targets 1 opposing unit
         TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
         RequiredMetadata = new List<string>()
     };
 
-    public bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> targets) => targets.Select((pair) => pair.team_id == 1).Count() == 1;
+    // public bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> targets) => targets.Select((pair) => pair.team_id == 1).Count() == 1;
 
     public AbilityData GetAbilityData() => m_abilityData;
 
     public IEnumerator IE_ProcessAbility(ActionData data, ICombatModel model, ICombatView _)
     {
         var (team_index, unit_index) = data.TargetIndices[0];
-        var target = model.GetUnitByIndex(team_index, unit_index);
+        var target = model.GetUnitByIndex(team_index, unit_index); // NOTE: for any enemy to use this ability, the team_index will need to be flipped.
 
         var (u_team_index, u_unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(u_team_index, u_unit_index);

@@ -9,6 +9,7 @@ public class StubAbility : IAbility
     { 
         Name = "StubAbility",
         Description = "A testing ability.",
+        RequiredTargets = new Dictionary<int, (int, int)>(),
         TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
         RequiredMetadata = new List<string>()
         {
@@ -17,11 +18,11 @@ public class StubAbility : IAbility
         }
     };
 
-    // This stub ability is valid for use if one enemy is targeted
+    /*// This stub ability is valid for use if one enemy is targeted
     public bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> targets)
     {
         return targets.Select((pair) => pair.team_id == 1).Count() == 1;
-    }
+    }*/
 
     public AbilityData GetAbilityData() => m_abilityData;
 

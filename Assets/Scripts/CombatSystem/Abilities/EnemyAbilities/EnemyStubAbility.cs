@@ -8,14 +8,15 @@ public class EnemyStubAbility : IAbility
     { 
         Name = "EnemyStubAbility",
         Description = "A testing ability that does nothing.",
+        RequiredTargets = new Dictionary<int, (int, int)>(),
         TargetCriteria = SelectionFlags.None,
         RequiredMetadata = new List<string>()
     };
 
-    public bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> _)
+   /* public bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> _)
     {
         return true; // stub
-    }
+    }*/
 
     public AbilityData GetAbilityData() => m_abilityData;
 

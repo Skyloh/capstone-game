@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -139,13 +140,25 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
         // TARGET INDICES
         var targets = new List<(int team, int unit)>();
-        while (!ability.CanPrepAbility(targets))
+        while (true)
         {
-            Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\".");
+            Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm.");
 
             yield return new WaitUntil(() => m_hasData);
 
             m_hasData = false;
+
+            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
+            if (m_data.ToLower() == "y" && is_ready)
+            {
+                Debug.Log("Activating ability...");
+                break;
+            }
+            else if (is_ready)
+            {
+                Debug.LogError("Valid targets have not been selected.");
+                continue;
+            }
 
             string[] split = m_data.Split(", ");
 
@@ -243,5 +256,22 @@ public class StubCombatView : MonoBehaviour, ICombatView
         }
 
         m_manager.PerformAction(action_data);
+    }
+
+    // this is fine since player-perspective is 0 = allies and 1 = enemies
+    // enemies might need to "flip" this logic
+    private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets)
+    {
+        foreach (var entry in data.RequiredTargets)
+        {
+            int team_id = entry.Key;
+            var (min, max) = entry.Value;
+
+            int count = targets.Select(pair => pair.team == team_id).Count();
+
+            if (count < min || count > max) return false;
+        }
+
+        return true;
     }
 }

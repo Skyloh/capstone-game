@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public interface IAbility
 {
+    /*
     // NOTE: better way to do this "ability target validation"? Something like how RPGMaker
     // does it? (various different enums for target types and such)
     // Might need an abstract ability...
@@ -26,6 +27,7 @@ public interface IAbility
     /// <param name="targets"></param>
     /// <returns></returns>
     bool CanPrepAbility(IReadOnlyList<(int team_id, int unit_id)> targets);
+    */
 
     AbilityData GetAbilityData();
 
