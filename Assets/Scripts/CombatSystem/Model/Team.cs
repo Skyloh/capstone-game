@@ -12,12 +12,24 @@ public class Team
 
     public Team(IList<CombatUnit> units, int team_id)
     {
-        m_units = new List<CombatUnit>(units);
-        m_hasUnitTakenTurn = new List<bool>(m_units.Count);
+        m_units = new List<CombatUnit>(units.Count);
+        m_hasUnitTakenTurn = new List<bool>(units.Count);
 
-        for (int i = 0; i< m_units.Count; i++) m_hasUnitTakenTurn.Add(false);
+        for (int i = 0; i < units.Count; i++)
+        {
+            AddUnit(units[i]);
+        }
 
         m_teamId = team_id;
+    }
+
+    public void AddUnit(CombatUnit unit)
+    {
+        int index = m_units.Count();
+        unit.SetIndices(m_teamId, index);
+
+        m_units.Add(unit);
+        m_hasUnitTakenTurn.Add(false);
     }
 
     public void ResetActionability()

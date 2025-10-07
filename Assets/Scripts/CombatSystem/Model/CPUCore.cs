@@ -39,23 +39,12 @@ public class CPUCore
             return;
         }
 
-        bool has_abilities = unit.TryGetModule<AbilityModule>(out var module);
-
-        // if no abilities, they can't take a turn in combat.
-        if (!has_abilities) return;
-
-        IAbility chosen = null;
-        foreach (var ability in module.GetAbilities())
+        if (!unit.TryGetModule<CPUModule>(out var module))
         {
-            // TODO check decision criteria and pick a move
-            chosen = ability;
+            throw new Exception("Missing CPU Module on enemy unit!");
         }
 
-        var data = new ActionData() { Action = chosen, UserTeamUnitIndex = (1, m_actingUnitIndex) }; // stub
-        // TODO fill out data using the RequiredTargets list. Make sure it's done from their perspective!
-        // e.g. "0" means allies of the enemies, so... keep that in mind
-
-        // TODO: filling out targeting data (done in decision criteria check?)
+        var data = module.MakeAction(m_combatModel);
 
         m_manager.PerformAction(data);
     }

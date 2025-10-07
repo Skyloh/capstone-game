@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public class StatusModule : IModule
+public class StatusModule : AModule
 {
     // TEMPORARY
     public enum TEMP_Status

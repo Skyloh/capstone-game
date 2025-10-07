@@ -1,4 +1,4 @@
-public class AffinityModule : IModule
+public class AffinityModule : AModule
 {
     public delegate void ChangeAffinity(AffinityType current, AffinityType previous);
 

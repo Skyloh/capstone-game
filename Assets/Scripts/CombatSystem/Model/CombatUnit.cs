@@ -12,6 +12,8 @@ public class CombatUnit
     /// </summary>
     private readonly IDictionary<System.Type, IModule> m_modules;
 
+    private (int team_index, int unit_index) m_indices;
+
     /// <summary>
     /// Initializes an empty combat unit.
     /// </summary>
@@ -55,6 +57,7 @@ public class CombatUnit
     public CombatUnit AddModule(IModule module)
     {
         m_modules.Add(module.GetType(), module);
+        module.SetOwner(this);
         return this;
     }
 
@@ -73,4 +76,7 @@ public class CombatUnit
 
         return success;
     }
+
+    public void SetIndices(int team, int unit) => m_indices = (team, unit);
+    public (int team, int unit) GetIndices() => m_indices;
 }

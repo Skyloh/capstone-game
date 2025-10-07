@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 // Left to Right
-public class AffinityBarModule : IModule
+public class AffinityBarModule : AModule
 {
     public delegate void ChangeAffinityBar(IList<AffinityType> current, IList<AffinityType> previous);
 

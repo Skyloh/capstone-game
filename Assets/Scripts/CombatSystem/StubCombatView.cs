@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class StubCombatView : MonoBehaviour, ICombatView
 {
-
     [SerializeField] private CombatTestingScript m_unitViewPrefab;
     [SerializeField] private Transform m_playerRow;
     [SerializeField] private Transform m_enemyRow;
@@ -86,8 +85,6 @@ public class StubCombatView : MonoBehaviour, ICombatView
         Debug.Log($"Next Phase stub. Turn count is {phase_turn_number}.");
 
         yield return null;
-
-
     }
 
     private void ProcessUnit(CombatUnit selected_unit)

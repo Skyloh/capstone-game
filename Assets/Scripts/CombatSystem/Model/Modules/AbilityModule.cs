@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public class AbilityModule : IModule
+public class AbilityModule : AModule
 {
     private readonly List<IAbility> m_abilities;
 

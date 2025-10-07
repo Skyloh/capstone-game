@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HealthModule : IModule
+public class HealthModule : AModule
 {
     public delegate void ChangeStat(int max, int current, int previous);
 

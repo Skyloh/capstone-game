@@ -3,5 +3,6 @@
 /// </summary>
 public interface IModule
 {
-    // Currently just a union datatype for now.
+    void SetOwner(CombatUnit unit);
+    CombatUnit GetOwner();
 }
