@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// </summary>
 public interface IAbility
 {
+    // TODO limited ability usage implementation (for Potion)
+
     AbilityData GetAbilityData();
 
     /// <summary>

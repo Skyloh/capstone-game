@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class StubCombatView : MonoBehaviour, ICombatView
 {
     [SerializeField] private CombatTestingScript m_unitViewPrefab;
+    [SerializeField] private BrainSO m_simpleEnemyCPUBrain;
     [SerializeField] private Transform m_playerRow;
     [SerializeField] private Transform m_enemyRow;
 
@@ -26,7 +27,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
     {
         m_dataField.onSubmit.AddListener(UpdateData);
 
-        m_manager.InitCombat();
+        m_manager.InitCombat(m_simpleEnemyCPUBrain);
         BeginUnitSelection();
     }
 
@@ -64,7 +65,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
             // test to see if input was good.
             var flag_criteria = SelectionFlags.Ally | SelectionFlags.Actionable | SelectionFlags.Alive;
             if (int.TryParse(m_data, out int result) && result >= 0 && result < 4 
-                && m_manager.TrySelectUnit(0, result, flag_criteria, out var selected))
+                && m_manager.TrySelectUnit(0, 0, result, flag_criteria, out var selected))
             {
                 // we're on to the next phase.
                 m_selectedUserIndexWithinTeam = result;
@@ -176,7 +177,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 continue;
             }
 
-            if (!m_manager.TrySelectUnit(pairing.team, pairing.unit, flags, out var _))
+            if (!m_manager.TrySelectUnit(0, pairing.team, pairing.unit, flags, out var _))
             {
                 Debug.Log("Invalid Unit.");
                 continue;

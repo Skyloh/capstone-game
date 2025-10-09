@@ -54,13 +54,17 @@ public class CombatManager : MonoBehaviour
     /// Creates a model and an enemy CPU core from the basic CombatUnit.MakePlayer/EnemyUnit methods.
     /// Each team has 4 units of the respective initialization.
     /// </summary>
-    public void InitCombat() // TODO split unit addition into a public method based off of a data SO or something
+    public void InitCombat(BrainSO cpu_brain_TEMP) // TODO split unit addition into a public method based off of a data SO or something
     {
         var unit_dict =
             new Dictionary<int, IList<CombatUnit>>()
             {
-                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit() } },
-                { 1, new List<CombatUnit>() { CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit() } }
+                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit("PlayerTest") } },
+                { 1, new List<CombatUnit>() { 
+                    CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest2", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest3", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest4", cpu_brain_TEMP) } }
             };
 
         m_combatModel = new CombatModel(unit_dict);
@@ -76,12 +80,25 @@ public class CombatManager : MonoBehaviour
         m_enemyCPU = new CPUCore(1, m_combatModel, this);
     }
 
-    public bool TrySelectUnit(int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
+    /// <summary>
+    /// Attempts to select a unit that fits the selection flag criteria, outputting them if successful.
+    /// 
+    /// The team_perspective argument is used to set the context for the Ally and Enemy flags. If you put in 0,
+    /// Allies will be other units on team id 0, whereas enemies will be on any non-0 team id. If you put in 1, Allies
+    /// will be other units on team id 1, whereas enemies will be on any non-1 team id.
+    /// </summary>
+    /// <param name="team_perspective"></param>
+    /// <param name="team_index"></param>
+    /// <param name="unit_index"></param>
+    /// <param name="selection_flags"></param>
+    /// <param name="selected"></param>
+    /// <returns>A bool if a unit was selected or not.</returns>
+    public bool TrySelectUnit(int team_perspective, int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
     {
         selected = null;
         
-        if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == m_playerTeamID) 
-            || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != m_playerTeamID))
+        if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == team_perspective) 
+            || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != team_perspective))
         {
             return false;
         }
