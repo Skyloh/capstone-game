@@ -42,7 +42,7 @@ public class CombatUnit
     public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)
     {
         return new CombatUnit(name)
-            .AddModule(new HealthModule(15, 15))
+            .AddModule(new HealthModule(35, 35))
             .AddModule(new AffinityBarModule(3))
             .AddModule(new StatusModule())
             .AddModule(new CPUModule(brain))

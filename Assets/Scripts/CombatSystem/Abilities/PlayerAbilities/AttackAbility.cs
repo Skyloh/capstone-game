@@ -48,6 +48,6 @@ public class AttackAbility : AAbility
 
         h_module.ChangeHealth(damage);
 
-        yield break;
+        yield return new WaitForSeconds(0.5f);
     }
 }

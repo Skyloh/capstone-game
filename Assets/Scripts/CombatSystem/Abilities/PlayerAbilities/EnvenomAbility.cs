@@ -51,7 +51,7 @@ public class EnvenomAbility : AAbility
 
         Debug.Log($"Applying {AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
 
-        yield break;
+        yield return new WaitForSeconds(0.5f);
     }
 
     private StatusModule.Status AffinityToStatus(AffinityType type)
