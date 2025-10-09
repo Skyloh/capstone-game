@@ -95,10 +95,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
         {
             var abilities = module.GetAbilities();
 
-            for (int i = 0; i < abilities.Count; ++i)
-            {
-                builder.AppendLine($"{i}: {abilities[i].GetAbilityData().Name}");
-            }
+            builder.Append(string.Join(", ", abilities.Select(a => a.GetAbilityData().Name)));
 
             Debug.Log(builder.ToString());
             StartCoroutine(IE_TakePlayerTurn(abilities));

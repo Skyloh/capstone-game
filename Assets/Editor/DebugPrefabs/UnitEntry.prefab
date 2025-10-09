@@ -451,6 +451,7 @@ MonoBehaviour:
   m_health: {fileID: 8746862132219701478}
   m_affinity: {fileID: 2751766562288819906}
   m_unit: {fileID: 2636921736269441266}
+  m_status: {fileID: 0}
 --- !u!222 &9204676693743432708
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -66,6 +66,8 @@ public class AffinityBarModule : AModule
 
     public void BreakLeading(int count)
     {
+        if (count == 0) return; 
+
         int start = GetFirstNonNoneIndex();
         for (int i = 0; i < count; ++i)
         {

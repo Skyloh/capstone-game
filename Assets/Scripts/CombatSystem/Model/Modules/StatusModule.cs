@@ -27,7 +27,7 @@ public class StatusModule : AModule
     {
         m_statusDurationMap[status] = duration;
 
-        OnEffectChanged.Invoke((status, m_statusDurationMap[status]), (Status.None, -1));
+        OnEffectChanged?.Invoke((status, m_statusDurationMap[status]), (Status.None, -1));
     }
 
     public void DecrementStatusDuration(Status status, int by_amount = 1)
@@ -38,11 +38,11 @@ public class StatusModule : AModule
         {
             m_statusDurationMap.Remove(status);
 
-            OnEffectChanged.Invoke((status, m_statusDurationMap[status] + by_amount), (Status.None, -1));
+            OnEffectChanged?.Invoke((status, m_statusDurationMap[status] + by_amount), (Status.None, -1));
         }
         else
         {
-            OnEffectChanged.Invoke((status, m_statusDurationMap[status] + by_amount), (status, m_statusDurationMap[status]));
+            OnEffectChanged?.Invoke((status, m_statusDurationMap[status] + by_amount), (status, m_statusDurationMap[status]));
         }
     }
 

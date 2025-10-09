@@ -36,16 +36,14 @@ public class CombatUnit
             .AddModule(new HealthModule(100, 100))
             .AddModule(new AffinityModule(AffinityType.Blue, AffinityType.Red))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new AttackAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new AttackAbility(), new EnvenomAbility() }));
     }
 
     public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)
     {
-        var weakness_bar = new List<AffinityType>() { AffinityType.Blue, AffinityType.Blue, AffinityType.Red }; // STUB - randomly generate?
-
         return new CombatUnit(name)
             .AddModule(new HealthModule(15, 15))
-            .AddModule(new AffinityBarModule(weakness_bar))
+            .AddModule(new AffinityBarModule(3))
             .AddModule(new StatusModule())
             .AddModule(new CPUModule(brain))
             .AddModule(new AbilityModule(new List<IAbility>() { new EnemyAttackAbility() }));

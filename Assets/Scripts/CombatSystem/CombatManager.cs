@@ -60,7 +60,8 @@ public class CombatManager : MonoBehaviour
         var unit_dict =
             new Dictionary<int, IList<CombatUnit>>()
             {
-                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit("PlayerTest") } },
+                { 0, new List<CombatUnit>() { 
+                    CombatUnit.MakePlayerUnit("PlayerTest") } },
                 { 1, new List<CombatUnit>() { 
                     CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  
                     CombatUnit.MakeEnemyUnit("EnemyTest2", cpu_brain_TEMP),  
