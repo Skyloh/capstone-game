@@ -33,22 +33,22 @@ public class CombatUnit
     public static CombatUnit MakePlayerUnit(string name)
     {
         return new CombatUnit(name)
-            .AddModule(new HealthModule(15, 15))
-            .AddModule(new AffinityModule(AffinityType.None, AffinityType.None))
+            .AddModule(new HealthModule(100, 100))
+            .AddModule(new AffinityModule(AffinityType.Blue, AffinityType.Red))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility(), new AttackAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new AttackAbility() }));
     }
 
     public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)
     {
-        var weakness_bar = new List<AffinityType>() { AffinityType.None }; // STUB - randomly generate?
+        var weakness_bar = new List<AffinityType>() { AffinityType.Blue, AffinityType.Blue, AffinityType.Red }; // STUB - randomly generate?
 
         return new CombatUnit(name)
             .AddModule(new HealthModule(15, 15))
             .AddModule(new AffinityBarModule(weakness_bar))
             .AddModule(new StatusModule())
             .AddModule(new CPUModule(brain))
-            .AddModule(new AbilityModule(new List<IAbility>() { new EnemyStubAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new EnemyAttackAbility() }));
     }
     #endregion
 

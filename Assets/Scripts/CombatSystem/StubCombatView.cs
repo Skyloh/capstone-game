@@ -140,13 +140,21 @@ public class StubCombatView : MonoBehaviour, ICombatView
         var targets = new List<(int team, int unit)>();
         while (true)
         {
-            Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm.");
+            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
+
+            if (is_ready)
+            {
+                Debug.Log($"Press 'y' to confirm {ability.GetAbilityData().Name} on {string.Join(" & ", targets)}.");
+            }
+            else
+            {
+                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm early.");
+            }
 
             yield return new WaitUntil(() => m_hasData);
 
             m_hasData = false;
 
-            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
             if (m_data.ToLower() == "y" && is_ready)
             {
                 Debug.Log("Activating ability...");

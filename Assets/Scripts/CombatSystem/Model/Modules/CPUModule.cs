@@ -134,6 +134,8 @@ public class CPUModule : AModule
         return true;
     }
 
+    // here is the assumption that limits us to 2 teams (0 for player, 1 for enemy).
+    // NOTE: abstract this if we want more teams.
     private int ConvertPerspective(int team_id)
     {
         if (team_id == 0) // allies to us

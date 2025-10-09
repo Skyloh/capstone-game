@@ -40,6 +40,8 @@ public class AttackAbility : AAbility
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
 
+        abar_module.BreakLeading(breaks);
+
         h_module.ChangeHealth(damage);
 
         Debug.Log("Dealing damage: " + damage);

@@ -38,6 +38,17 @@ public class AffinityBarModule : AModule
         return -1;
     }
 
+    public void BreakLeading(int count)
+    {
+        int start = GetFirstNonNoneIndex();
+        for (int i = 0; i < count; ++i)
+        {
+            if (i + start >= BarLength()) break;
+
+            SetAtIndex(i + start, AffinityType.None);
+        }
+    }
+
     public int CalculateLeadingBreaks(AffinityType break_element)
     {
         int breaks = 0;
