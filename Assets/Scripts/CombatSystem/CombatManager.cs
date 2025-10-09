@@ -178,7 +178,8 @@ public class CombatManager : MonoBehaviour
         // decrement statuses
         if (has_status_module)
         {
-            foreach (var status in s_module.GetStatuses())
+            var collection_copy = new HashSet<StatusModule.Status>(s_module.GetStatuses());
+            foreach (var status in collection_copy)
             {
                 s_module.DecrementStatusDuration(status);
             }
