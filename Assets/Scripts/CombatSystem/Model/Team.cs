@@ -36,8 +36,6 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; i++)
         {
-            // TODO: if status consumes turn, indicate it here?
-
             m_hasUnitTakenTurn[i] = false;
         }
     }
