@@ -14,9 +14,29 @@ public class AffinityModule : AModule
         m_weaknessAffinity = weakness;
     }
 
-    public AffinityType GetWeaknessAffinity() => m_weaknessAffinity;
+    public AffinityType GetWeaknessAffinity()
+    {
+        if (GetOwner().TryGetModule<StatusModule>(out var status_module))
+        {
+            var veiled_weakness = status_module.GetContainedVeilStatus();
 
-    public AffinityType GetWeaponAffinity() => m_weaponAffinity;
+            if (veiled_weakness != StatusModule.Status.None) return MorphVeilStatusToAffinity(veiled_weakness);
+        }
+
+        return m_weaknessAffinity;
+    }
+
+    public AffinityType GetWeaponAffinity()
+    {
+        if (GetOwner().TryGetModule<StatusModule>(out var status_module))
+        {
+            var morphed_weapon = status_module.GetContainedVeilStatus();
+
+            if (morphed_weapon != StatusModule.Status.None) return MorphVeilStatusToAffinity(morphed_weapon);
+        }
+
+        return m_weaponAffinity;
+    }
 
 
     public void ChangeWeaponAffinity(AffinityType to_type)
@@ -35,5 +55,17 @@ public class AffinityModule : AModule
         m_weaknessAffinity = to_type;
 
         OnWeaknessAffinityChanged.Invoke(to_type, original);
+    }
+
+    private AffinityType MorphVeilStatusToAffinity(StatusModule.Status status)
+    {
+        return status switch
+        {
+            StatusModule.Status.MorphRed or StatusModule.Status.VeilRed => AffinityType.Red,
+            StatusModule.Status.MorphBlue or StatusModule.Status.VeilBlue => AffinityType.Blue,
+            StatusModule.Status.MorphGreen or StatusModule.Status.VeilGreen => AffinityType.Green,
+            StatusModule.Status.MorphYellow or StatusModule.Status.VeilYellow => AffinityType.Yellow,
+            _ => AffinityType.None,
+        };
     }
 }
