@@ -3,6 +3,7 @@ using UnityEngine;
 using TNRD;
 using System.Collections.Generic;
 using System;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Defines a controller class that handles interoping between the model and view interfaces, tying combat flow together
@@ -137,7 +138,9 @@ public class CombatManager : MonoBehaviour
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 
-        StartCoroutine(IE_ResolveAbility(action_information));
+        StartCoroutine(
+            IE_ResolveAbility(
+                TestForShockStatus(action_information)));
 
         // CheckStateThenNext is called upon ability completion
     }
@@ -152,7 +155,42 @@ public class CombatManager : MonoBehaviour
     {
         yield return data.Action.IE_ProcessAbility(data, m_combatModel, m_combatView.Value);
 
+        var (team_index, unit_index) = data.UserTeamUnitIndex;
+        ProcessUnitEndTurn(m_combatModel.GetUnitByIndex(team_index, unit_index));
+
         CheckStateThenNext();
+    }
+
+
+    private void ProcessUnitEndTurn(CombatUnit unit)
+    {
+        bool has_status_module = unit.TryGetModule<StatusModule>(out var s_module);
+
+        // burn
+        if (has_status_module 
+            && s_module.HasStatus(StatusModule.Status.Burn)
+            && unit.TryGetModule<HealthModule>(out var h_module))
+        {
+            h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
+        }
+
+        // decrement statuses
+        if (has_status_module)
+        {
+            foreach (var status in s_module.GetStatuses())
+            {
+                s_module.DecrementStatusDuration(status);
+            }
+        }
+
+        // if enemy and not stunned with a broken bar, refill it
+        if (unit.TryGetModule<AffinityBarModule>(out var abar_m) 
+            && abar_m.IsBroken()
+            && unit.TryGetModule<StatusModule>(out var s_m)
+            && !s_m.HasStatus(StatusModule.Status.Stun))
+        {
+            abar_m.FillBar();
+        }
     }
 
     /// <summary>
@@ -206,6 +244,23 @@ public class CombatManager : MonoBehaviour
             // next phase
             StartCoroutine(IE_PhaseChange());
         }
+    }
+
+    private ActionData TestForShockStatus(ActionData on_action)
+    {
+        var (team_index, unit_index) = on_action.UserTeamUnitIndex;
+        if (m_combatModel.GetUnitByIndex(team_index, unit_index).TryGetModule<StatusModule>(out var s_module)
+            && s_module.HasStatus(StatusModule.Status.Shock)
+            && Random.Range(0, 2) == 0)
+        {
+            return new ActionData()
+            {
+                Action = new System_ShockAbility(),
+                UserTeamUnitIndex = on_action.UserTeamUnitIndex
+            };
+        }
+
+        return on_action;
     }
 
     private IEnumerator IE_PhaseChange()

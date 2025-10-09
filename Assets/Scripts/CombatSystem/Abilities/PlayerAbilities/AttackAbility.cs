@@ -31,6 +31,8 @@ public class AttackAbility : AAbility
 
         if (!has_setup) yield break;
 
+        // DAMAGE CALCULATION
+
         int breaks = abar_module.CalculateLeadingBreaks(aff_module.GetWeaponAffinity());
 
         int damage = AbilityUtils.CalculateDamage(50, 70);
@@ -42,9 +44,9 @@ public class AttackAbility : AAbility
 
         abar_module.BreakLeading(breaks);
 
-        h_module.ChangeHealth(damage);
+        damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
-        Debug.Log("Dealing damage: " + damage);
+        h_module.ChangeHealth(damage);
 
         yield break;
     }

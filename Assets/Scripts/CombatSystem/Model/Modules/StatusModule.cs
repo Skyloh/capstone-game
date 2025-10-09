@@ -2,25 +2,54 @@ using System.Collections.Generic;
 
 public class StatusModule : AModule
 {
-    // TEMPORARY
-    public enum TEMP_Status
-    { None }
+    public enum Status
+    { 
+        None,
+        Stun,
+        Burn,
+        Shock,
+        Bruise,
+        Chill
+    }
 
-    public delegate void ChangeEffect((TEMP_Status status, int duration) from, (TEMP_Status status, int duration) to);
+    public delegate void ChangeEffect((Status status, int duration) from, (Status status, int duration) to);
 
-    private readonly IDictionary<TEMP_Status, int> m_statusDurationMap;
+    private readonly IDictionary<Status, int> m_statusDurationMap;
 
     public event ChangeEffect OnEffectChanged; // for View stuff. Dont forget to desubscribe!
 
     public StatusModule()
     {
-        m_statusDurationMap = new Dictionary<TEMP_Status, int>();
+        m_statusDurationMap = new Dictionary<Status, int>();
     }
 
-    public void DecrementStatusDuration(TEMP_Status status, int by_amount = 1)
+    public void AddStatus(Status status, int duration)
+    {
+        m_statusDurationMap[status] = duration;
+
+        OnEffectChanged.Invoke((status, m_statusDurationMap[status]), (Status.None, -1));
+    }
+
+    public void DecrementStatusDuration(Status status, int by_amount = 1)
     {
         m_statusDurationMap[status] -= by_amount;
 
-        OnEffectChanged.Invoke((status, m_statusDurationMap[status] + by_amount), (status, m_statusDurationMap[status]));
+        if (m_statusDurationMap[status] == 0)
+        {
+            m_statusDurationMap.Remove(status);
+
+            OnEffectChanged.Invoke((status, m_statusDurationMap[status] + by_amount), (Status.None, -1));
+        }
+        else
+        {
+            OnEffectChanged.Invoke((status, m_statusDurationMap[status] + by_amount), (status, m_statusDurationMap[status]));
+        }
     }
+
+    public ICollection<Status> GetStatuses()
+    {
+        return m_statusDurationMap.Keys;
+    }
+
+    public bool HasStatus(Status status) => m_statusDurationMap.ContainsKey(status);
 }

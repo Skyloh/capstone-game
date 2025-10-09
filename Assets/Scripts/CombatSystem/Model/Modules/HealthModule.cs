@@ -26,5 +26,7 @@ public class HealthModule : AModule
 
     public void ChangeHealth(int decrease_amount) => SetHealth(m_currentHealth - decrease_amount);
 
+    public int GetMaxHealth() => m_maxHealth;
+
     public bool IsAlive() => m_currentHealth > 0;
 }

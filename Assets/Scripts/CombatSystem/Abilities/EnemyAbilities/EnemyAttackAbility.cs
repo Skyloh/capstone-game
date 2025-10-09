@@ -36,11 +36,16 @@ public class EnemyAttackAbility : AAbility
 
         if (!has_setup) yield break;
 
-        int damage = AbilityUtils.CalculateDamage(5, aff_module.GetWeaknessAffinity() == AffinityType.Red ? 20 : 10);
+        int damage = 
+            AbilityUtils.ApplyStatusScalars(
+                user, 
+                target, 
+                AbilityUtils.ApplyWeaknessAffinityScalar(
+                    target,
+                    AbilityUtils.CalculateDamage(5, 10), 
+                    AffinityType.Red));
 
         h_module.ChangeHealth(damage);
-
-        Debug.Log("Dealing damage: " + damage);
 
         yield break;
     }
