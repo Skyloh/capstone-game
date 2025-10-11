@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealthModule : AModule
 {
-    public delegate void ChangeStat(int max, int current, int previous);
+    public delegate void ChangeStat(int max, int current);
 
     private readonly int m_maxHealth;
     private int m_currentHealth;
@@ -17,11 +17,9 @@ public class HealthModule : AModule
 
     public void SetHealth(int health)
     {
-        int health_cache = m_currentHealth;
-
         m_currentHealth = Mathf.Max(Mathf.Min(health, m_maxHealth), 0); // bounds-clamping health
 
-        OnHealthChanged?.Invoke(m_maxHealth, health, health_cache);
+        OnHealthChanged?.Invoke(m_maxHealth, health);
     }
 
     public void ChangeHealth(int decrease_amount) => SetHealth(m_currentHealth - decrease_amount);

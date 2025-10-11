@@ -1,19 +1,61 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerUnit : MonoBehaviour
+namespace CombatSystem.View
 {
-    public SpriteRenderer playerSpriteRenderer;
-    // Start is called before the first frame update
-    void Start()
+    public class PlayerUnit : MonoBehaviour, IUnit
     {
-        
-    }
+        public SpriteRenderer playerSpriteRenderer;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public event Action Hover;
+        public event Action Click;
+
+        public void OnMouseEnter()
+        {
+            Hover?.Invoke();
+        }
+
+        public void SetUnit(IUnit.PlaceholderUnitClass unit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUnit.PlaceholderUnitClass GetUnitDefinition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HideUnit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayEntrance()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayAttack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayDead()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateHp(int max, int current)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

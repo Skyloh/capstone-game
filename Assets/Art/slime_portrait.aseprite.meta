@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 997fc8eb53c9e314c82bb3f380476502
+guid: aa628f1aa23c2b14283c3ef861b5ebb1
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ambys_Frame_0
+  - name: slime_portrait
     originalName: 
-    pivot: {x: 0.4848485, y: 0}
+    pivot: {x: 0.5, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 33
-      height: 30
-    spriteID: 1f8589145f25a054dae2863ae69bc265
+      width: 64
+      height: 64
+    spriteID: 3e6c347842e83704681b157a0d1ac834
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -141,51 +141,23 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: ambys_Frame_1
-    originalName: 
-    pivot: {x: 0.4848485, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 42
-      width: 33
-      height: 30
-    spriteID: fc06b3d041bd05548b0b8bdb39298ec6
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 42}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -674248350
-    name: ambys
+    guid: -33737796
+    name: slime_portrait
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ambys_Frame_0
+    - name: slime_portrait
       frameIndex: 0
       cellRect:
-        x: 16
+        x: 0
         y: 0
-        width: 33
-        height: 30
-      spriteId: 1f8589145f25a054dae2863ae69bc265
-    - name: ambys_Frame_1
-      frameIndex: 1
-      cellRect:
-        x: 16
-        y: 0
-        width: 33
-        height: 30
-      spriteId: fc06b3d041bd05548b0b8bdb39298ec6
+        width: 64
+        height: 64
+      spriteId: 3e6c347842e83704681b157a0d1ac834
     linkedCells: []
     parentIndex: -1
   platformSettings: []
