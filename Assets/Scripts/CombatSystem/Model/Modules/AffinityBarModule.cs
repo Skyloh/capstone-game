@@ -41,6 +41,11 @@ public class AffinityBarModule : AModule
         }
     }
 
+    public AffinityType this[int index]
+    {
+        get => GetAtIndex(index);
+        set => SetAtIndex(index, value);
+    }
     public int BarLength() => m_barSequence.Count;
 
     public AffinityType GetAtIndex(int i) => m_barSequence[i];
