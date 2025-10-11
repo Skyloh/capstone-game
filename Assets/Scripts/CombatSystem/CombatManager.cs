@@ -3,6 +3,7 @@ using UnityEngine;
 using TNRD;
 using System.Collections.Generic;
 using System;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Defines a controller class that handles interoping between the model and view interfaces, tying combat flow together
@@ -54,13 +55,18 @@ public class CombatManager : MonoBehaviour
     /// Creates a model and an enemy CPU core from the basic CombatUnit.MakePlayer/EnemyUnit methods.
     /// Each team has 4 units of the respective initialization.
     /// </summary>
-    public void InitCombat() // TODO split unit addition into a public method based off of a data SO or something
+    public void InitCombat(BrainSO cpu_brain_TEMP) // TODO split unit addition into a public method based off of a data SO or something
     {
         var unit_dict =
             new Dictionary<int, IList<CombatUnit>>()
             {
-                { 0, new List<CombatUnit>() { CombatUnit.MakePlayerUnit() } },
-                { 1, new List<CombatUnit>() { CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit(),  CombatUnit.MakeEnemyUnit() } }
+                { 0, new List<CombatUnit>() { 
+                    CombatUnit.MakePlayerUnit("PlayerTest") } },
+                { 1, new List<CombatUnit>() { 
+                    CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest2", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest3", cpu_brain_TEMP),  
+                    CombatUnit.MakeEnemyUnit("EnemyTest4", cpu_brain_TEMP) } }
             };
 
         m_combatModel = new CombatModel(unit_dict);
@@ -76,12 +82,25 @@ public class CombatManager : MonoBehaviour
         m_enemyCPU = new CPUCore(1, m_combatModel, this);
     }
 
-    public bool TrySelectUnit(int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
+    /// <summary>
+    /// Attempts to select a unit that fits the selection flag criteria, outputting them if successful.
+    /// 
+    /// The team_perspective argument is used to set the context for the Ally and Enemy flags. If you put in 0,
+    /// Allies will be other units on team id 0, whereas enemies will be on any non-0 team id. If you put in 1, Allies
+    /// will be other units on team id 1, whereas enemies will be on any non-1 team id.
+    /// </summary>
+    /// <param name="team_perspective"></param>
+    /// <param name="team_index"></param>
+    /// <param name="unit_index"></param>
+    /// <param name="selection_flags"></param>
+    /// <param name="selected"></param>
+    /// <returns>A bool if a unit was selected or not.</returns>
+    public bool TrySelectUnit(int team_perspective, int team_index, int unit_index, SelectionFlags selection_flags, out CombatUnit selected)
     {
         selected = null;
         
-        if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == m_playerTeamID) 
-            || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != m_playerTeamID))
+        if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == team_perspective) 
+            || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != team_perspective))
         {
             return false;
         }
@@ -120,7 +139,9 @@ public class CombatManager : MonoBehaviour
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 
-        StartCoroutine(IE_ResolveAbility(action_information));
+        StartCoroutine(
+            IE_ResolveAbility(
+                TestForShockStatus(action_information)));
 
         // CheckStateThenNext is called upon ability completion
     }
@@ -135,7 +156,43 @@ public class CombatManager : MonoBehaviour
     {
         yield return data.Action.IE_ProcessAbility(data, m_combatModel, m_combatView.Value);
 
+        var (team_index, unit_index) = data.UserTeamUnitIndex;
+        ProcessUnitEndTurn(m_combatModel.GetUnitByIndex(team_index, unit_index));
+
         CheckStateThenNext();
+    }
+
+
+    private void ProcessUnitEndTurn(CombatUnit unit)
+    {
+        bool has_status_module = unit.TryGetModule<StatusModule>(out var s_module);
+
+        // burn
+        if (has_status_module 
+            && s_module.HasStatus(StatusModule.Status.Burn)
+            && unit.TryGetModule<HealthModule>(out var h_module))
+        {
+            h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
+        }
+
+        // decrement statuses
+        if (has_status_module)
+        {
+            var collection_copy = new HashSet<StatusModule.Status>(s_module.GetStatuses());
+            foreach (var status in collection_copy)
+            {
+                s_module.DecrementStatusDuration(status);
+            }
+        }
+
+        // if enemy and not stunned with a broken bar, refill it
+        if (unit.TryGetModule<AffinityBarModule>(out var abar_m) 
+            && abar_m.IsBroken()
+            && unit.TryGetModule<StatusModule>(out var s_m)
+            && !s_m.HasStatus(StatusModule.Status.Stun))
+        {
+            abar_m.FillBar();
+        }
     }
 
     /// <summary>
@@ -189,6 +246,23 @@ public class CombatManager : MonoBehaviour
             // next phase
             StartCoroutine(IE_PhaseChange());
         }
+    }
+
+    private ActionData TestForShockStatus(ActionData on_action)
+    {
+        var (team_index, unit_index) = on_action.UserTeamUnitIndex;
+        if (m_combatModel.GetUnitByIndex(team_index, unit_index).TryGetModule<StatusModule>(out var s_module)
+            && s_module.HasStatus(StatusModule.Status.Shock)
+            && Random.Range(0, 2) == 0)
+        {
+            return new ActionData()
+            {
+                Action = new System_ShockAbility(),
+                UserTeamUnitIndex = on_action.UserTeamUnitIndex
+            };
+        }
+
+        return on_action;
     }
 
     private IEnumerator IE_PhaseChange()

@@ -8,7 +8,7 @@ public class EnemyStubAbility : AAbility
     {
         SetAbilityData(new()
         {
-            Name = "EnemyStubAbility",
+            Name = "en_StubAbility",
             Description = "A testing ability that does nothing.",
             RequiredTargets = new Dictionary<int, (int, int)>(),
             TargetCriteria = SelectionFlags.None,

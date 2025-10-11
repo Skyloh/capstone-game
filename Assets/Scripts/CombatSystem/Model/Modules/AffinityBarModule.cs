@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using Random = UnityEngine.Random;
 
 // Left to Right
 public class AffinityBarModule : AModule
@@ -10,9 +11,34 @@ public class AffinityBarModule : AModule
 
     public event ChangeAffinityBar OnAffinityBarChanged;
 
-    public AffinityBarModule(IList<AffinityType> bar_sequence)
+    private readonly int m_slotCount;
+
+    public AffinityBarModule(int slot_count)
     {
-        m_barSequence = bar_sequence;
+        m_barSequence = new List<AffinityType>();
+        m_slotCount = slot_count;
+
+        FillBar();
+    }
+
+    public void FillBar()
+    {
+        m_barSequence.Clear();
+
+        for (int i = 0; i < m_slotCount; i++)
+        {
+            var affinity = Random.Range(0, 3) switch
+            {
+                0 => AffinityType.Red,
+                1 => AffinityType.Blue,
+                2 => AffinityType.Yellow,
+                3 => AffinityType.Green,
+                // unreachable
+                _ => AffinityType.None,
+            };
+
+            m_barSequence.Add(affinity);
+        }
     }
 
     public int BarLength() => m_barSequence.Count;
@@ -38,6 +64,29 @@ public class AffinityBarModule : AModule
         return -1;
     }
 
+    public void BreakLeading(int count)
+    {
+        if (count == 0) return; 
+
+        int start = GetFirstNonNoneIndex();
+        for (int i = 0; i < count; ++i)
+        {
+            if (i + start >= BarLength()) break;
+
+            SetAtIndex(i + start, AffinityType.None);
+        }
+
+        if (IsBroken() && GetOwner().TryGetModule<StatusModule>(out var status_module))
+        {
+            status_module.AddStatus(StatusModule.Status.Stun, 1);
+        }
+    }
+
+    public bool IsBroken()
+    {
+        return GetFirstNonNoneIndex() == -1;
+    }
+
     public int CalculateLeadingBreaks(AffinityType break_element)
     {
         int breaks = 0;
@@ -50,6 +99,8 @@ public class AffinityBarModule : AModule
 
         return breaks;
     }
+
+
 
     // helpers for other functionality eventually
 }

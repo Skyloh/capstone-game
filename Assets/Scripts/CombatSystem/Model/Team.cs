@@ -15,12 +15,12 @@ public class Team
         m_units = new List<CombatUnit>(units.Count);
         m_hasUnitTakenTurn = new List<bool>(units.Count);
 
+        m_teamId = team_id;
+
         for (int i = 0; i < units.Count; i++)
         {
             AddUnit(units[i]);
         }
-
-        m_teamId = team_id;
     }
 
     public void AddUnit(CombatUnit unit)
@@ -36,8 +36,6 @@ public class Team
     {
         for (int i = 0; i < m_units.Count; i++)
         {
-            // TODO: if status consumes turn, indicate it here?
-
             m_hasUnitTakenTurn[i] = false;
         }
     }

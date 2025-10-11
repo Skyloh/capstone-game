@@ -31,7 +31,8 @@ public class CPUCore
         m_actingUnitIndex = m_actingUnitIndex + 1;
 
         // if this index isnt selectable, recursively go to the next
-        if (!m_manager.TrySelectUnit(m_cpuTeamIndex, m_actingUnitIndex, SelectionFlags.Enemy | SelectionFlags.Actionable | SelectionFlags.Alive, out var unit))
+        // using the Ally flag because we're going to the next Ally... (which is the next enemy. Haha).
+        if (!m_manager.TrySelectUnit(m_cpuTeamIndex, m_cpuTeamIndex, m_actingUnitIndex, SelectionFlags.Ally | SelectionFlags.Actionable | SelectionFlags.Alive, out var unit))
         {
             UnityEngine.Debug.LogWarning("Unable to select. Go to next...");
             m_manager.CheckStateThenNext();

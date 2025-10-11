@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class StubCombatView : MonoBehaviour, ICombatView
 {
     [SerializeField] private CombatTestingScript m_unitViewPrefab;
+    [SerializeField] private BrainSO m_simpleEnemyCPUBrain;
     [SerializeField] private Transform m_playerRow;
     [SerializeField] private Transform m_enemyRow;
 
@@ -26,7 +27,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
     {
         m_dataField.onSubmit.AddListener(UpdateData);
 
-        m_manager.InitCombat();
+        m_manager.InitCombat(m_simpleEnemyCPUBrain);
         BeginUnitSelection();
     }
 
@@ -64,7 +65,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
             // test to see if input was good.
             var flag_criteria = SelectionFlags.Ally | SelectionFlags.Actionable | SelectionFlags.Alive;
             if (int.TryParse(m_data, out int result) && result >= 0 && result < 4 
-                && m_manager.TrySelectUnit(0, result, flag_criteria, out var selected))
+                && m_manager.TrySelectUnit(0, 0, result, flag_criteria, out var selected))
             {
                 // we're on to the next phase.
                 m_selectedUserIndexWithinTeam = result;
@@ -94,10 +95,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
         {
             var abilities = module.GetAbilities();
 
-            for (int i = 0; i < abilities.Count; ++i)
-            {
-                builder.AppendLine($"{i}: {abilities[i].GetAbilityData().Name}");
-            }
+            builder.Append(string.Join(", ", abilities.Select(a => a.GetAbilityData().Name)));
 
             Debug.Log(builder.ToString());
             StartCoroutine(IE_TakePlayerTurn(abilities));
@@ -139,13 +137,21 @@ public class StubCombatView : MonoBehaviour, ICombatView
         var targets = new List<(int team, int unit)>();
         while (true)
         {
-            Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm.");
+            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
+
+            if (is_ready)
+            {
+                Debug.Log($"Press 'y' to confirm {ability.GetAbilityData().Name} on {string.Join(" & ", targets)}.");
+            }
+            else
+            {
+                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm early.");
+            }
 
             yield return new WaitUntil(() => m_hasData);
 
             m_hasData = false;
 
-            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
             if (m_data.ToLower() == "y" && is_ready)
             {
                 Debug.Log("Activating ability...");
@@ -176,7 +182,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 continue;
             }
 
-            if (!m_manager.TrySelectUnit(pairing.team, pairing.unit, flags, out var _))
+            if (!m_manager.TrySelectUnit(0, pairing.team, pairing.unit, flags, out var _))
             {
                 Debug.Log("Invalid Unit.");
                 continue;

@@ -14,12 +14,15 @@ public class CombatUnit
 
     private (int team_index, int unit_index) m_indices;
 
+    private readonly string m_name;
+
     /// <summary>
     /// Initializes an empty combat unit.
     /// </summary>
-    public CombatUnit()
+    public CombatUnit(string name)
     {
         m_modules = new Dictionary<System.Type, IModule>();
+        m_name = name;
     }
 
     #region Stub Unit Methods
@@ -27,24 +30,23 @@ public class CombatUnit
     // able to be constructed from a set of parameters given at the start of every combat.
     //
     // definitely a SO for units, right? like, a UnitData or something?
-    public static CombatUnit MakePlayerUnit()
+    public static CombatUnit MakePlayerUnit(string name)
     {
-        return new CombatUnit()
-            .AddModule(new HealthModule(15, 15))
-            .AddModule(new AffinityModule(AffinityType.None, AffinityType.None))
+        return new CombatUnit(name)
+            .AddModule(new HealthModule(100, 100))
+            .AddModule(new AffinityModule(AffinityType.Blue, AffinityType.Red))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new StubAbility(), new AttackAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { new AttackAbility(), new EnvenomAbility() }));
     }
 
-    public static CombatUnit MakeEnemyUnit()
+    public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)
     {
-        var weakness_bar = new List<AffinityType>() { AffinityType.None }; // STUB - randomly generate?
-
-        return new CombatUnit()
-            .AddModule(new HealthModule(15, 15))
-            .AddModule(new AffinityBarModule(weakness_bar))
+        return new CombatUnit(name)
+            .AddModule(new HealthModule(35, 35))
+            .AddModule(new AffinityBarModule(3))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new EnemyStubAbility() }));
+            .AddModule(new CPUModule(brain))
+            .AddModule(new AbilityModule(new List<IAbility>() { new EnemyAttackAbility() }));
     }
     #endregion
 
@@ -79,4 +81,6 @@ public class CombatUnit
 
     public void SetIndices(int team, int unit) => m_indices = (team, unit);
     public (int team, int unit) GetIndices() => m_indices;
+
+    public string GetName() => m_name;
 }

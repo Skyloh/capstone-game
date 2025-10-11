@@ -19,7 +19,7 @@ public class AttackAbility : AAbility
     public override IEnumerator IE_ProcessAbility(ActionData data, ICombatModel model, ICombatView _)
     {
         var (team_index, unit_index) = data.TargetIndices[0];
-        var target = model.GetUnitByIndex(team_index, unit_index); // NOTE: for any enemy to use this ability, the team_index will need to be flipped.
+        var target = model.GetUnitByIndex(team_index, unit_index); 
 
         var (u_team_index, u_unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(u_team_index, u_unit_index);
@@ -31,6 +31,8 @@ public class AttackAbility : AAbility
 
         if (!has_setup) yield break;
 
+        // DAMAGE CALCULATION
+
         int breaks = abar_module.CalculateLeadingBreaks(aff_module.GetWeaponAffinity());
 
         int damage = AbilityUtils.CalculateDamage(50, 70);
@@ -40,10 +42,12 @@ public class AttackAbility : AAbility
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
 
+        abar_module.BreakLeading(breaks);
+
+        damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
+
         h_module.ChangeHealth(damage);
 
-        Debug.Log("Dealing damage: " + damage);
-
-        yield break;
+        yield return new WaitForSeconds(0.5f);
     }
 }
