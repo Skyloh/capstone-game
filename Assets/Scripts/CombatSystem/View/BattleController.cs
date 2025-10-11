@@ -9,13 +9,21 @@ public class BattleController : MonoBehaviour, ICombatView
 {
     // Start is called before the first frame update
     private VisualElement ui;
-
+    private CombatManager combatManager;
     private Button attackButton1;
     private Button attackButton2;
     private Button attackButton3;
     private Button attackButton4;
     private Label actionDescription;
 
+    /// should be of size 4 
+    private PlayerUnit[] playerUnits;
+    //TODO remove class and replace with non stub in own file
+    private partial class EnemyUnit
+    {
+    }
+
+    private EnemyUnit[] enemyUnits;
     public CombatModel model;
     private void Awake()
     {

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70177f011facfe4fb3201fdcdb37430, type: 3}
+  m_Name: BattleSprites
+  m_EditorClassIdentifier: 
+  firePlayerWeakness: {fileID: -1305025378, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
+  waterPlayerWeakness: {fileID: 959226755, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
+  lightningPlayerWeakness: {fileID: -1540257828, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
+  physicalPlayerWeakness: {fileID: -83540121, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
+  fireEnemyWeakness: {fileID: -1388139963531476014, guid: 98b879104b451f644b85972705000519, type: 3}
+  waterEnemyWeakness: {fileID: 0}
+  lightningEnemyWeakness: {fileID: 1463189404431928116, guid: 9f63f346ba0892d48adabb9c01a3434f, type: 3}
+  physicalEnemyWeakness: {fileID: -1983185657376244199, guid: d8a55899a5f500e4384f333e6532f50c, type: 3}
