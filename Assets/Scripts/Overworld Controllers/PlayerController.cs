@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
             // move the player based on what inputs are given
             if (move != Vector3.zero)
             {
+                // Prioritizes horizontal movement for facing direction if both horiz/vert are given
                 if (Mathf.Abs(move.x) >= Mathf.Abs(move.y))
                 {
                     facingDirection = new Vector3(Mathf.Sign(move.x), 0, 0);
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Update the player's sprite based on their current facing direction
     private void UpdateSpriteDirection()
     {
         if (facingDirection.x > 0)
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour
             playerSpriteRenderer.sprite = playerSpriteDown;
     }
 
+    // Check if the target cell is blocked by a collision tile or an NPC
     private bool IsBlocked(Vector3Int cell)
     {
         if (collisionTilemap.HasTile(cell)) return true;
@@ -118,6 +121,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    // Interact with an NPC in the facing direction
     private void Interact()
     {
         Vector3Int facingCell = grid.WorldToCell(transform.position + facingDirection);

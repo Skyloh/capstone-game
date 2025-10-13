@@ -28,6 +28,7 @@ public class NPCController : MonoBehaviour
         }
     }
 
+    // If the player interacts with this NPC, start dialogue
     public void Interact()
     {
         if (dialogue.Length == 0)
