@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer playerSpriteRenderer;
 
     public Tilemap collisionTilemap;
+    public Tilemap loadingZoneTilemap;
 
     void Start()
     {
@@ -91,6 +93,8 @@ public class PlayerController : MonoBehaviour
             {
                 transform.position = targetPosition;
                 isMoving = false;
+
+                CheckForLoadingZone();
             }
         }
     }
@@ -119,6 +123,19 @@ public class PlayerController : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    // Check if player stops movement on a loading zone tile
+    private void CheckForLoadingZone()
+    {
+        Vector3Int playerCell = grid.WorldToCell(transform.position);
+        TileBase tile = loadingZoneTilemap.GetTile(playerCell);
+
+        if (tile is LoadingZoneTile loadingZoneTile && !string.IsNullOrEmpty(loadingZoneTile.sceneToLoad))
+        {
+            UnityEngine.Debug.Log($"Loading scene: {loadingZoneTile.sceneToLoad}");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(loadingZoneTile.sceneToLoad);
+        }
     }
 
     // Interact with an NPC in the facing direction
