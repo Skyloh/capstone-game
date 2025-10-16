@@ -13,9 +13,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
     [SerializeField] private Transform m_playerRow;
     [SerializeField] private Transform m_enemyRow;
 
-    [Space(10)]
-
-    [SerializeField] private CombatManager m_manager;
+    [Space(10)] [SerializeField] private CombatManager m_manager;
     [SerializeField] private InputField m_dataField;
 
     private string m_data;
@@ -31,11 +29,12 @@ public class StubCombatView : MonoBehaviour, ICombatView
         BeginUnitSelection();
     }
 
-    public void UpdateData(string data) 
+    public void UpdateData(string data)
     {
         m_data = data;
         m_hasData = data != string.Empty;
     }
+
     public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)
     {
         var instance = GameObject.Instantiate(m_unitViewPrefab);
@@ -64,7 +63,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
             // test to see if input was good.
             var flag_criteria = SelectionFlags.Ally | SelectionFlags.Actionable | SelectionFlags.Alive;
-            if (int.TryParse(m_data, out int result) && result >= 0 && result < 4 
+            if (int.TryParse(m_data, out int result) && result >= 0 && result < 4
                 && m_manager.TrySelectUnit(0, 0, result, flag_criteria, out var selected))
             {
                 // we're on to the next phase.
@@ -200,7 +199,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
         var metadata = ability.GetAbilityData().RequiredMetadata;
         action_data.ActionMetadata = new Dictionary<string, string>();
 
-        for (int i = 0; i < metadata.Count; i++) 
+        for (int i = 0; i < metadata.Count; i++)
         {
             switch (metadata[i])
             {
@@ -229,6 +228,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                                 continue;
                         }
                     }
+
                     break;
 
                 case "NUMBER_OF_LEADING":
@@ -250,6 +250,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
                         action_data.ActionMetadata.Add(metadata[i], num.ToString());
                     }
+
                     break;
 
                 default:

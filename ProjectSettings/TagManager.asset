@@ -39,6 +39,24 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: distant_background
+    uniqueID: 700290001
+    locked: 0
+  - name: background_2
+    uniqueID: 955525809
+    locked: 0
+  - name: background_1
+    uniqueID: 1718001059
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: foreground_1
+    uniqueID: 3428706909
+    locked: 0
+  - name: foreground_2
+    uniqueID: 1398089075
+    locked: 0
+  - name: ui
+    uniqueID: 3399957001
     locked: 0

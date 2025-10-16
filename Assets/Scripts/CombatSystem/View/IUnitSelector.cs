@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace CombatSystem.View
 {
     public interface IUnitSelector
@@ -6,7 +9,16 @@ namespace CombatSystem.View
         /// Activates interface allowing for interaction to select for unit
         /// </summary>
         /// <param name="selectionFlags"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        (int team, int unit) SelectAsync(SelectionFlags selectionFlags);
+        Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags, CancellationToken token = default);
+        public delegate void SelectionUnitCallback(int team, int unit);
+        void SelectOne(SelectionFlags selectionFlags, SelectionUnitCallback callback);
+        Unit[] Players { get; }
+        EnemyUnit[] Enemies { get; }
+        
+        public delegate void UnitHovered(int index, IUnit unit);
+        public event UnitHovered PlayerHovered;
+        public event UnitHovered EnemyHovered;
     }
 }

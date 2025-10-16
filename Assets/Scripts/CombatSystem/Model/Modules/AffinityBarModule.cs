@@ -56,7 +56,7 @@ public class AffinityBarModule : AModule
 
         m_barSequence[i] = type;
 
-        OnAffinityBarChanged.Invoke(m_barSequence, clone);
+        OnAffinityBarChanged?.Invoke(m_barSequence, clone);
     }
 
     public int GetFirstNonNoneIndex()
