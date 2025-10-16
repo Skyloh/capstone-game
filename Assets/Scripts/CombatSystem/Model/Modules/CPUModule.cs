@@ -62,9 +62,16 @@ public class CPUModule : AModule
         {
             var unit_pool = new List<CombatUnit>(model.GetTeam(ConvertPerspective(entry.Key)).GetUnits());
 
+            var (min, max) = entry.Value;
+            if (min == max && min == -1)
+            {
+                FillUnits(unit_pool, building_targets, model, data.TargetCriteria);
+                break;
+            }
+
             int chosen_so_far = 0; // track the number of units we've successfully added
 
-            for (int i = 0; i < entry.Value.max; ++i)
+            for (int i = 0; i < max; ++i)
             {
                 // get a target for us to process
                 var unit = FindValidTarget(unit_pool, model, target_criteria);
@@ -79,7 +86,7 @@ public class CPUModule : AModule
                 {
                     // if we didnt manage to choose enough targets, error.
                     // this in theory shouldnt happen, but just in case.
-                    if (chosen_so_far < entry.Value.min)
+                    if (chosen_so_far < min)
                     {
                         throw new Exception("Not enough targets!");
                     }
@@ -99,6 +106,14 @@ public class CPUModule : AModule
         }
 
         return target_ids;
+    }
+
+    private void FillUnits(List<CombatUnit> pool, List<CombatUnit> targets, ICombatModel model, SelectionFlags criteria)
+    {
+        while (pool.Count > 0)
+        {
+            targets.Add(FindValidTarget(pool, model, criteria));
+        }
     }
 
     private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria)
@@ -125,6 +140,7 @@ public class CPUModule : AModule
         (int team_id, int unit_id) = unit.GetIndices();
         var team = model.GetTeam(team_id);
 
+        // unforch dupe code...
         if (flags.HasFlag(SelectionFlags.Actionable) && team.HasUnitTakenTurn(unit_id)
             || (flags.HasFlag(SelectionFlags.Alive) && !team.IsUnitAlive(unit_id)))
         {

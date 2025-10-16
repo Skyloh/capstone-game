@@ -14,6 +14,7 @@ public class AffinityModule : AModule
         m_weaknessAffinity = weakness;
     }
 
+    // used by things "observing" this unit. will return veiled or morphed affinities.
     public AffinityType GetWeaknessAffinity()
     {
         if (GetOwner().TryGetModule<StatusModule>(out var status_module))
@@ -26,17 +27,24 @@ public class AffinityModule : AModule
         return m_weaknessAffinity;
     }
 
+    // for abilities that need to access data behind veils and morphs
+    public AffinityType GetRawWeaknessAffinity() => m_weaknessAffinity;
+
+    // used by things "observing" this unit. will return veiled or morphed affinities.
     public AffinityType GetWeaponAffinity()
     {
         if (GetOwner().TryGetModule<StatusModule>(out var status_module))
         {
-            var morphed_weapon = status_module.GetContainedVeilStatus();
+            var morphed_weapon = status_module.GetContainedMorphStatus();
 
             if (morphed_weapon != StatusModule.Status.None) return MorphVeilStatusToAffinity(morphed_weapon);
         }
 
         return m_weaponAffinity;
     }
+
+    // for abilities that need to access data behind veils and morphs
+    public AffinityType GetRawWeaponAffinity() => m_weaponAffinity;
 
 
     public void ChangeWeaponAffinity(AffinityType to_type)

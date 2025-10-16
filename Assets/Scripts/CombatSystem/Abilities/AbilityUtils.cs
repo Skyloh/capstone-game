@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class AbilityUtils
@@ -47,4 +49,9 @@ public static class AbilityUtils
             _ => AffinityType.None,
         };
     }
+
+    public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
+    public static IReadOnlyDictionary<int, (int, int)> AllEnemies() => new Dictionary<int, (int min, int max)> { { 1, (-1, -1) } };
+    public static IReadOnlyDictionary<int, (int, int)> EmptyTargets() => new Dictionary<int, (int min, int max)>();
+    public static List<string> EmptyMetadata() => new List<string>();
 }

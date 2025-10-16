@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -190,6 +191,19 @@ public class StubCombatView : MonoBehaviour, ICombatView
             targets.Add(pairing);
         }
 
+        // checking sweep-target collection
+        var data = ability.GetAbilityData();
+        foreach (var entry in data.RequiredTargets)
+        {
+            // if we have a sweep-target (-1, -1), fill it before moving on.
+            // NOTE: This does not stop duplicate targeting entries
+            var (min, max) = entry.Value;
+            if (min == max && min == -1)
+            {
+                FillTargets(entry.Key, data.TargetCriteria, targets);
+            }
+        }
+
         (int, int)[] target_indices = new (int, int)[targets.Count];
         for (int i = 0; i < targets.Count; i++) target_indices[i] = targets[i];
 
@@ -262,6 +276,26 @@ public class StubCombatView : MonoBehaviour, ICombatView
         m_manager.PerformAction(action_data);
     }
 
+    private void FillTargets(int team_number, SelectionFlags flags, IList<(int, int)> targets)
+    {
+        int unit_index = 0;
+        while (true)
+        {
+            try
+            {
+                // get all valid units on the team until we go OoB
+                if (m_manager.TrySelectUnit(0, team_number, unit_index++, flags, out var unit))
+                {
+                    targets.Add(unit.GetIndices());
+                }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                break;
+            }
+        }
+    }
+
     // this is fine since player-perspective is 0 = allies and 1 = enemies
     // enemies might need to "flip" this logic
     private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets)
@@ -270,6 +304,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
         {
             int team_id = entry.Key;
             var (min, max) = entry.Value;
+
+            // if "target all viable," exit early because we'll be filling it automatically
+            if (min == -1 && max == -1) return true;
 
             int count = targets.Select(pair => pair.team == team_id).Count();
 

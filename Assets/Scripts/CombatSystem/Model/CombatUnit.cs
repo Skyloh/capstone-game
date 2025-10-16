@@ -36,7 +36,13 @@ public class CombatUnit
             .AddModule(new HealthModule(100, 100))
             .AddModule(new AffinityModule(AffinityType.Blue, AffinityType.Red))
             .AddModule(new StatusModule())
-            .AddModule(new AbilityModule(new List<IAbility>() { new AttackAbility(), new EnvenomAbility() }));
+            .AddModule(new AbilityModule(new List<IAbility>() { 
+                new AttackAbility(), 
+                new EnvenomAbility(), 
+                new SweepAbility(),
+                new InstillAbility(),
+                new DefendAbility()
+            }));
     }
 
     public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)

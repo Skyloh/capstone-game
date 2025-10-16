@@ -105,16 +105,9 @@ public class CombatManager : MonoBehaviour
             return false;
         }
 
-        Team selected_team;
-        try
-        {
-            selected_team = m_combatModel.GetTeam(team_index);
-            selected_team.GetUnit(unit_index);
-        }
-        catch (IndexOutOfRangeException)
-        {
-            return false;
-        }
+        // unhandled exception intentionally for OoB.
+        var selected_team = m_combatModel.GetTeam(team_index);
+        selected_team.GetUnit(unit_index);
 
         if (selection_flags.HasFlag(SelectionFlags.Actionable) && selected_team.HasUnitTakenTurn(unit_index)
             || (selection_flags.HasFlag(SelectionFlags.Alive) && !selected_team.IsUnitAlive(unit_index)))

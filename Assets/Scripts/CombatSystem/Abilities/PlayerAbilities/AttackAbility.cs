@@ -10,9 +10,9 @@ public class AttackAbility : AAbility
         {
             Name = "Attack",
             Description = "Damages one enemy and Breaks.",
-            RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (min: 1, max: 1) } }, // targets 1 opposing unit
+            RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
-            RequiredMetadata = new List<string>()
+            RequiredMetadata = AbilityUtils.EmptyMetadata()
         });
     }
 
@@ -42,11 +42,13 @@ public class AttackAbility : AAbility
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
 
-        abar_module.BreakLeading(breaks);
-
         damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
+        abar_module.BreakLeading(breaks);
+
         h_module.ChangeHealth(damage);
+
+        Debug.Log($"Damaging {target.GetName()} for {damage}.");
 
         yield return new WaitForSeconds(0.5f);
     }

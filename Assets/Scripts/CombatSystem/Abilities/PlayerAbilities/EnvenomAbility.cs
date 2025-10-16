@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnvenomAbility : AAbility
@@ -10,9 +9,9 @@ public class EnvenomAbility : AAbility
         {
             Name = "Envenom",
             Description = "Damages one enemy and applies a status based on the weapon element with a duration equal to the number of Breaks.",
-            RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (min: 1, max: 1) } }, // targets 1 opposing unit
+            RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
-            RequiredMetadata = new List<string>()
+            RequiredMetadata = AbilityUtils.EmptyMetadata()
         });
     }
     public override IEnumerator IE_ProcessAbility(ActionData data, ICombatModel model, ICombatView view)
@@ -42,11 +41,14 @@ public class EnvenomAbility : AAbility
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
 
-        abar_module.BreakLeading(breaks);
-
         damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
+        abar_module.BreakLeading(breaks);
+
         h_module.ChangeHealth(damage);
+
+        Debug.Log($"Damaging {target.GetName()} for {damage} with breaks {breaks}.");
+
         status_module.AddStatus(AffinityToStatus(aff_module.GetWeaponAffinity()), breaks);
 
         Debug.Log($"Applying {AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
