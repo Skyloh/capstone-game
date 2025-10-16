@@ -11,6 +11,8 @@ public class Description : MonoBehaviour
         public string name;
         public string description;
     }
+    
+    
 
     void OnEnable()
     {
