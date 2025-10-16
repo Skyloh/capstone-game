@@ -21,8 +21,20 @@ public class AffinityBarModule : AModule
         FillBar();
     }
 
+    // DEBUG
+    public AffinityBarModule(AffinityType type, int slot_count)
+    {
+        m_barSequence = new List<AffinityType>();
+
+        for (int i = 0; i < slot_count; i++) m_barSequence.Add(type);
+
+        m_slotCount = slot_count;
+    }
+
     public void FillBar()
     {
+        var old_bar = new List<AffinityType>(m_barSequence);
+
         m_barSequence.Clear();
 
         for (int i = 0; i < m_slotCount; i++)
@@ -39,6 +51,8 @@ public class AffinityBarModule : AModule
 
             m_barSequence.Add(affinity);
         }
+
+        OnAffinityBarChanged?.Invoke(m_barSequence, old_bar);
     }
 
     public AffinityType this[int index]
@@ -83,7 +97,7 @@ public class AffinityBarModule : AModule
 
         if (IsBroken() && GetOwner().TryGetModule<StatusModule>(out var status_module))
         {
-            status_module.AddStatus(StatusModule.Status.Stun, 1);
+            status_module.AddStatus(StatusModule.Status.Stun, 2);
         }
     }
 

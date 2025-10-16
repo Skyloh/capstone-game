@@ -155,36 +155,20 @@ public class CombatManager : MonoBehaviour
         CheckStateThenNext();
     }
 
-
+    /// <summary>
+    /// Processes any behaviors pertaining to the end of a unit's turn.
+    /// 
+    /// Currently just used to handle Burn resolution.
+    /// </summary>
+    /// <param name="unit"></param>
     private void ProcessUnitEndTurn(CombatUnit unit)
     {
-        bool has_status_module = unit.TryGetModule<StatusModule>(out var s_module);
-
         // burn
-        if (has_status_module 
+        if (unit.TryGetModule<StatusModule>(out var s_module)
             && s_module.HasStatus(StatusModule.Status.Burn)
             && unit.TryGetModule<HealthModule>(out var h_module))
         {
             h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
-        }
-
-        // decrement statuses
-        if (has_status_module)
-        {
-            var collection_copy = new HashSet<StatusModule.Status>(s_module.GetStatuses());
-            foreach (var status in collection_copy)
-            {
-                s_module.DecrementStatusDuration(status);
-            }
-        }
-
-        // if enemy and not stunned with a broken bar, refill it
-        if (unit.TryGetModule<AffinityBarModule>(out var abar_m) 
-            && abar_m.IsBroken()
-            && unit.TryGetModule<StatusModule>(out var s_m)
-            && !s_m.HasStatus(StatusModule.Status.Stun))
-        {
-            abar_m.FillBar();
         }
     }
 
@@ -195,23 +179,15 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void CheckStateThenNext()
     {
-        // check the state of battle
-        for (int team_index = 0; team_index < m_combatModel.GetTeamCount(); ++team_index)
+        // end the phase of the current team
+        EndTeamPhase();
+
+        // check to see if the battle has ended
+        // must be done after EndTeamPhase in case Burn kills an enemy.=
+        if (CheckBattleEnded(out var state))
         {
-            var team = m_combatModel.GetTeam(team_index);
-
-            for (int unit_index = 0; unit_index < team.Count(); ++unit_index)
-            {
-                if (team.IsUnitAlive(unit_index)) break;
-
-                // if we got here, that means we didn't break, which means no unit is alive
-                if (unit_index == team.Count() - 1)
-                {
-                    // END GAME
-                    Debug.LogError("GAME END IN " + (team_index == 0 ? "LOSS" : "VICTORY"));
-                    return;
-                }
-            }
+            Debug.LogError("BATTLE RESOLVED WITH STATE: " + state);
+            return;
         }
 
         // does current phase have any more actionable units? 
@@ -237,7 +213,79 @@ public class CombatManager : MonoBehaviour
         {
             Debug.LogWarning("NEXT PHASE");
             // next phase
-            StartCoroutine(IE_PhaseChange());
+            StartCoroutine(IE_BeginNextTeamPhase());
+        }
+    }
+
+    /// <summary>
+    /// Checks to see if a team has been fully wiped-out, reporting the proper
+    /// win-loss state in the out variable if true.
+    /// </summary>
+    /// <param name="state"></param>
+    /// <returns></returns>
+    private bool CheckBattleEnded(out string state)
+    {
+        for (int team_index = 0; team_index < m_combatModel.GetTeamCount(); ++team_index)
+        {
+            var team = m_combatModel.GetTeam(team_index);
+
+            for (int unit_index = 0; unit_index < team.Count(); ++unit_index)
+            {
+                if (team.IsUnitAlive(unit_index)) break;
+
+                // if we got here, that means we didn't break, which means no unit is alive on this team
+                if (unit_index == team.Count() - 1)
+                {
+                    // END GAME
+                    state = team_index == 0 ? "LOSS" : "VICTORY";
+                    return true;
+                }
+            }
+        }
+
+        state = string.Empty;
+        return false;
+    }
+
+    /// <summary>
+    /// Ends a team's phase by applying end-of-turn statuses, decrementing those statuses, then
+    /// checking for/applying enemy affinity-bar refilling behavior.
+    /// 
+    /// If this method gets bloated, pull behavior out into the various Modules instead, giving them
+    /// turn-phase event methods to implement, or something.
+    /// </summary>
+    private void EndTeamPhase()
+    {
+        var ending_team = m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex());
+        foreach (var unit in ending_team.GetUnits())
+        {
+            // APPLY END-TURN STATUSES
+            // NOTE: should be abstracted, but we have limited statuses that rely on turn phases so not necessary atm.
+            if (unit.TryGetModule<StatusModule>(out var s_module))
+            {
+                // burn
+                if (s_module.HasStatus(StatusModule.Status.Burn)
+                    && unit.TryGetModule<HealthModule>(out var h_module))
+                {
+                    h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
+                }
+
+                // DECREMENT ALL STATUSES
+                var collection_copy = new HashSet<StatusModule.Status>(s_module.GetStatuses());
+                foreach (var status in collection_copy)
+                {
+                    s_module.DecrementStatusDuration(status);
+                }
+
+                // CHECK FOR BAR REFILLING
+                // if enemy and not stunned with a broken bar, refill it
+                if (unit.TryGetModule<AffinityBarModule>(out var abar_m)
+                    && abar_m.IsBroken()
+                    && !s_module.HasStatus(StatusModule.Status.Stun))
+                {
+                    abar_m.FillBar();
+                }
+            }
         }
     }
 
@@ -258,11 +306,13 @@ public class CombatManager : MonoBehaviour
         return on_action;
     }
 
-    private IEnumerator IE_PhaseChange()
+    private IEnumerator IE_BeginNextTeamPhase()
     {
         yield return m_combatView.Value.NextPhase(m_combatModel.IncActiveTeamIndex());
 
-        m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex()).ResetActionability();
+        var next_team = m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex());
+        next_team.ResetActionability();
+        TestForStunStatus(next_team); // consumes any Stunned unit actions
 
         if (m_combatModel.CurrentActiveTeamIndex() == m_playerTeamID)
         {
@@ -271,6 +321,19 @@ public class CombatManager : MonoBehaviour
         else
         {
             m_enemyCPU.SelectNext(true); // mark a resetting of the enemy phase
+        }
+    }
+
+    private void TestForStunStatus(Team team)
+    {
+        foreach (var unit in team.GetUnits())
+        {
+            if (unit.TryGetModule<StatusModule>(out var status_module)
+                && status_module.HasStatus(StatusModule.Status.Stun))
+            {
+                Debug.Log("Stunned!");
+                team.ConsumeTurnOfUnit(unit);
+            }
         }
     }
 }
