@@ -24,12 +24,9 @@ public class AttackAbility : AAbility
         var (u_team_index, u_unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(u_team_index, u_unit_index);
 
-        bool has_setup =
-              target.TryGetModule<HealthModule>(out var h_module)
-            & target.TryGetModule<AffinityBarModule>(out var abar_module)
-            & user.TryGetModule<AffinityModule>(out var aff_module);
-
-        if (!has_setup) yield break;
+        var h_module = GetModuleOrError<HealthModule>(target);
+        var abar_module = GetModuleOrError<AffinityBarModule>(target);
+        var aff_module = GetModuleOrError<AffinityModule>(user);
 
         // DAMAGE CALCULATION
 

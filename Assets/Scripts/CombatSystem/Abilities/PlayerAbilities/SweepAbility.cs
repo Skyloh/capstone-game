@@ -22,7 +22,7 @@ public class SweepAbility : AAbility
         var (u_team_index, u_unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(u_team_index, u_unit_index);
 
-        if (!user.TryGetModule<AffinityModule>(out var aff_module)) yield break;
+        var aff_module = GetModuleOrError<AffinityModule>(user);
 
         int index = 0;
         var breaks_array = new int[data.TargetIndices.Length];
@@ -31,7 +31,7 @@ public class SweepAbility : AAbility
         {
             var target = model.GetUnitByIndex(team_index, unit_index);
 
-            if (!target.TryGetModule<AffinityBarModule>(out var bar_module)) continue;
+            var bar_module = GetModuleOrError<AffinityBarModule>(target);
 
             int breaks = bar_module.CalculateLeadingBreaks(aff_module.GetWeaponAffinity());
             breaks_array[index++] = breaks;

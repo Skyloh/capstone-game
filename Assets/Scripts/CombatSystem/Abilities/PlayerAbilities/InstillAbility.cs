@@ -23,11 +23,8 @@ public class InstillAbility : AAbility
         var target_index = data.TargetIndices[0];
         var target = model.GetUnitByIndex(target_index.team_index, target_index.unit_index);
 
-        bool has_setup =
-            unit.TryGetModule<AffinityModule>(out var aff)
-            & target.TryGetModule<AffinityBarModule>(out var aff_bar);
-
-        if (!has_setup) yield break;
+        var aff = GetModuleOrError<AffinityModule>(unit);
+        var aff_bar = GetModuleOrError<AffinityBarModule>(target);
 
         for (int i = 0; i < 2 && i < aff_bar.BarLength(); ++i)
         {

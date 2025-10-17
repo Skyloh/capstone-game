@@ -22,13 +22,10 @@ public class EnvenomAbility : AAbility
         var (u_team_index, u_unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(u_team_index, u_unit_index);
 
-        bool has_setup =
-              target.TryGetModule<HealthModule>(out var h_module)
-            & target.TryGetModule<AffinityBarModule>(out var abar_module)
-            & user.TryGetModule<AffinityModule>(out var aff_module)
-            & target.TryGetModule<StatusModule>(out var status_module);
-
-        if (!has_setup) yield break;
+        var h_module = GetModuleOrError<HealthModule>(target);
+        var abar_module = GetModuleOrError<AffinityBarModule>(target);
+        var status_module = GetModuleOrError<StatusModule>(target);
+        var aff_module = GetModuleOrError<AffinityModule>(user);
 
         // DAMAGE CALCULATION
 
@@ -49,23 +46,10 @@ public class EnvenomAbility : AAbility
 
         Debug.Log($"Damaging {target.GetName()} for {damage} with breaks {breaks}.");
 
-        status_module.AddStatus(AffinityToStatus(aff_module.GetWeaponAffinity()), breaks);
+        status_module.AddStatus(AbilityUtils.AffinityToStatus(aff_module.GetWeaponAffinity()), breaks);
 
-        Debug.Log($"Applying {AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
+        Debug.Log($"Applying {AbilityUtils.AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
 
         yield return new WaitForSeconds(0.5f);
-    }
-
-    private StatusModule.Status AffinityToStatus(AffinityType type)
-    {
-        var status = type switch
-        {
-            AffinityType.Red => StatusModule.Status.Burn,
-            AffinityType.Blue => StatusModule.Status.Chill,
-            AffinityType.Yellow => StatusModule.Status.Shock,
-            AffinityType.Green => StatusModule.Status.Bruise,
-            _ => StatusModule.Status.None,
-        };
-        return status;
     }
 }

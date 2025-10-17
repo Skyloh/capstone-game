@@ -21,7 +21,7 @@ public class DefendAbility : AAbility
         var (team_index, unit_index) = data.UserTeamUnitIndex;
         var unit = model.GetUnitByIndex(team_index, unit_index);
 
-        if (!unit.TryGetModule<StatusModule>(out var module)) yield break;
+        var module = GetModuleOrError<StatusModule>(unit);
 
         module.AddStatus(StatusModule.Status.VeilNone, 2);
 

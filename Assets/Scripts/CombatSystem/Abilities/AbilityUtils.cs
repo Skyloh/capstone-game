@@ -50,8 +50,22 @@ public static class AbilityUtils
         };
     }
 
+    public static StatusModule.Status AffinityToStatus(AffinityType type)
+    {
+        var status = type switch
+        {
+            AffinityType.Red => StatusModule.Status.Burn,
+            AffinityType.Blue => StatusModule.Status.Chill,
+            AffinityType.Yellow => StatusModule.Status.Shock,
+            AffinityType.Green => StatusModule.Status.Bruise,
+            _ => StatusModule.Status.None,
+        };
+        return status;
+    }
+
     public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
     public static IReadOnlyDictionary<int, (int, int)> AllEnemies() => new Dictionary<int, (int min, int max)> { { 1, (-1, -1) } };
+    public static IReadOnlyDictionary<int, (int, int)> AllAllies() => new Dictionary<int, (int min, int max)> { { 0, (-1, -1) } };
     public static IReadOnlyDictionary<int, (int, int)> EmptyTargets() => new Dictionary<int, (int min, int max)>();
     public static List<string> EmptyMetadata() => new List<string>();
 }
