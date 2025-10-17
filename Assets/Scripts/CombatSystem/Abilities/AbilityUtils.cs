@@ -25,17 +25,17 @@ public static class AbilityUtils
 
     private static float GetChillDamageScalar(CombatUnit attacker)
     {
-        return (attacker.TryGetModule<StatusModule>(out var module) && module.HasStatus(StatusModule.Status.Chill)) ? 0.5f : 1f;
+        return (attacker.TryGetModule<StatusModule>(out var module) && module.HasStatus(Status.Chill)) ? 0.5f : 1f;
     }
 
     private static float GetStunDamageScalar(CombatUnit defender)
     {
-        return (defender.TryGetModule<StatusModule>(out var module) && module.HasStatus(StatusModule.Status.Stun)) ? 2f : 1f;
+        return (defender.TryGetModule<StatusModule>(out var module) && module.HasStatus(Status.Stun)) ? 2f : 1f;
     }
 
     private static float GetBruiseDamageScalar(CombatUnit defender)
     {
-        return (defender.TryGetModule<StatusModule>(out var module) && module.HasStatus(StatusModule.Status.Bruise)) ? 1.5f : 1f;
+        return (defender.TryGetModule<StatusModule>(out var module) && module.HasStatus(Status.Bruise)) ? 1.5f : 1f;
     }
 
     public static AffinityType StringToAffinity(string str)
@@ -48,19 +48,6 @@ public static class AbilityUtils
             "green" => AffinityType.Green,
             _ => AffinityType.None,
         };
-    }
-
-    public static StatusModule.Status AffinityToStatus(AffinityType type)
-    {
-        var status = type switch
-        {
-            AffinityType.Red => StatusModule.Status.Burn,
-            AffinityType.Blue => StatusModule.Status.Chill,
-            AffinityType.Yellow => StatusModule.Status.Shock,
-            AffinityType.Green => StatusModule.Status.Bruise,
-            _ => StatusModule.Status.None,
-        };
-        return status;
     }
 
     public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };

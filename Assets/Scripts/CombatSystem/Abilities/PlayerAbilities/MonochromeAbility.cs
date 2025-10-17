@@ -20,6 +20,13 @@ public class MonochromeAbility : AAbility
         var (team_index, unit_index) = data.UserTeamUnitIndex;
         var unit = model.GetUnitByIndex(team_index, unit_index);
 
+        var weapon_aff = GetModuleOrError<AffinityModule>(unit).GetRawWeaponAffinity();
+
+        foreach (var target in data.TargetIndices)
+        {
+            var t_status = GetModuleOrError<StatusModule>(model.GetUnitByIndex(target.team_index, target.unit_index));
+            //t_status.AddStatus()
+        }
 
         yield return new WaitForSeconds(0.5f);
     }

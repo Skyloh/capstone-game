@@ -25,7 +25,7 @@ public class SpraypaintAbility : AAbility
 
         for (int i = 0; i < 2 && i < aff_bar.BarLength(); ++i)
         {
-            var aff_status = AbilityUtils.AffinityToStatus(aff_bar.GetAtIndex(i));
+            var aff_status = StatusUtils.AffinityToStatus(aff_bar.GetAtIndex(i));
             status.AddStatus(aff_status, 1);
 
             Debug.Log("Inflicting " + aff_status);

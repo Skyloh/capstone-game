@@ -23,7 +23,7 @@ public class DefendAbility : AAbility
 
         var module = GetModuleOrError<StatusModule>(unit);
 
-        module.AddStatus(StatusModule.Status.VeilNone, 2);
+        module.AddStatus(Status.VeilNone, 2);
 
         unit.TryGetModule<AffinityModule>(out var DEBUG);
         Debug.Log($"Your weakness is now read as {DEBUG.GetWeaknessAffinity()}!");

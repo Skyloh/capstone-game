@@ -58,7 +58,7 @@ namespace CombatSystem.View
             Debug.Log("Entrance animation should play");
         }
 
-        public void PlayStatus( StatusModule.Status status)
+        public void PlayStatus(Status status)
         {
             Debug.Log("Status animation should play");
         }

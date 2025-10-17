@@ -165,7 +165,7 @@ public class CombatManager : MonoBehaviour
     {
         // burn
         if (unit.TryGetModule<StatusModule>(out var s_module)
-            && s_module.HasStatus(StatusModule.Status.Burn)
+            && s_module.HasStatus(Status.Burn)
             && unit.TryGetModule<HealthModule>(out var h_module))
         {
             h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
@@ -264,14 +264,14 @@ public class CombatManager : MonoBehaviour
             if (unit.TryGetModule<StatusModule>(out var s_module))
             {
                 // burn
-                if (s_module.HasStatus(StatusModule.Status.Burn)
+                if (s_module.HasStatus(Status.Burn)
                     && unit.TryGetModule<HealthModule>(out var h_module))
                 {
                     h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
                 }
 
                 // DECREMENT ALL STATUSES
-                var collection_copy = new HashSet<StatusModule.Status>(s_module.GetStatuses());
+                var collection_copy = new HashSet<Status>(s_module.GetStatuses());
                 foreach (var status in collection_copy)
                 {
                     s_module.DecrementStatusDuration(status);
@@ -281,7 +281,7 @@ public class CombatManager : MonoBehaviour
                 // if enemy and not stunned with a broken bar, refill it
                 if (unit.TryGetModule<AffinityBarModule>(out var abar_m)
                     && abar_m.IsBroken()
-                    && !s_module.HasStatus(StatusModule.Status.Stun))
+                    && !s_module.HasStatus(Status.Stun))
                 {
                     abar_m.FillBar();
                 }
@@ -293,7 +293,7 @@ public class CombatManager : MonoBehaviour
     {
         var (team_index, unit_index) = on_action.UserTeamUnitIndex;
         if (m_combatModel.GetUnitByIndex(team_index, unit_index).TryGetModule<StatusModule>(out var s_module)
-            && s_module.HasStatus(StatusModule.Status.Shock)
+            && s_module.HasStatus(Status.Shock)
             && Random.Range(0, 2) == 0)
         {
             return new ActionData()
@@ -329,7 +329,7 @@ public class CombatManager : MonoBehaviour
         foreach (var unit in team.GetUnits())
         {
             if (unit.TryGetModule<StatusModule>(out var status_module)
-                && status_module.HasStatus(StatusModule.Status.Stun))
+                && status_module.HasStatus(Status.Stun))
             {
                 Debug.Log("Stunned!");
                 team.ConsumeTurnOfUnit(unit);

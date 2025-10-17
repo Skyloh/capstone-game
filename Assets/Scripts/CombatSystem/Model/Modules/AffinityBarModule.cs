@@ -97,7 +97,7 @@ public class AffinityBarModule : AModule
 
         if (IsBroken() && GetOwner().TryGetModule<StatusModule>(out var status_module))
         {
-            status_module.AddStatus(StatusModule.Status.Stun, 2);
+            status_module.AddStatus(Status.Stun, 2);
         }
     }
 

@@ -13,7 +13,7 @@ namespace CombatSystem.View
         void HideUnit();
         void PlayEntrance();
         void PlayAttack();
-        void PlayStatus(StatusModule.Status status);
+        void PlayStatus(Status status);
         void PlayDead();
         void UpdateHp(int max, int current);
         void Highlight();

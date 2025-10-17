@@ -2,26 +2,6 @@ using System.Collections.Generic;
 
 public class StatusModule : AModule
 {
-    public enum Status
-    { 
-        None,
-        Stun,
-        Burn,
-        Shock,
-        Bruise,
-        Chill,
-        MorphRed, // change weapon element to X
-        MorphBlue,
-        MorphYellow,
-        MorphGreen,
-        MorphNone,
-        VeilRed, // change weakness element to X
-        VeilBlue,
-        VeilYellow,
-        VeilGreen,
-        VeilNone
-    }
-
     public delegate void ChangeEffect((Status status, int duration) from, (Status status, int duration) to);
 
     private readonly IDictionary<Status, int> m_statusDurationMap;
@@ -87,7 +67,4 @@ public class StatusModule : AModule
 
         return Status.None;
     }
-
-    private bool IsMorphStatus(Status status) => (int)status >= 6 && (int)status <= 10;
-    private bool IsVeilStatus(Status status) => (int)status >= 11 && (int)status <= 11;
 }
