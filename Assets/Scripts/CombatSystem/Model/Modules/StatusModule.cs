@@ -15,6 +15,8 @@ public class StatusModule : AModule
 
     public void AddStatus(Status status, int duration)
     {
+        if (status == Status.None) return;
+
         m_statusDurationMap[status] = duration;
 
         OnEffectChanged?.Invoke((status, m_statusDurationMap[status]), (Status.None, -1));

@@ -26,7 +26,8 @@ public class InstillAbility : AAbility
         var aff = GetModuleOrError<AffinityModule>(unit);
         var aff_bar = GetModuleOrError<AffinityBarModule>(target);
 
-        for (int i = 0; i < 2 && i < aff_bar.BarLength(); ++i)
+        int start = aff_bar.GetFirstNonNoneIndex();
+        for (int i = start; i < start + 2 && i < aff_bar.BarLength(); ++i)
         {
             aff_bar.SetAtIndex(i, aff.GetWeaponAffinity());
         }

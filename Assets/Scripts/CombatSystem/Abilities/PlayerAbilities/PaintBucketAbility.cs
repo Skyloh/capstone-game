@@ -1,14 +1,14 @@
 using System.Collections;
 using UnityEngine;
 
-public class MonochromeAbility : AAbility
+public class PaintBucketAbility : AAbility
 {
-    public MonochromeAbility()
+    public PaintBucketAbility()
     {
         SetAbilityData(new()
         {
-            Name = "Monochrome",
-            Description = "Until the end of turn, change all allies' weapon elements to yours.",
+            Name = "Paint Bucket",
+            Description = "Until the end of turn, change all allies' weakness elements to yours.",
             RequiredTargets = AbilityUtils.AllAllies(),
             TargetCriteria = SelectionFlags.Ally | SelectionFlags.Alive,
             RequiredMetadata = AbilityUtils.EmptyMetadata()
@@ -20,14 +20,14 @@ public class MonochromeAbility : AAbility
         var (team_index, unit_index) = data.UserTeamUnitIndex;
         var unit = model.GetUnitByIndex(team_index, unit_index);
 
-        var weapon_aff = GetModuleOrError<AffinityModule>(unit).GetRawWeaponAffinity();
+        var weakness_aff = GetModuleOrError<AffinityModule>(unit).GetRawWeaknessAffinity();
 
         foreach (var target in data.TargetIndices)
         {
             var t_status = GetModuleOrError<StatusModule>(model.GetUnitByIndex(target.team_index, target.unit_index));
-            t_status.AddStatus(StatusUtils.AffinityToMorph(weapon_aff), 1);
+            t_status.AddStatus(StatusUtils.AffinityToVeil(weakness_aff), 1);
 
-            Debug.Log($"{StatusUtils.AffinityToMorph(weapon_aff)} granted to {target}!");
+            Debug.Log($"{StatusUtils.AffinityToVeil(weakness_aff)} granted to {target}!");
 
             yield return new WaitForSeconds(0.5f);
         }

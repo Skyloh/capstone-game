@@ -23,9 +23,13 @@ public class SpraypaintAbility : AAbility
         var status = GetModuleOrError<StatusModule>(target);
         var aff_bar = GetModuleOrError<AffinityBarModule>(target);
 
-        for (int i = 0; i < 2 && i < aff_bar.BarLength(); ++i)
+        var start = aff_bar.GetFirstNonNoneIndex();
+        for (int i = start; i < start + 2 && i < aff_bar.BarLength(); ++i)
         {
             var aff_status = StatusUtils.AffinityToStatus(aff_bar.GetAtIndex(i));
+
+            if (aff_status == Status.None) continue;
+
             status.AddStatus(aff_status, 1);
 
             Debug.Log("Inflicting " + aff_status);

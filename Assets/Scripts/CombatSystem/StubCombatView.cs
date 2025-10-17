@@ -217,11 +217,11 @@ public class StubCombatView : MonoBehaviour, ICombatView
         {
             switch (metadata[i])
             {
-                case "COLOR_TYPE":
+                case MetadataKeys.WEAPON_ELEMENT:
                     string affinity = string.Empty;
                     while (affinity == string.Empty)
                     {
-                        Debug.Log("Select Affinity to Change by Name.");
+                        Debug.Log("Select Affinity for Weapon Element.");
 
                         yield return new WaitUntil(() => m_hasData);
 
@@ -242,30 +242,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
                                 continue;
                         }
                     }
-
                     break;
 
-                case "NUMBER_OF_LEADING":
-                    int num = -1;
-                    while (num == -1)
-                    {
-                        Debug.Log("Input Leading Number Count [1-3].");
-
-                        yield return new WaitUntil(() => m_hasData);
-
-                        m_hasData = false;
-
-                        if (!(int.TryParse(m_data, out num) && num > 0 && num <= 3))
-                        {
-                            Debug.Log("Invalid input.");
-                            num = -1;
-                            continue;
-                        }
-
-                        action_data.ActionMetadata.Add(metadata[i], num.ToString());
-                    }
-
-                    break;
+                // remove Metadata examples at bottom of script
 
                 default:
                     Debug.Log($"Metadata {metadata[i]} is not implemented.");
@@ -316,3 +295,55 @@ public class StubCombatView : MonoBehaviour, ICombatView
         return true;
     }
 }
+
+/*
+ * case "COLOR_TYPE":
+                    string affinity = string.Empty;
+                    while (affinity == string.Empty)
+                    {
+                        Debug.Log("Select Affinity to Change by Name.");
+
+                        yield return new WaitUntil(() => m_hasData);
+
+                        m_hasData = false;
+
+                        switch (m_data.ToLower())
+                        {
+                            case "red":
+                            case "blue":
+                            case "yellow":
+                            case "green":
+                                action_data.ActionMetadata.Add(metadata[i], m_data.ToLower());
+                                affinity = m_data.ToLower();
+                                break;
+
+                            default:
+                                Debug.Log("Invalid Input.");
+                                continue;
+                        }
+                    }
+
+                    break;
+
+                case "NUMBER_OF_LEADING":
+                    int num = -1;
+                    while (num == -1)
+                    {
+                        Debug.Log("Input Leading Number Count [1-3].");
+
+                        yield return new WaitUntil(() => m_hasData);
+
+                        m_hasData = false;
+
+                        if (!(int.TryParse(m_data, out num) && num > 0 && num <= 3))
+                        {
+                            Debug.Log("Invalid input.");
+                            num = -1;
+                            continue;
+                        }
+
+                        action_data.ActionMetadata.Add(metadata[i], num.ToString());
+                    }
+
+                    break;
+*/
