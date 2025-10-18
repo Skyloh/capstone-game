@@ -1,3 +1,5 @@
+using Unity.Burst.CompilerServices;
+
 public enum Status
 {
     None,
@@ -20,8 +22,8 @@ public enum Status
 
 public static class StatusUtils
 {
-    public static bool IsMorphStatus(Status status) => (int)status >= 6 && (int)status <= 10;
-    public static bool IsVeilStatus(Status status) => (int)status >= 11 && (int)status <= 11;
+    public static bool IsMorphStatus(Status status) => (int)status >= (int)Status.MorphRed && (int)status <= (int)Status.MorphNone;
+    public static bool IsVeilStatus(Status status) => (int)status >= (int)Status.VeilRed && (int)status <= (int)Status.VeilNone;
 
     public static Status AffinityToStatus(AffinityType type)
     {

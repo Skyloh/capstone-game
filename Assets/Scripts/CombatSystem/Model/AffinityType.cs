@@ -6,5 +6,5 @@ public enum AffinityType : uint
     Yellow = 0x04, // 1 << 2
     Green = 0x08, // 1 << 3
     // piggybacks for targeting purposes
-    All = 0xFFFFFFFF 
+    All = 0xFFFFFFFF
 }

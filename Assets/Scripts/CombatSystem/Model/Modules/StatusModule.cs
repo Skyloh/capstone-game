@@ -17,6 +17,10 @@ public class StatusModule : AModule
     {
         if (status == Status.None) return;
 
+        // only 1 morph can be active at a time; only 1 veil can be active at a time
+        // the most recently-applied takes priority.
+        EnsureMorphVeilInvariant(status);
+
         m_statusDurationMap[status] = duration;
 
         OnEffectChanged?.Invoke((Status.None, -1), (status, m_statusDurationMap[status]));
@@ -28,14 +32,21 @@ public class StatusModule : AModule
 
         if (m_statusDurationMap[status] == 0)
         {
-            m_statusDurationMap.Remove(status);
-
-            OnEffectChanged?.Invoke((status, by_amount), (Status.None, -1));
+            RemoveStatus(status, by_amount);
         }
         else
         {
             OnEffectChanged?.Invoke((status, m_statusDurationMap[status] + by_amount), (status, m_statusDurationMap[status]));
         }
+    }
+
+    private void RemoveStatus(Status status, int decrement_amount = 0)
+    {
+        int duration_remaining = m_statusDurationMap[status];
+
+        m_statusDurationMap.Remove(status);
+
+        OnEffectChanged?.Invoke((status, duration_remaining + decrement_amount), (Status.None, -1));
     }
 
     public ICollection<Status> GetStatuses()
@@ -71,4 +82,21 @@ public class StatusModule : AModule
     }
 
     public static bool IsEmptyStatus((Status s, int dur) item) => item.s == Status.None || item.dur == -1;
+
+    private void EnsureMorphVeilInvariant(Status incoming)
+    {
+        // no dupe Morphs; only most recent applied
+        Status contained_m = GetContainedMorphStatus();
+        if (StatusUtils.IsMorphStatus(incoming) && contained_m != Status.None)
+        {
+            RemoveStatus(contained_m);
+        }
+
+        // no dupe Veils; only most recent applied
+        Status contained_v = GetContainedVeilStatus();
+        if (StatusUtils.IsVeilStatus(incoming) && contained_v != Status.None)
+        {
+            RemoveStatus(contained_v);
+        }
+    }
 }

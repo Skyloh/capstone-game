@@ -34,14 +34,19 @@ public class CombatUnit
     {
         return new CombatUnit(name)
             .AddModule(new HealthModule(100, 100))
-            .AddModule(new AffinityModule(AffinityType.Blue, AffinityType.Red))
+            .AddModule(new AffinityModule())
             .AddModule(new StatusModule())
             .AddModule(new AbilityModule(new List<IAbility>() { 
                 new AttackAbility(), 
                 new EnvenomAbility(), 
                 new SweepAbility(),
                 new InstillAbility(),
-                new DefendAbility()
+                new DefendAbility(),
+                new MonochromeAbility(),
+                new PaintBucketAbility(),
+                new BlindsideAbility(),
+                new SpraypaintAbility(),
+                new InfuseAbility()
             }));
     }
 
