@@ -159,7 +159,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
             if (m_data.ToLower() == "y" && is_ready)
             {
-                Debug.Log("Activating ability...");
+                Debug.Log("Continuing...");
                 break;
             }
             else if (is_ready)
@@ -227,6 +227,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     while (affinity == string.Empty)
                     {
                         Debug.Log("Select Affinity for Weapon Element.");
+                        Debug.Log("red, yellow, blue, green.");
 
                         yield return new WaitUntil(() => m_hasData);
 
@@ -257,6 +258,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
             }
         }
 
+        Debug.Log("Activating ability...");
         m_manager.PerformAction(action_data);
     }
 
