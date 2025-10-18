@@ -61,12 +61,17 @@ public class CombatManager : MonoBehaviour
             new Dictionary<int, IList<CombatUnit>>()
             {
                 { 0, new List<CombatUnit>() { 
-                    CombatUnit.MakePlayerUnit("PlayerTest") } },
+                    CombatUnit.MakePlayerUnit("PlayerTest1"),
+                    CombatUnit.MakePlayerUnit("PlayerTest2"),
+                    CombatUnit.MakePlayerUnit("PlayerTest3"),
+                    CombatUnit.MakePlayerUnit("PlayerTest4")
+                } },
                 { 1, new List<CombatUnit>() { 
                     CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  
                     CombatUnit.MakeEnemyUnit("EnemyTest2", cpu_brain_TEMP),  
                     CombatUnit.MakeEnemyUnit("EnemyTest3", cpu_brain_TEMP),  
-                    CombatUnit.MakeEnemyUnit("EnemyTest4", cpu_brain_TEMP) } }
+                    CombatUnit.MakeEnemyUnit("EnemyTest4", cpu_brain_TEMP) 
+                } }
             };
 
         m_combatModel = new CombatModel(unit_dict);
