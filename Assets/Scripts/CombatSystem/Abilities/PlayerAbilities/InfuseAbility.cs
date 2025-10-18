@@ -13,7 +13,7 @@ public class InfuseAbility : AAbility
             Description = "Change your weapon-element to any element, then perform an Attack.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
-            RequiredMetadata = new List<string>() { MetadataKeys.WEAPON_ELEMENT }
+            RequiredMetadata = new List<string>() { MetadataConstants.WEAPON_ELEMENT }
         });
 
         m_internalFallback = new AttackAbility();
@@ -26,9 +26,9 @@ public class InfuseAbility : AAbility
 
         var aff_module = GetModuleOrError<AffinityModule>(user);
 
-        if (!data.ActionMetadata.TryGetValue(MetadataKeys.WEAPON_ELEMENT, out string element)) 
+        if (!data.ActionMetadata.TryGetValue(MetadataConstants.WEAPON_ELEMENT, out string element)) 
         {
-            throw new System.Exception($"No metadata key found for {MetadataKeys.WEAPON_ELEMENT}");
+            throw new System.Exception($"No metadata key found for {MetadataConstants.WEAPON_ELEMENT}");
         }
 
         aff_module.ChangeWeaponAffinity(AbilityUtils.StringToAffinity(element));

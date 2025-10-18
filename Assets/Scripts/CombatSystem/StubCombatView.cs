@@ -220,11 +220,12 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
         for (int i = 0; i < metadata.Count; i++)
         {
+            string input;
             switch (metadata[i])
             {
-                case MetadataKeys.WEAPON_ELEMENT:
-                    string affinity = string.Empty;
-                    while (affinity == string.Empty)
+                case MetadataConstants.WEAPON_ELEMENT:
+                    input = string.Empty;
+                    while (input == string.Empty)
                     {
                         Debug.Log("Select Affinity for Weapon Element.");
                         Debug.Log("red, yellow, blue, green.");
@@ -240,7 +241,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                             case "yellow":
                             case "green":
                                 action_data.ActionMetadata.Add(metadata[i], m_data.ToLower());
-                                affinity = m_data.ToLower();
+                                input = m_data.ToLower();
                                 break;
 
                             default:
@@ -250,7 +251,33 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     }
                     break;
 
-                // remove Metadata examples at bottom of script
+                case MetadataConstants.WEAPON_OR_WEAKNESS:
+                    input = string.Empty;
+                    while (input == string.Empty)
+                    {
+                        Debug.Log("Select Weapon Element or Weakness Element to modify.");
+                        Debug.Log("weapon, weakness.");
+
+                        yield return new WaitUntil(() => m_hasData);
+
+                        m_hasData = false;
+
+                        switch (m_data.ToLower())
+                        {
+                            case "weapon":
+                            case "weakness":
+                                action_data.ActionMetadata.Add(metadata[i], m_data.ToLower());
+                                input = m_data.ToLower();
+                                break;
+
+                            default:
+                                Debug.Log("Invalid Input.");
+                                continue;
+                        }
+                    }
+                    break;
+
+                // removed Metadata examples at bottom of script
 
                 default:
                     Debug.Log($"Metadata {metadata[i]} is not implemented.");
