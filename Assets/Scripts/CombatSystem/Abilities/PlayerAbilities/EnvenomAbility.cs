@@ -46,10 +46,17 @@ public class EnvenomAbility : AAbility
 
         Debug.Log($"Damaging {target.GetName()} for {damage} with breaks {breaks}.");
 
-        status_module.AddStatus(StatusUtils.AffinityToStatus(aff_module.GetWeaponAffinity()), breaks);
+        if (breaks > 0)
+        {
+            status_module.AddStatus(StatusUtils.AffinityToStatus(aff_module.GetWeaponAffinity()), breaks);
 
-        Debug.Log($"Applying {StatusUtils.AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
+            Debug.Log($"Applying {StatusUtils.AffinityToStatus(aff_module.GetWeaponAffinity())} with {breaks} stacks.");
+        }
+        else
+        {
+            Debug.Log("No status applied.");
+        }
 
-        yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.5f);
     }
 }

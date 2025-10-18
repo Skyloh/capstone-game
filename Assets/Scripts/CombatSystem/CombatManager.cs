@@ -179,9 +179,6 @@ public class CombatManager : MonoBehaviour
     /// </summary>
     public void CheckStateThenNext()
     {
-        // end the phase of the current team
-        EndTeamPhase();
-
         // check to see if the battle has ended
         // must be done after EndTeamPhase in case Burn kills an enemy.=
         if (CheckBattleEnded(out var state))
@@ -211,7 +208,11 @@ public class CombatManager : MonoBehaviour
         }
         else
         {
+            // end the phase of the current team
+            EndTeamPhase();
+
             Debug.LogWarning("NEXT PHASE");
+
             // next phase
             StartCoroutine(IE_BeginNextTeamPhase());
         }

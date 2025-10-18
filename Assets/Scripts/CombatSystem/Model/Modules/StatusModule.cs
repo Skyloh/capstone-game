@@ -19,7 +19,7 @@ public class StatusModule : AModule
 
         m_statusDurationMap[status] = duration;
 
-        OnEffectChanged?.Invoke((status, m_statusDurationMap[status]), (Status.None, -1));
+        OnEffectChanged?.Invoke((Status.None, -1), (status, m_statusDurationMap[status]));
     }
 
     public void DecrementStatusDuration(Status status, int by_amount = 1)
@@ -30,7 +30,7 @@ public class StatusModule : AModule
         {
             m_statusDurationMap.Remove(status);
 
-            OnEffectChanged?.Invoke((status, m_statusDurationMap[status] + by_amount), (Status.None, -1));
+            OnEffectChanged?.Invoke((status, by_amount), (Status.None, -1));
         }
         else
         {
@@ -69,4 +69,6 @@ public class StatusModule : AModule
 
         return Status.None;
     }
+
+    public static bool IsEmptyStatus((Status s, int dur) item) => item.s == Status.None || item.dur == -1;
 }
