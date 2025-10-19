@@ -21,9 +21,19 @@ public class StatusModule : AModule
         // the most recently-applied takes priority.
         EnsureMorphVeilInvariant(status);
 
-        m_statusDurationMap[status] = duration;
+        // checks if it already exists, and compounds onto it if it does
+        if (m_statusDurationMap.ContainsKey(status))
+        {
+            m_statusDurationMap[status] += duration;
 
-        OnEffectChanged?.Invoke((Status.None, -1), (status, m_statusDurationMap[status]));
+            OnEffectChanged?.Invoke((status, m_statusDurationMap[status] - duration), (status, m_statusDurationMap[status]));
+        }
+        else
+        {
+            m_statusDurationMap[status] = duration; 
+
+            OnEffectChanged?.Invoke((Status.None, -1), (status, m_statusDurationMap[status]));
+        }
     }
 
     public void DecrementStatusDuration(Status status, int by_amount = 1)
