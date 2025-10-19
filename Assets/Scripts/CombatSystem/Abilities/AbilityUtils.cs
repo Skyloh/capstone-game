@@ -51,6 +51,7 @@ public static class AbilityUtils
     }
 
     public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
+    public static IReadOnlyDictionary<int, (int, int)> SingleAlly() => new Dictionary<int, (int min, int max)> { { 0, (1, 1) } };
     public static IReadOnlyDictionary<int, (int, int)> AllEnemies() => new Dictionary<int, (int min, int max)> { { 1, (-1, -1) } };
     public static IReadOnlyDictionary<int, (int, int)> AllAllies() => new Dictionary<int, (int min, int max)> { { 0, (-1, -1) } };
     public static IReadOnlyDictionary<int, (int, int)> EmptyTargets() => new Dictionary<int, (int min, int max)>();
