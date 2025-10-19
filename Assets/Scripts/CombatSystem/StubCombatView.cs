@@ -162,7 +162,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 Debug.Log("Continuing...");
                 break;
             }
-            else if (is_ready)
+            else if (!is_ready)
             {
                 Debug.LogError("Valid targets have not been selected.");
                 continue;
