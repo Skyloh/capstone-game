@@ -10,7 +10,7 @@ public class InfuseAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Infusion",
-            Description = "Change your weapon-element to any element, then perform an Attack.",
+            Description = "Change your weapon-element to any element, then perform a regular, weapon-elemented Attack.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
             RequiredMetadata = new List<string>() { MetadataConstants.WEAPON_ELEMENT }

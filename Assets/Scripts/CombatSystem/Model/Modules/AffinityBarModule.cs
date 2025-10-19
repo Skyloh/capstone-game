@@ -108,9 +108,14 @@ public class AffinityBarModule : AModule
 
     public int CalculateLeadingBreaks(AffinityType break_element)
     {
+        return CalculateLeadingBreaks(new HashSet<AffinityType>() { break_element });
+    }
+
+    public int CalculateLeadingBreaks(ISet<AffinityType> break_elements)
+    {
         int breaks = 0;
         for (int i = GetFirstNonNoneIndex();
-            i >= 0 && i < BarLength() && GetAtIndex(i) == break_element;
+            i >= 0 && i < BarLength() && break_elements.Contains(GetAtIndex(i));
             ++i)
         {
             ++breaks;
@@ -118,7 +123,6 @@ public class AffinityBarModule : AModule
 
         return breaks;
     }
-
 
 
     // helpers for other functionality eventually

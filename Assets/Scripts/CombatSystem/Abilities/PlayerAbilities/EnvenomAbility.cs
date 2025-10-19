@@ -8,7 +8,7 @@ public class EnvenomAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Envenom",
-            Description = "Damages one enemy and applies a status based on the weapon element with a duration equal to the number of Breaks.",
+            Description = "Attack one enemy and Break with your weapon element, applying a status based on the element broken with a duration equal to the number of Breaks.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
             RequiredMetadata = AbilityUtils.EmptyMetadata()

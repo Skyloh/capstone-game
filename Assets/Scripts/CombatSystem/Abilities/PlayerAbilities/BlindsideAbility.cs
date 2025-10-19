@@ -8,7 +8,7 @@ public class BlindsideAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Blindside",
-            Description = "Break the leading 2 elements, then follow up with a weaker Attack.",
+            Description = "Break the leading 2 elements, then follow up with a weaker, regular, weapon-elemented Attack.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
             RequiredMetadata = AbilityUtils.EmptyMetadata()

@@ -10,7 +10,7 @@ public class SweepAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Sweep",
-            Description = "Damage all enemies with your weapon, spreading any Break damage to all targets.",
+            Description = "Damage and Break all enemies with your weapon-element, spreading any Break damage to all targets.",
             RequiredTargets = AbilityUtils.AllEnemies(),
             TargetCriteria = SelectionFlags.Alive | SelectionFlags.Enemy,
             RequiredMetadata = AbilityUtils.EmptyMetadata()
@@ -43,11 +43,8 @@ public class SweepAbility : AAbility
         {
             var target = model.GetUnitByIndex(team_index, unit_index);
 
-            bool has_setup =
-                target.TryGetModule<AffinityBarModule>(out var bar_module)
-                & target.TryGetModule<HealthModule>(out var health_module);
-
-            if (!has_setup) continue;
+            var bar_module = GetModuleOrError<AffinityBarModule>(target);
+            var health_module = GetModuleOrError<HealthModule>(target);
 
             int base_damage = AbilityUtils.CalculateDamage(10, 20);
             Debug.Log("Base damage = " + base_damage);
