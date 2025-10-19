@@ -142,15 +142,20 @@ public class StubCombatView : MonoBehaviour, ICombatView
         var targets = new List<(int team, int unit)>();
         while (true)
         {
-            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets);
+            bool is_ready = CanPrepAbility(ability.GetAbilityData(), targets, out bool can_take_more);
 
-            if (is_ready)
+            if (is_ready && !can_take_more)
             {
                 Debug.Log($"Press 'y' to confirm {ability.GetAbilityData().Name} on {string.Join(" & ", targets)}.");
             }
+            else if (is_ready && can_take_more)
+            {
+                Debug.Log($"Ability is prepped, but you may continue selecting units.");
+                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
+            }
             else
             {
-                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm early.");
+                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
             }
 
             yield return new WaitUntil(() => m_hasData);
@@ -162,7 +167,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 Debug.Log("Continuing...");
                 break;
             }
-            else if (!is_ready)
+            else if (m_data.ToLower() == "y" && !is_ready)
             {
                 Debug.LogError("Valid targets have not been selected.");
                 continue;
@@ -220,12 +225,14 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
         for (int i = 0; i < metadata.Count; i++)
         {
-            string input;
+            Debug.Log("Handling metadata data for key entry: " + metadata[i]);
+
+            bool break_loop;
             switch (metadata[i])
             {
                 case MetadataConstants.WEAPON_ELEMENT:
-                    input = string.Empty;
-                    while (input == string.Empty)
+                    break_loop = false;
+                    while (!break_loop)
                     {
                         Debug.Log("Select Affinity for Weapon Element.");
                         Debug.Log("red, yellow, blue, green.");
@@ -240,8 +247,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
                             case "blue":
                             case "yellow":
                             case "green":
-                                action_data.ActionMetadata.Add(metadata[i], m_data.ToLower());
-                                input = m_data.ToLower();
+                                action_data.AddToMetadata(metadata[i], m_data.ToLower());
+                                break_loop = true;
                                 break;
 
                             default:
@@ -252,8 +259,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     break;
 
                 case MetadataConstants.WEAPON_OR_WEAKNESS:
-                    input = string.Empty;
-                    while (input == string.Empty)
+                    break_loop = false;
+                    while (!break_loop)
                     {
                         Debug.Log("Select Weapon Element or Weakness Element to modify.");
                         Debug.Log("weapon, weakness.");
@@ -266,13 +273,79 @@ public class StubCombatView : MonoBehaviour, ICombatView
                         {
                             case "weapon":
                             case "weakness":
-                                action_data.ActionMetadata.Add(metadata[i], m_data.ToLower());
-                                input = m_data.ToLower();
+                                action_data.AddToMetadata(metadata[i], m_data.ToLower());
+                                break_loop = true;
                                 break;
 
                             default:
                                 Debug.Log("Invalid Input.");
                                 continue;
+                        }
+                    }
+                    break;
+
+                case MetadataConstants.OPTIONAL_AITI:
+                case MetadataConstants.AFF_INDEX_TARGET_INDEX:
+                    bool is_optional = metadata[i] == MetadataConstants.OPTIONAL_AITI;
+
+                    break_loop = false;
+                    while (!break_loop)
+                    {
+                        if (!is_optional) Debug.Log("Input target indices and element index.");
+                        else Debug.Log("Input target indices and element index, or \"n\" to finalize.");
+                        Debug.Log("e.g. 1, 0, 0 = target team index, target unit index, 0-indexed element index in bar");
+
+                        yield return new WaitUntil(() => m_hasData);
+
+                        m_hasData = false;
+
+                        if (is_optional && m_data.ToLower() == "n")
+                        {
+                            // not needed, but semantically similar
+                            // break_loop = true;
+                            break;
+                        }
+
+                        string[] string_data = m_data.Split(", ");
+
+                        try
+                        {
+                            if (string_data.Length != 3) throw new Exception("Invalid number of data entries: " + string_data.Length);
+
+                            int team_index = int.Parse(string_data[0]);
+                            int unit_index = int.Parse(string_data[1]);
+                            int aff_index  = int.Parse(string_data[2]);
+
+                            // if trying to target a unit not in the selection scope, ensure valid targeting
+                            if (!action_data.TargetIndices.Contains((team_index, unit_index))) throw new Exception("Target not in selected targets.");
+                            
+                            // if trying to target OoB unit, ensure valid indices
+                            if (!m_manager.TrySelectUnit(0, team_index, unit_index, SelectionFlags.Enemy | SelectionFlags.Ally, out var unit)) throw new Exception("Unable to select unit.");
+                            
+                            // if OoB or missing a bar module, ensure valid selection
+                            if (!(unit.TryGetModule<AffinityBarModule>(out var module)
+                                && aff_index >= module.GetFirstNonNoneIndex()
+                                && aff_index < module.BarLength())) throw new Exception("Affinity index OoB or no bar module on target.");
+
+                            // if the specific target is already added to the metadata key, ensure uniqueness
+                            string aiti_string = AbilityUtils.MakeAffinityIndexTargetIndexString(aff_index, (team_index, unit_index));
+                            if ((action_data.ActionMetadata.TryGetValue(MetadataConstants.AFF_INDEX_TARGET_INDEX, out string value)
+                                && value == aiti_string)
+                                || (action_data.ActionMetadata.TryGetValue(MetadataConstants.OPTIONAL_AITI, out string o_value)
+                                && o_value == aiti_string)) throw new Exception("String already exists in AITI metadata key. Choose a unique target.");
+
+
+                            // all conditions pass? good to go.
+                            action_data.AddToMetadata(
+                                MetadataConstants.AFF_INDEX_TARGET_INDEX,
+                                aiti_string);
+
+                            break_loop = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log("Invalid input: " + e.Message);
+                            continue;
                         }
                     }
                     break;
@@ -311,8 +384,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
     // this is fine since player-perspective is 0 = allies and 1 = enemies
     // enemies might need to "flip" this logic
-    private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets)
+    private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets, out bool can_take_more)
     {
+        can_take_more = false;
         foreach (var entry in data.RequiredTargets)
         {
             int team_id = entry.Key;
@@ -324,6 +398,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
             int count = targets.Select(pair => pair.team == team_id).Count();
 
             if (count < min || count > max) return false;
+            if (count < max) can_take_more = true;
         }
 
         return true;

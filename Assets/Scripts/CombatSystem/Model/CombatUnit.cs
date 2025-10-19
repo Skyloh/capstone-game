@@ -46,7 +46,8 @@ public class CombatUnit
                 new PaintBucketAbility(),
                 new BlindsideAbility(),
                 new SpraypaintAbility(),
-                new InfuseAbility()
+                new InfuseAbility(),
+                new SwapAbility()
             }));
     }
 

@@ -36,4 +36,16 @@ public struct ActionData
     /// during their control flow step.
     /// </summary>
     public Dictionary<string, string> ActionMetadata;
+
+    public readonly void AddToMetadata(string key, string value)
+    {
+        if (ActionMetadata.ContainsKey(key))
+        {
+            ActionMetadata[key] += AbilityUtils.METADATA_UNION_CHARACTER + value;
+        }
+        else
+        {
+            ActionMetadata.Add(key, value);
+        }
+    }
 }

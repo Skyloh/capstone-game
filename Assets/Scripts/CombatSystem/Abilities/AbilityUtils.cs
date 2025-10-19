@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class AbilityUtils
 {
+    // the character for combining several entries in a single metadata key
+    public const char METADATA_UNION_CHARACTER = '&';
+
     public static int CalculateDamage(int base_damage, int max_damage)
     {
         return Mathf.FloorToInt((max_damage - base_damage) * Random.Range(0f, 1f) + base_damage);
@@ -48,6 +51,40 @@ public static class AbilityUtils
             "green" => AffinityType.Green,
             _ => AffinityType.None,
         };
+    }
+
+    public static string MakeAffinityIndexTargetIndexString(int aff_index, (int t_i, int u_i) unit_indices)
+    {
+        return $"{unit_indices.t_i}-{unit_indices.u_i}:{aff_index}";
+    }
+
+    public static (int team_index, int unit_index, int aff_index) ParseAffinityIndexTargetIndexString(string input)
+    {
+        int hyphen = input.IndexOf('-');
+        int colon = input.IndexOf(':');
+        
+        if (hyphen == -1 || colon == -1) throw new System.Exception("String is of improper format! " + input);
+
+        string team_index_str = input[..hyphen];
+
+        int u_start_ind = hyphen + 1;
+        string unit_index_str = input[u_start_ind..input.IndexOf(':')];
+
+        string aff_index = input[(colon + 1)..];
+
+        return (int.Parse(team_index_str), int.Parse(unit_index_str), int.Parse(aff_index));
+    }
+
+    public static string[] SplitMetadataEntry(string data)
+    {
+        if (!data.Contains(METADATA_UNION_CHARACTER))
+        {
+            throw new System.Exception(
+                $"Metadata union character \"{METADATA_UNION_CHARACTER}\" missing for data string \"{data}\"! " +
+                $"It must be included if metadata key maps to several data entries!");
+        }
+
+        return data.Split(METADATA_UNION_CHARACTER);
     }
 
     public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };

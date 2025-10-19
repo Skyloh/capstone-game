@@ -13,6 +13,8 @@ public class AffinityBarModule : AModule
 
     private readonly int m_slotCount;
 
+    private IList<AffinityType> m_bookmark;
+
     public AffinityBarModule(int slot_count)
     {
         m_barSequence = new List<AffinityType>();
@@ -33,7 +35,7 @@ public class AffinityBarModule : AModule
 
     public void FillBar()
     {
-        var old_bar = new List<AffinityType>(m_barSequence);
+        Bookmark();
 
         m_barSequence.Clear();
 
@@ -52,7 +54,7 @@ public class AffinityBarModule : AModule
             m_barSequence.Add(affinity);
         }
 
-        OnAffinityBarChanged?.Invoke(m_barSequence, old_bar);
+        ConsumeBookmark();
     }
 
     public AffinityType this[int index]
@@ -60,18 +62,32 @@ public class AffinityBarModule : AModule
         get => GetAtIndex(index);
         set => SetAtIndex(index, value);
     }
+
     public int BarLength() => m_barSequence.Count;
 
     public AffinityType GetAtIndex(int i) => m_barSequence[i];
 
     public void SetAtIndex(int i, AffinityType type)
     {
-        var clone = new List<AffinityType>(m_barSequence);
+        Bookmark();
 
         m_barSequence[i] = type;
 
-        OnAffinityBarChanged?.Invoke(m_barSequence, clone);
+        ConsumeBookmark();
     }
+
+    public void Bookmark() => m_bookmark = new List<AffinityType>(m_barSequence);
+    public void ConsumeBookmark()
+    {
+        OnAffinityBarChanged?.Invoke(m_barSequence, m_bookmark);
+        m_bookmark = null;
+    }
+
+
+    // VERY IMPORTANT to call Bookmark and ConsumeBookmark before and after using the Silent methods
+    public void SilentRemoveAt(int index) => m_barSequence.RemoveAt(index);
+
+    public void SilentPushBack(AffinityType aff) => m_barSequence.Add(aff);
 
     public int GetFirstNonNoneIndex()
     {
@@ -82,6 +98,8 @@ public class AffinityBarModule : AModule
 
         return -1;
     }
+
+    public IList<AffinityType> CloneCurrentBar() => new List<AffinityType>(m_barSequence);
 
     public void BreakLeading(int count)
     {
