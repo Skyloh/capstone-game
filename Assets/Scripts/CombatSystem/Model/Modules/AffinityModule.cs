@@ -19,8 +19,8 @@ public class AffinityModule : AModule
     // DEBUG
     public AffinityModule()
     {
-        m_weaponAffinity = (AffinityType)(1 << Random.Range(1, 4));
-        m_weaknessAffinity = (AffinityType)(1 << Random.Range(1, 4));
+        m_weaponAffinity = (AffinityType)(1 << Random.Range(0, 4));
+        m_weaknessAffinity = (AffinityType)(1 << Random.Range(0, 4));
     }
 
     // used by things "observing" this unit. will return veiled or morphed affinities.

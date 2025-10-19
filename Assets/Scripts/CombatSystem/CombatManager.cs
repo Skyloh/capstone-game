@@ -164,10 +164,12 @@ public class CombatManager : MonoBehaviour
     /// Processes any behaviors pertaining to the end of a unit's turn.
     /// 
     /// Currently just used to handle Burn resolution.
+    /// NOTE: Not anymore. Burn is handled at the end of phase. Remove this method?
     /// </summary>
     /// <param name="unit"></param>
-    private void ProcessUnitEndTurn(CombatUnit unit)
+    private void ProcessUnitEndTurn(CombatUnit _)
     {
+        /*
         // burn
         if (unit.TryGetModule<StatusModule>(out var s_module)
             && s_module.HasStatus(Status.Burn)
@@ -175,6 +177,7 @@ public class CombatManager : MonoBehaviour
         {
             h_module.ChangeHealth(Mathf.FloorToInt(h_module.GetMaxHealth() * 0.1f));
         }
+        */
     }
 
     /// <summary>
