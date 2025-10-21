@@ -75,7 +75,10 @@ public class CPUModule : AModule
             for (int i = 0; i < max; ++i)
             {
                 // get a target for us to process
-                var unit = FindValidTarget(unit_pool, model, target_criteria);
+                //
+                // use Goad to find a surefire target if we're attacking an Enemy team. Do not use Goad if
+                // we're searching our allies for a target, because that is dumb.
+                var unit = FindValidTarget(unit_pool, model, target_criteria, entry.Key != 0);
 
                 if (unit != null) // if one exists
                 {
@@ -117,7 +120,7 @@ public class CPUModule : AModule
         }
     }
 
-    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria )
+    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria, bool use_rage = false)
     {
         // pick a random unit from the pool, dropping them if they dont match the criteria
         CombatUnit unit;
@@ -126,7 +129,7 @@ public class CPUModule : AModule
             // uh oh, we didnt find one in time.
             if (unit_pool.Count == 0) return null;
 
-            int index = Random.Range(0, unit_pool.Count);
+            int index = GetIndexOfPotentialUnit(unit_pool, use_rage);
 
             unit = unit_pool[index];
             unit_pool.RemoveAt(index);
@@ -134,6 +137,27 @@ public class CPUModule : AModule
         } while (!MatchesCriteria(unit, model, target_criteria));
 
         return unit;
+    }
+
+    private int GetIndexOfPotentialUnit(List<CombatUnit> unit_pool, bool use_rage)
+    {
+        // if not to use Goad to get a target, pick random
+        if (!use_rage) return Random.Range(0, unit_pool.Count);
+
+        // otherwise, find a target with Goad
+        for (int i = 0; i < unit_pool.Count; ++i)
+        {
+            // not great that this is done repeatedly, but it's a fast
+            // lookup (two dictionaries) so it doesn't matter for now.
+            if (unit_pool[i].TryGetModule<StatusModule>(out var module) 
+                && module.HasStatus(Status.Goad))
+            {
+                return i;
+            }
+        }
+
+        // failing that, pick random
+        return Random.Range(0, unit_pool.Count);
     }
 
     private bool MatchesCriteria(CombatUnit unit, ICombatModel model, SelectionFlags flags)

@@ -17,7 +17,8 @@ public enum Status
     VeilBlue,
     VeilYellow,
     VeilGreen,
-    VeilNone
+    VeilNone,
+    Goad
 }
 
 public static class StatusUtils
