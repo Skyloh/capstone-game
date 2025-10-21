@@ -999,6 +999,7 @@ GameObject:
   - component: {fileID: 2107557644}
   - component: {fileID: 2107557645}
   - component: {fileID: 2107557646}
+  - component: {fileID: 2107557647}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1062,6 +1063,18 @@ MonoBehaviour:
   m_enemyRow: {fileID: 105451463}
   m_manager: {fileID: 2107557645}
   m_dataField: {fileID: 1983381470}
+--- !u!114 &2107557647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107557643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbecddecaa12c7e41a035c7b864a76de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

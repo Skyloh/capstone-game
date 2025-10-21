@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -113,17 +114,22 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
     private IEnumerator IE_TakePlayerTurn(IReadOnlyList<IAbility> abilities)
     {
-        int chosen_move = -1;
+        int chosen_move = -1; // -1 is invalid, -2 is item usage
         while (chosen_move == -1)
         {
-            Debug.Log("Select Ability by Index.");
+            Debug.Log("Select Ability by Index or type \"item\" to use an item.");
 
             yield return new WaitUntil(() => m_hasData);
 
             m_hasData = false;
 
+            // handle item case
+            if (m_data.ToLower() == "item")
+            {
+                chosen_move = -2;
+            }
             // if selecting a move failed, invalidate it.
-            if (!(int.TryParse(m_data, out chosen_move) && chosen_move >= 0 && chosen_move < abilities.Count))
+            else if (!(int.TryParse(m_data, out chosen_move) && chosen_move >= 0 && chosen_move < abilities.Count))
             {
                 chosen_move = -1;
 
@@ -131,7 +137,43 @@ public class StubCombatView : MonoBehaviour, ICombatView
             }
         }
 
-        var ability = abilities[chosen_move];
+        // process if using inventory access
+        IAbility ability;
+        if (chosen_move != -2) ability = abilities[chosen_move];
+        else
+        {
+            // print all items
+            var inventory_contents = InventorySingleton.Instance.ViewItems();
+            int max_index = inventory_contents.Count;
+
+            var builder = new StringBuilder();
+            int index = 0;
+            foreach (var item in inventory_contents) 
+                builder.Append(index++).Append(": ").Append(item.GetAbilityData().Name).Append(", ");
+            builder.Remove(builder.Length - 2, 2);
+
+            Debug.Log(builder.ToString());
+
+            int chosen_item_index = -1;
+            while (chosen_item_index == -1)
+            {
+                Debug.Log("Select Item by index.");
+
+                yield return new WaitUntil(() => m_hasData);
+
+                m_hasData = false;
+
+                // if selecting a move failed, invalidate it.
+                if (!(int.TryParse(m_data, out chosen_item_index) && chosen_item_index >= 0 && chosen_item_index < max_index))
+                {
+                    chosen_item_index = -1;
+
+                    Debug.Log("Invalid input.");
+                }
+            }
+
+            ability = new System_UseItemAbility(InventorySingleton.Instance.ConsumeItemAtIndex(chosen_item_index));
+        }
 
         // ACTION DATA SETUP
         var action_data = new ActionData();

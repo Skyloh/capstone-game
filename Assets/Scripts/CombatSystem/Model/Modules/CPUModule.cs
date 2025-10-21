@@ -62,15 +62,16 @@ public class CPUModule : AModule
         {
             var unit_pool = new List<CombatUnit>(model.GetTeam(ConvertPerspective(entry.Key)).GetUnits());
 
+            // if we're to target a whole team, simply fill with a whole team of units.
             var (min, max) = entry.Value;
             if (min == max && min == -1)
             {
                 FillUnits(unit_pool, building_targets, model, data.TargetCriteria);
                 break;
             }
+            // otherwise, perform regular target selection
 
             int chosen_so_far = 0; // track the number of units we've successfully added
-
             for (int i = 0; i < max; ++i)
             {
                 // get a target for us to process
@@ -116,7 +117,7 @@ public class CPUModule : AModule
         }
     }
 
-    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria)
+    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria )
     {
         // pick a random unit from the pool, dropping them if they dont match the criteria
         CombatUnit unit;

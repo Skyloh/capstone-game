@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// a utility class for computations for abilities as well as handlers for metadata and targeting creation
 public static class AbilityUtils
 {
     // the character for combining several entries in a single metadata key
