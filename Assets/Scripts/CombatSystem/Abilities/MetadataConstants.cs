@@ -12,6 +12,8 @@ public static class MetadataConstants
     public const string AFF_INDEX_TARGET_INDEX = "index-element-index-target";
     public const string OPTIONAL_AITI = "optional-" + AFF_INDEX_TARGET_INDEX;
 
+    public const string PAIR_AFF_INDEX_TARGET_INDEX = "pair-index-element-index-target";
+
     /* If i need these, use them. Try to get a more generalized key implementation first, though. These are bespoke.
     public const string AFFINITY_INDEX_2 = "2-affinity-index"; // for Swap (pick 2 indices on up to 2 enemies)
     public const string AFFINITY_INDEX_3 = "3-affinity-index"; // for Delay (pick 3 indices on 1 enemy)

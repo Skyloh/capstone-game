@@ -392,6 +392,60 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     }
                     break;
 
+                case MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX:
+                    break_loop = false;
+                    while (!break_loop)
+                    {
+                        Debug.Log("Input target indices and element-pair index.");
+                        Debug.Log("e.g. 1, 0, 0 = target team index, target unit index, 0-indexed left-element index in bar");
+
+                        yield return new WaitUntil(() => m_hasData);
+
+                        m_hasData = false;
+
+                        string[] string_data = m_data.Split(", ");
+
+                        try
+                        {
+                            if (string_data.Length != 3) throw new Exception("Invalid number of data entries: " + string_data.Length);
+
+                            int team_index = int.Parse(string_data[0]);
+                            int unit_index = int.Parse(string_data[1]);
+                            int aff_index = int.Parse(string_data[2]);
+
+                            // if trying to target a unit not in the selection scope, ensure valid targeting
+                            if (!action_data.TargetIndices.Contains((team_index, unit_index))) throw new Exception("Target not in selected targets.");
+
+                            // if trying to target OoB unit, ensure valid indices
+                            if (!m_manager.TrySelectUnit(0, team_index, unit_index, SelectionFlags.Enemy | SelectionFlags.Ally, out var unit)) throw new Exception("Unable to select unit.");
+
+                            // if OoB or missing a bar module, ensure valid selection
+                            if (!(unit.TryGetModule<AffinityBarModule>(out var module)
+                                && aff_index >= module.GetFirstNonNoneIndex()
+                                && aff_index+1 < module.BarLength())) throw new Exception("Affinity index OoB or no bar module on target.");
+
+                            // if the specific target is already added to the metadata key, ensure uniqueness
+                            if (!AssertPairNoOverlap(aff_index, action_data.ActionMetadata))
+                            {
+                                throw new Exception("Index creates overlapping pair element zone.");
+                            }
+
+
+                            // all conditions pass? good to go.
+                            action_data.AddToMetadata(
+                                MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX,
+                                AbilityUtils.MakeAffinityIndexTargetIndexString(aff_index, (team_index, unit_index)));
+
+                            break_loop = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log("Invalid input: " + e.Message);
+                            continue;
+                        }
+                    }
+                    break;
+
                 // removed Metadata examples at bottom of script
 
                 default:
@@ -402,6 +456,18 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
         Debug.Log("Activating ability...");
         m_manager.PerformAction(action_data);
+    }
+
+    private bool AssertPairNoOverlap(int new_element_index, Dictionary<string, string> current_metadata)
+    {
+        if (current_metadata.TryGetValue(MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX, out string value))
+        {
+            (int _, int _, int index) = AbilityUtils.ParseAffinityIndexTargetIndexString(value);
+
+            return new_element_index != index && new_element_index - 1 != index && new_element_index + 1 != index;
+        }
+
+        return true;
     }
 
     private void FillTargets(int team_number, SelectionFlags flags, IList<(int, int)> targets)
