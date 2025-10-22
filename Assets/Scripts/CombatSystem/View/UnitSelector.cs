@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.IO.LowLevel.Unsafe;
@@ -9,6 +11,8 @@ namespace CombatSystem.View
 {
     public class UnitSelector : MonoBehaviour, IUnitSelector
     {
+        private readonly Queue<(SelectionFlags flags, IUnitSelector.SelectionUnitCallback callback)> requests = new();
+        private CombatManager combatManager;
         private void Awake()
         {
             // throw new NotImplementedException();
@@ -23,12 +27,14 @@ namespace CombatSystem.View
                 enemies[i].Unhover += () => OnUnitUnhovered(i1, enemies[i1]);
                 enemies[i].Click += () => OnEnemyClicked(i1, enemies[i1]);
             }
+            combatManager = GetComponent<CombatManager>();
         }
 
-        ICombatModel combatModel;
+        ICombatModel combatModel => combatManager.CombatModel;
 
         private bool IsValidPlayerSelection(int index)
         {
+            SelectionFlags currentFlags = requests.Peek().flags;
             if (!currentFlags.HasFlag(SelectionFlags.Ally)) return false;
             if (currentFlags.HasFlag(SelectionFlags.Actionable))
             {
@@ -51,6 +57,7 @@ namespace CombatSystem.View
 
         private bool IsValidEnemySelection(int index)
         {
+            SelectionFlags currentFlags = requests.Peek().flags;
             if (!currentFlags.HasFlag(SelectionFlags.Enemy)) return false;
             if (currentFlags.HasFlag(SelectionFlags.Actionable))
             {
@@ -73,52 +80,50 @@ namespace CombatSystem.View
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
-            if (!inSelectionMode) return;
-
+            if(requests.Count == 0) return;
             if (IsValidPlayerSelection(index))
             {
                 players[index].Highlight();
+                Debug.Log($"Player {index} hovered");
                 PlayerHovered?.Invoke(index, unit);
             }
         }
 
         private void OnEnemyHovered(int index, IUnit unit)
         {
-            if (!inSelectionMode) return;
+            if(requests.Count == 0) return;
             if (IsValidEnemySelection(index))
             {
                 enemies[index].Highlight();
+                Debug.Log($"Enemy {index} hovered");
                 EnemyHovered?.Invoke(index, enemies[index]);
             }
         }
 
         private void OnUnitUnhovered(int index, IUnit unit)
         {
-            if (!inSelectionMode)return;
+            if (requests.Count == 0)return;
             unit.Unhighlight();
         }
 
-        private SelectionFlags currentFlags;
-        private (int team, int unit) currentSelection;
-
         private void OnPlayerClicked(int index, IUnit unit)
         {
-            if(!inSelectionMode) return;
+            if(requests.Count == 0) return;
             if (IsValidPlayerSelection(index))
             {
-                currentSelection = (0, index);
-                inSelectionMode = false;
+                requests.Dequeue().callback(0,index);
+                Debug.Log($"Selected 0 , {index}");
                 unit.Focus();
             }
         }
 
         private void OnEnemyClicked(int index, IUnit unit)
         {
-            if(!inSelectionMode) return;
+            if(requests.Count == 0) return;
             if (IsValidEnemySelection(index))
             {
-                currentSelection = (1, index);
-                inSelectionMode = false;
+                Debug.Log($"Selected 1 , {index}");
+                requests.Dequeue().callback(1,index);
                 unit.Focus();
             }
         }
@@ -130,35 +135,42 @@ namespace CombatSystem.View
         [SerializeField] private Unit[] players;
         [SerializeField] private EnemyUnit[] enemies;
 
-        private bool inSelectionMode = false;
-
         public async Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags,
             CancellationToken token = default)
         {
-            currentSelection = (-1, -1);
-            inSelectionMode = true;
-            currentFlags = selectionFlags;
+            bool inSelectionMode = true;
+            (int team, int unit) selection = (-1, -1);
+            SelectOne(selectionFlags,(team, unit)=>
+            {
+                inSelectionMode = false;
+                selection = (team, unit);
+            });
             while (inSelectionMode && !token.IsCancellationRequested)
             {
                 await Awaitable.NextFrameAsync(token);
             }
-
-            inSelectionMode = false;
-            currentFlags = SelectionFlags.None;
-            Debug.Log($"Selected {currentSelection.team} {currentSelection.unit}");
-            return currentSelection;
+            Debug.Log($"Selected {selection.team} {selection.unit}");
+            return selection;
         }
 
-        public async void SelectOne(SelectionFlags selectionFlags, IUnitSelector.SelectionUnitCallback callback)
+        public void SelectOne(SelectionFlags selectionFlags, IUnitSelector.SelectionUnitCallback callback)
         {
-            try
+            requests.Enqueue((selectionFlags, callback));
+        }
+
+        public void ClearPlayersSelection()
+        {
+            foreach (var player in players)
             {
-                var selection = await SelectOneAsync(selectionFlags);
-                callback(selection.team, selection.unit);
+                player.Unhighlight();
             }
-            catch
+        }
+
+        public void ClearEnemiesSelection()
+        {
+            foreach (var enemy in enemies)
             {
-                Debug.Log("Error occured during unit selection");
+                enemy.Unhighlight();
             }
         }
 

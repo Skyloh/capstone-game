@@ -14,6 +14,14 @@ namespace CombatSystem.View
         Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags, CancellationToken token = default);
         public delegate void SelectionUnitCallback(int team, int unit);
         void SelectOne(SelectionFlags selectionFlags, SelectionUnitCallback callback);
+
+        void ClearSelection()
+        {
+            ClearPlayersSelection();
+            ClearEnemiesSelection();
+        }
+        void ClearPlayersSelection();
+        void ClearEnemiesSelection();
         Unit[] Players { get; }
         EnemyUnit[] Enemies { get; }
         

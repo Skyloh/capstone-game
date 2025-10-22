@@ -30,6 +30,10 @@ public class CombatManager : MonoBehaviour
     /// (units, teams, turn count, active team) that pertains to a combat encounter.
     /// </summary>
     private ICombatModel m_combatModel;
+    /// <summary>
+    /// Ideally should be read only version of  ICombatModel interface
+    /// </summary>
+    public ICombatModel CombatModel { get => m_combatModel;}
 
     /// <summary>
     /// The view interface associated with this combat manager. Serialized for convenience in linking with

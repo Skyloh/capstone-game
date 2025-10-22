@@ -17,6 +17,8 @@ namespace CombatSystem.View
         [SerializeField]
         private SpriteRenderer highlight;
 
+        private bool isFocused = false;
+
         [SerializeField] private Slider healthSlider;
         public void OnMouseEnter()
         {
@@ -73,16 +75,22 @@ namespace CombatSystem.View
         public void Focus()
         {
             highlight.color =focusColor;
+            isFocused = true;
         }
         [ContextMenu("Highlight")]
         public void Highlight()
         {
+            if (isFocused)
+            {
+                return;
+            }
             highlight.color = highlightColor;
         }
         [ContextMenu("Unhighlight")]
         public void Unhighlight()
         {
             highlight.color = Color.clear;
+            isFocused = false;
         }
         public void UpdateHp(int max, int current)
         {

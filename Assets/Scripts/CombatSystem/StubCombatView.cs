@@ -101,6 +101,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
             {
                 builder.Append($"{index++}: {ability.GetAbilityData().Name}, ");
             }
+
             builder.Remove(builder.Length - 2, 2);
 
             Debug.Log(builder.ToString());
@@ -148,7 +149,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
             var builder = new StringBuilder();
             int index = 0;
-            foreach (var item in inventory_contents) 
+            foreach (var item in inventory_contents)
                 builder.Append(index++).Append(": ").Append(item.GetAbilityData().Name).Append(", ");
             builder.Remove(builder.Length - 2, 2);
 
@@ -164,7 +165,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
                 m_hasData = false;
 
                 // if selecting a move failed, invalidate it.
-                if (!(int.TryParse(m_data, out chosen_item_index) && chosen_item_index >= 0 && chosen_item_index < max_index))
+                if (!(int.TryParse(m_data, out chosen_item_index) && chosen_item_index >= 0 &&
+                      chosen_item_index < max_index))
                 {
                     chosen_item_index = -1;
 
@@ -193,11 +195,13 @@ public class StubCombatView : MonoBehaviour, ICombatView
             else if (is_ready && can_take_more)
             {
                 Debug.Log($"Ability is prepped, but you may continue selecting units.");
-                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
+                Debug.Log(
+                    "Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
             }
             else
             {
-                Debug.Log("Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
+                Debug.Log(
+                    "Select Target(s) by Inputting \"Team_Index, Unit_Index\", or 'y' to confirm current selection.");
             }
 
             yield return new WaitUntil(() => m_hasData);
@@ -298,6 +302,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                                 continue;
                         }
                     }
+
                     break;
 
                 case MetadataConstants.WEAPON_OR_WEAKNESS:
@@ -324,6 +329,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                                 continue;
                         }
                     }
+
                     break;
 
                 case MetadataConstants.OPTIONAL_AITI:
@@ -335,7 +341,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     {
                         if (!is_optional) Debug.Log("Input target indices and element index.");
                         else Debug.Log("Input target indices and element index, or \"n\" to finalize.");
-                        Debug.Log("e.g. 1, 0, 0 = target team index, target unit index, 0-indexed element index in bar");
+                        Debug.Log(
+                            "e.g. 1, 0, 0 = target team index, target unit index, 0-indexed element index in bar");
 
                         yield return new WaitUntil(() => m_hasData);
 
@@ -352,29 +359,39 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
                         try
                         {
-                            if (string_data.Length != 3) throw new Exception("Invalid number of data entries: " + string_data.Length);
+                            if (string_data.Length != 3)
+                                throw new Exception("Invalid number of data entries: " + string_data.Length);
 
                             int team_index = int.Parse(string_data[0]);
                             int unit_index = int.Parse(string_data[1]);
-                            int aff_index  = int.Parse(string_data[2]);
+                            int aff_index = int.Parse(string_data[2]);
 
                             // if trying to target a unit not in the selection scope, ensure valid targeting
-                            if (!action_data.TargetIndices.Contains((team_index, unit_index))) throw new Exception("Target not in selected targets.");
-                            
+                            if (!action_data.TargetIndices.Contains((team_index, unit_index)))
+                                throw new Exception("Target not in selected targets.");
+
                             // if trying to target OoB unit, ensure valid indices
-                            if (!m_manager.TrySelectUnit(0, team_index, unit_index, SelectionFlags.Enemy | SelectionFlags.Ally, out var unit)) throw new Exception("Unable to select unit.");
-                            
+                            if (!m_manager.TrySelectUnit(0, team_index, unit_index,
+                                    SelectionFlags.Enemy | SelectionFlags.Ally, out var unit))
+                                throw new Exception("Unable to select unit.");
+
                             // if OoB or missing a bar module, ensure valid selection
                             if (!(unit.TryGetModule<AffinityBarModule>(out var module)
-                                && aff_index >= module.GetFirstNonNoneIndex()
-                                && aff_index < module.BarLength())) throw new Exception("Affinity index OoB or no bar module on target.");
+                                  && aff_index >= module.GetFirstNonNoneIndex()
+                                  && aff_index < module.BarLength()))
+                                throw new Exception("Affinity index OoB or no bar module on target.");
 
                             // if the specific target is already added to the metadata key, ensure uniqueness
-                            string aiti_string = AbilityUtils.MakeAffinityIndexTargetIndexString(aff_index, (team_index, unit_index));
-                            if ((action_data.ActionMetadata.TryGetValue(MetadataConstants.AFF_INDEX_TARGET_INDEX, out string value)
-                                && value == aiti_string)
-                                || (action_data.ActionMetadata.TryGetValue(MetadataConstants.OPTIONAL_AITI, out string o_value)
-                                && o_value == aiti_string)) throw new Exception("String already exists in AITI metadata key. Choose a unique target.");
+                            string aiti_string =
+                                AbilityUtils.MakeAffinityIndexTargetIndexString(aff_index, (team_index, unit_index));
+                            if ((action_data.ActionMetadata.TryGetValue(MetadataConstants.AFF_INDEX_TARGET_INDEX,
+                                     out string value)
+                                 && value == aiti_string)
+                                || (action_data.ActionMetadata.TryGetValue(MetadataConstants.OPTIONAL_AITI,
+                                        out string o_value)
+                                    && o_value == aiti_string))
+                                throw new Exception(
+                                    "String already exists in AITI metadata key. Choose a unique target.");
 
 
                             // all conditions pass? good to go.
@@ -390,6 +407,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                             continue;
                         }
                     }
+
                     break;
 
                 case MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX:
@@ -397,7 +415,8 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     while (!break_loop)
                     {
                         Debug.Log("Input target indices and element-pair index.");
-                        Debug.Log("e.g. 1, 0, 0 = target team index, target unit index, 0-indexed left-element index in bar");
+                        Debug.Log(
+                            "e.g. 1, 0, 0 = target team index, target unit index, 0-indexed left-element index in bar");
 
                         yield return new WaitUntil(() => m_hasData);
 
@@ -407,22 +426,27 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
                         try
                         {
-                            if (string_data.Length != 3) throw new Exception("Invalid number of data entries: " + string_data.Length);
+                            if (string_data.Length != 3)
+                                throw new Exception("Invalid number of data entries: " + string_data.Length);
 
                             int team_index = int.Parse(string_data[0]);
                             int unit_index = int.Parse(string_data[1]);
                             int aff_index = int.Parse(string_data[2]);
 
                             // if trying to target a unit not in the selection scope, ensure valid targeting
-                            if (!action_data.TargetIndices.Contains((team_index, unit_index))) throw new Exception("Target not in selected targets.");
+                            if (!action_data.TargetIndices.Contains((team_index, unit_index)))
+                                throw new Exception("Target not in selected targets.");
 
                             // if trying to target OoB unit, ensure valid indices
-                            if (!m_manager.TrySelectUnit(0, team_index, unit_index, SelectionFlags.Enemy | SelectionFlags.Ally, out var unit)) throw new Exception("Unable to select unit.");
+                            if (!m_manager.TrySelectUnit(0, team_index, unit_index,
+                                    SelectionFlags.Enemy | SelectionFlags.Ally, out var unit))
+                                throw new Exception("Unable to select unit.");
 
                             // if OoB or missing a bar module, ensure valid selection
                             if (!(unit.TryGetModule<AffinityBarModule>(out var module)
-                                && aff_index >= module.GetFirstNonNoneIndex()
-                                && aff_index+1 < module.BarLength())) throw new Exception("Affinity index OoB or no bar module on target.");
+                                  && aff_index >= module.GetFirstNonNoneIndex()
+                                  && aff_index + 1 < module.BarLength()))
+                                throw new Exception("Affinity index OoB or no bar module on target.");
 
                             // if the specific target is already added to the metadata key, ensure uniqueness
                             if (!AssertPairNoOverlap(aff_index, action_data.ActionMetadata))
@@ -444,6 +468,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
                             continue;
                         }
                     }
+
                     break;
 
                 // removed Metadata examples at bottom of script

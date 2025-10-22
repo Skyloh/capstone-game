@@ -21,10 +21,10 @@ public class HealthModule : AModule
 
         OnHealthChanged?.Invoke(m_maxHealth, health);
     }
-
+    
     public void ChangeHealth(int decrease_amount) => SetHealth(m_currentHealth - decrease_amount);
 
     public int GetMaxHealth() => m_maxHealth;
-
+    public int CurrentHealth() => m_currentHealth;
     public bool IsAlive() => m_currentHealth > 0;
 }

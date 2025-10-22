@@ -7,15 +7,20 @@ using UnityEngine.UIElements;
 
 namespace CombatSystem.View
 {
-    public class BattleController : MonoBehaviour, ICombatView
+    public class BattleInterface : MonoBehaviour, ICombatView
     {
         // Start is called before the first frame update
+        public ViewSprites battleSprites;
+        public BrainSO cpuBrain;
         private VisualElement ui;
+        private VisualElement playerWeaknessIcon;
         private CombatManager combatManager;
         private Button attackButton1;
         private Button attackButton2;
         private Button attackButton3;
         private Button attackButton4;
+        private Label playerCharacterName;
+        private Label playerTotalHp;
         private Button backToUnits;
         private Label actionDescription;
 
@@ -23,17 +28,20 @@ namespace CombatSystem.View
 
         //TODO remove class and replace with non stub in own file
 
-        public CombatModel model;
-        public CombatManager manager;
+        public ICombatModel model => combatManager.CombatModel;
 
         private void Awake()
         {
             ui = GetComponent<UIDocument>().rootVisualElement;
+            combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
+            combatManager.InitCombat(cpuBrain);
+            BeginUnitSelection();
         }
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
+            Debug.Log(index);
             DisplayUnit(model.GetTeam(0).GetUnit(index));
         }
 
@@ -43,6 +51,9 @@ namespace CombatSystem.View
             attackButton2 = ui.Q<Button>("Action2");
             attackButton3 = ui.Q<Button>("Action3");
             attackButton4 = ui.Q<Button>("Action4");
+            playerCharacterName = ui.Q<Label>("PlayerName");
+            playerWeaknessIcon =  ui.Q<VisualElement>("PlayerWeaknessIcon");
+            playerTotalHp = ui.Q<Label>("PlayerTotalHp");
             backToUnits = ui.Q<Button>("BackToUnits");
             actionDescription = ui.Q<Label>("ActionDescription");
 
@@ -52,19 +63,25 @@ namespace CombatSystem.View
             attackButton3.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 2));
 
             attackButton4.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 3));
+            backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
         }
 
+        private void OnBackToUnits(ClickEvent e)
+        {
+            Debug.Log("AHHHHHHHHH");
+            unitSelector.ClearSelection();
+            Debug.Log(Enum.GetName(typeof(BattleStates),currentState));
+            if (currentState == BattleStates.ActionSelection)
+            {
+                TriggerState(BattleStates.UnitSelection);
+                Debug.Log("Back to units");
+            } 
+        }
         private EventCallback<MouseOverEvent> attackButton1HoverCallback;
 
         private void UpdateAttackDescription(MouseOverEvent e, int index)
         {
             actionDescription.text = abilityCache.GetAbilities()[index].GetAbilityData().Description;
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            attackButton1.text = " Hello";
         }
 
         private AbilityModule abilityCache;
@@ -273,25 +290,58 @@ namespace CombatSystem.View
 
         private int selectedPlayer = -1;
 
-        private void DisplayUnit(CombatUnit selected_unit)
+        private void DisplayUnit(CombatUnit selectedUnit)
         {
-            if (selected_unit.TryGetModule(out abilityCache))
+            Debug.Log($"Displaying unit {selectedUnit}");
+            UpdateAbilityCallback(selectedUnit);
+            if (selectedUnit.TryGetModule(out HealthModule healthModule))
             {
+                //TODO prevent edge cases where this number can go out of date
+                playerTotalHp.text = $"{healthModule.CurrentHealth()}/{healthModule.GetMaxHealth()}";
+            }
+
+            if (selectedUnit.TryGetModule(out AffinityModule affinityModule))
+            {
+                switch (affinityModule.GetWeaknessAffinity())
+                {
+                    case AffinityType.Blue:
+                        playerWeaknessIcon.style.backgroundImage = new StyleBackground(battleSprites.waterPlayerWeakness);
+                        break;
+                        case AffinityType.Red:
+                        playerWeaknessIcon.style.backgroundImage =  new StyleBackground(battleSprites.firePlayerWeakness);
+                        break;
+                        case AffinityType.Green:
+                        playerWeaknessIcon.style.backgroundImage = new StyleBackground(battleSprites.physicalPlayerWeakness);
+                        break;
+                        case AffinityType.Yellow:
+                        playerWeaknessIcon.style.backgroundImage =  new StyleBackground(battleSprites.lightningPlayerWeakness);
+                        break;
+                        case AffinityType.None:
+                        break;
+                }
+            }
+
+            playerCharacterName.text = selectedUnit.GetName();
+            if (selectedUnit.TryGetModule(out abilityCache))
+            {
+                foreach (var ab in abilityCache.GetAbilities())
+                {
+                    Debug.Log(ab);
+                }
                 var abilities = abilityCache.GetAbilities();
                 attackButton1.text = abilities[0].GetAbilityData().Name;
-                attackButton1.text = abilities[1].GetAbilityData().Name;
-                attackButton1.text = abilities[2].GetAbilityData().Name;
-                attackButton1.text = abilities[3].GetAbilityData().Name;
+                attackButton2.text = abilities[1].GetAbilityData().Name;
+                attackButton3.text = abilities[2].GetAbilityData().Name;
+                attackButton4.text = abilities[3].GetAbilityData().Name;
             }
         }
 
-        private void UpdateAbilityCallback()
+        private void UpdateAbilityCallback(CombatUnit selectedUnit)
         {
-            var selectedUnit = model.GetTeam(0).GetUnit(selectedPlayer);
             selectedUnit.TryGetModule(out abilityCache);
             var abilities = abilityCache.GetAbilities();
-
-            for (int i = 0; i < abilities.Count; i++)
+            // TODO support more than 4 attacks
+            for (int i = 0; i < 4; i++)
             {
                 int j = i; // prevents captured variable shenanigans 
                 attackCallbacks[i] = (mde) => AttackClicked(mde, abilities[j], j);
