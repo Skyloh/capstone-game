@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,16 +11,23 @@ namespace CombatSystem.View
         /// </summary>
         /// <param name="selectionFlags"></param>
         /// <param name="token"></param>
-        /// <returns></returns>
+        /// <returns>(-1,-1) if nothing was selected</returns>
         Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags, CancellationToken token = default);
         public delegate void SelectionUnitCallback(int team, int unit);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selectionFlags"></param>
+        /// <param name="callback">function to callback with the selected unit (-1,-1) if nothing was selected</param>
         void SelectOne(SelectionFlags selectionFlags, SelectionUnitCallback callback);
-
+        List<(int team, int unit)> SelectAll(SelectionFlags selectionFlags);
         void ClearSelection()
         {
             ClearPlayersSelection();
             ClearEnemiesSelection();
         }
+
+        void ClearRequests();
         void ClearPlayersSelection();
         void ClearEnemiesSelection();
         Unit[] Players { get; }

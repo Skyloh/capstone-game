@@ -614,7 +614,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpriteRenderer: {fileID: 3106181926374552202}
   highlight: {fileID: 1770676185309322578}
-  healthSlider: {fileID: 0}
+  healthSlider: {fileID: 2265773513263377054}
   highlightColor: {r: 1, g: 0.83757424, b: 0.3915094, a: 1}
   focusColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &3082662975004741046

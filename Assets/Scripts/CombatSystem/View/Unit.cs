@@ -89,11 +89,20 @@ namespace CombatSystem.View
         [ContextMenu("Unhighlight")]
         public void Unhighlight()
         {
+            highlight.color = isFocused ? focusColor : Color.clear;
+        }
+
+        public void Unselect()
+        {
             highlight.color = Color.clear;
             isFocused = false;
         }
         public void UpdateHp(int max, int current)
         {
+            if (healthSlider == null)
+            {
+                Debug.unityLogger.Log("Health slider not set " + name);
+            }
             healthSlider.maxValue = max;
             healthSlider.value = current;
         }

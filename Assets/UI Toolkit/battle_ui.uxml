@@ -21,6 +21,7 @@
             <ui:Button text="action_2" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Action2" class="action" style="font-size: 8px;" />
             <ui:Button text="action_3" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Action3" class="action" style="font-size: 8px;" />
             <ui:Button text="action_4" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Action4" class="action" style="font-size: 8px;" />
+            <ui:Button text="confirm" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Confirm" class="action" style="font-size: 8px;" />
             <ui:Button text="Back" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackToUnits" class="hide" />
             <ui:Label tabindex="-1" text="Power: XX&#10;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ActionDescription" style="-unity-text-align: upper-left; white-space: normal; text-overflow: clip; align-items: flex-start; justify-content: center; align-self: auto; font-size: 8px;" />
         </ui:VisualElement>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,6 +20,7 @@ namespace CombatSystem.View
         private Button attackButton2;
         private Button attackButton3;
         private Button attackButton4;
+        private Button confirmButton;
         private Label playerCharacterName;
         private Label playerTotalHp;
         private Button backToUnits;
@@ -41,7 +43,6 @@ namespace CombatSystem.View
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
-            Debug.Log(index);
             DisplayUnit(model.GetTeam(0).GetUnit(index));
         }
 
@@ -52,10 +53,11 @@ namespace CombatSystem.View
             attackButton3 = ui.Q<Button>("Action3");
             attackButton4 = ui.Q<Button>("Action4");
             playerCharacterName = ui.Q<Label>("PlayerName");
-            playerWeaknessIcon =  ui.Q<VisualElement>("PlayerWeaknessIcon");
+            playerWeaknessIcon = ui.Q<VisualElement>("PlayerWeaknessIcon");
             playerTotalHp = ui.Q<Label>("PlayerTotalHp");
             backToUnits = ui.Q<Button>("BackToUnits");
             actionDescription = ui.Q<Label>("ActionDescription");
+            confirmButton = ui.Q<Button>("Confirm");
 
             attackButton1.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 0));
 
@@ -63,20 +65,29 @@ namespace CombatSystem.View
             attackButton3.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 2));
 
             attackButton4.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 3));
+            confirmButton.RegisterCallback<ClickEvent>(ConfirmTargets);
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
+            DisplayUnit(model.GetTeam(0).GetUnit(0));
         }
 
         private void OnBackToUnits(ClickEvent e)
         {
-            Debug.Log("AHHHHHHHHH");
-            unitSelector.ClearSelection();
-            Debug.Log(Enum.GetName(typeof(BattleStates),currentState));
+            if (currentState.HasFlag(BattleStates.ActionSelection | BattleStates.TargetSelection))
+                Debug.Log(Enum.GetName(typeof(BattleStates), currentState));
             if (currentState == BattleStates.ActionSelection)
             {
                 TriggerState(BattleStates.UnitSelection);
-                Debug.Log("Back to units");
-            } 
+            }
+
+            switch (currentState)
+            {
+                case BattleStates.ActionSelection:
+                case BattleStates.TargetSelection:
+                    TriggerState(BattleStates.UnitSelection);
+                    break;
+            }
         }
+
         private EventCallback<MouseOverEvent> attackButton1HoverCallback;
 
         private void UpdateAttackDescription(MouseOverEvent e, int index)
@@ -93,7 +104,9 @@ namespace CombatSystem.View
 
         public IEnumerator NextPhase(int phase_turn_number)
         {
-            throw new NotImplementedException();
+            Debug.Log($"Phase change: {phase_turn_number}");
+
+            yield break;
         }
 
         public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)
@@ -113,6 +126,7 @@ namespace CombatSystem.View
 
         #region StateManagement
 
+        [Flags]
         private enum BattleStates
         {
             Setup,
@@ -138,6 +152,9 @@ namespace CombatSystem.View
                 case BattleStates.TargetSelection:
                     StartTargetSelection(previous);
                     break;
+                case BattleStates.AffinityTargeting:
+                    StartAffinityTargeting(previous);
+                    break;
                 case BattleStates.ActionSelection:
                     StartActionSelection(previous);
                     break;
@@ -149,6 +166,7 @@ namespace CombatSystem.View
             }
         }
 
+
         private void CleanupState(BattleStates next)
         {
             switch (currentState)
@@ -158,6 +176,9 @@ namespace CombatSystem.View
                     break;
                 case BattleStates.UnitSelection:
                     CleanUpUnitSelection(next);
+                    break;
+                case BattleStates.AffinityTargeting:
+                    CleanUpAffinitySelection();
                     break;
                 case BattleStates.TargetSelection:
                     CleanUpTargetSelection(next);
@@ -172,6 +193,7 @@ namespace CombatSystem.View
                     throw new Exception("Invalid battle state: " + currentState);
             }
         }
+
 
         private BattleStates triggeredState = BattleStates.Setup;
 
@@ -196,17 +218,12 @@ namespace CombatSystem.View
                 case BattleStates.Setup:
                     HandleSetup();
                     break;
-                case BattleStates.UnitSelection:
-                    HandleUnitSelection();
-                    break;
-                case BattleStates.TargetSelection:
-                    HandleTargetSelection();
-                    break;
-                case BattleStates.ActionSelection:
-                    HandleActionSelection();
-                    break;
                 case BattleStates.EnemyTurn:
                     HandleEnemyTurn();
+                    break;
+                case BattleStates.UnitSelection:
+                case BattleStates.TargetSelection:
+                case BattleStates.ActionSelection:
                     break;
             }
         }
@@ -233,6 +250,7 @@ namespace CombatSystem.View
 
         private void StartUnitSelection(BattleStates previous)
         {
+            unitSelector.ClearSelection();
             unitSelector.PlayerHovered += OnPlayerHovered;
             unitSelector.SelectOne(SelectionFlags.Alive | SelectionFlags.Ally | SelectionFlags.Actionable, SelectUnit);
         }
@@ -251,16 +269,13 @@ namespace CombatSystem.View
             {
                 DisplayUnit(selectedUnit);
                 selectedPlayer = unit;
+                Debug.Log("un" + selectedPlayer);
                 TriggerState(BattleStates.ActionSelection);
             }
             else
             {
                 Debug.Log("Unit selection failed likely due to a state mismatch between combat manager and view");
             }
-        }
-
-        private void HandleUnitSelection()
-        {
         }
 
         private void CleanUpUnitSelection(BattleStates next)
@@ -272,16 +287,59 @@ namespace CombatSystem.View
 
         #region Target Selection
 
+        private ActionData actionData;
+        private List<(int team, int unit)> selectedTargets = new();
+
         private void StartTargetSelection(BattleStates previous)
         {
+            selectedTargets.Clear();
+            var abilityData = actionData.Action.GetAbilityData();
+            actionData.UserTeamUnitIndex.team_index = 0;
+            actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
+            foreach (var target in abilityData.RequiredTargets)
+            {
+                SelectionFlags additionalFlag = target.Key == 0 ? SelectionFlags.Ally : SelectionFlags.Enemy;
+                if (target.Value is { min: -1, max: -1 })
+                {
+                    Debug.Log("min");
+                    selectedTargets.AddRange(unitSelector.SelectAll(abilityData.TargetCriteria | additionalFlag));
+                }
+
+                for (int i = 0; i < target.Value.min; i++)
+                {
+                    unitSelector.SelectOne(abilityData.TargetCriteria,
+                        (team, unit) => { selectedTargets.Add((team, unit)); });
+                }
+            }
         }
 
-        private void HandleTargetSelection()
+        private void ConfirmTargets(ClickEvent e)
         {
+            if (currentState != BattleStates.TargetSelection) return;
+            if (CanPrepAbility(actionData.Action.GetAbilityData(), selectedTargets))
+            {
+                TriggerState(BattleStates.AffinityTargeting);
+            }
+        }
+
+        private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets)
+        {
+            foreach (var entry in data.RequiredTargets)
+            {
+                var (min, max) = entry.Value;
+                if (min == -1 && max == -1) continue;
+                int count = selectedTargets.Select(pair => pair.team == entry.Key).Count();
+                if (count < min || count > max) return false;
+            }
+
+            return true;
         }
 
         private void CleanUpTargetSelection(BattleStates next)
         {
+            actionData.TargetIndices = selectedTargets.ToArray();
+            unitSelector.ClearRequests();
+            selectedTargets.Clear();
         }
 
         #endregion
@@ -305,18 +363,22 @@ namespace CombatSystem.View
                 switch (affinityModule.GetWeaknessAffinity())
                 {
                     case AffinityType.Blue:
-                        playerWeaknessIcon.style.backgroundImage = new StyleBackground(battleSprites.waterPlayerWeakness);
+                        playerWeaknessIcon.style.backgroundImage =
+                            new StyleBackground(battleSprites.waterPlayerWeakness);
                         break;
-                        case AffinityType.Red:
-                        playerWeaknessIcon.style.backgroundImage =  new StyleBackground(battleSprites.firePlayerWeakness);
+                    case AffinityType.Red:
+                        playerWeaknessIcon.style.backgroundImage =
+                            new StyleBackground(battleSprites.firePlayerWeakness);
                         break;
-                        case AffinityType.Green:
-                        playerWeaknessIcon.style.backgroundImage = new StyleBackground(battleSprites.physicalPlayerWeakness);
+                    case AffinityType.Green:
+                        playerWeaknessIcon.style.backgroundImage =
+                            new StyleBackground(battleSprites.physicalPlayerWeakness);
                         break;
-                        case AffinityType.Yellow:
-                        playerWeaknessIcon.style.backgroundImage =  new StyleBackground(battleSprites.lightningPlayerWeakness);
+                    case AffinityType.Yellow:
+                        playerWeaknessIcon.style.backgroundImage =
+                            new StyleBackground(battleSprites.lightningPlayerWeakness);
                         break;
-                        case AffinityType.None:
+                    case AffinityType.None:
                         break;
                 }
             }
@@ -324,10 +386,6 @@ namespace CombatSystem.View
             playerCharacterName.text = selectedUnit.GetName();
             if (selectedUnit.TryGetModule(out abilityCache))
             {
-                foreach (var ab in abilityCache.GetAbilities())
-                {
-                    Debug.Log(ab);
-                }
                 var abilities = abilityCache.GetAbilities();
                 attackButton1.text = abilities[0].GetAbilityData().Name;
                 attackButton2.text = abilities[1].GetAbilityData().Name;
@@ -350,12 +408,12 @@ namespace CombatSystem.View
 
         private void StartActionSelection(BattleStates previous)
         {
-            backToUnits.RegisterCallback<MouseDownEvent>(TriggerUnitSelection);
+            backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
 
-            attackButton1.RegisterCallback<MouseDownEvent>(attackCallbacks[0]);
-            attackButton2.RegisterCallback<MouseDownEvent>(attackCallbacks[1]);
-            attackButton3.RegisterCallback<MouseDownEvent>(attackCallbacks[2]);
-            attackButton4.RegisterCallback<MouseDownEvent>(attackCallbacks[3]);
+            attackButton1.RegisterCallback<ClickEvent>(attackCallbacks[0]);
+            attackButton2.RegisterCallback<ClickEvent>(attackCallbacks[1]);
+            attackButton3.RegisterCallback<ClickEvent>(attackCallbacks[2]);
+            attackButton4.RegisterCallback<ClickEvent>(attackCallbacks[3]);
 
             if (selectedPlayer == -1)
             {
@@ -364,36 +422,50 @@ namespace CombatSystem.View
         }
 
         // cache to unregister callbacks
-        private readonly EventCallback<MouseDownEvent>[] attackCallbacks = new EventCallback<MouseDownEvent>[4];
+        private readonly EventCallback<ClickEvent>[] attackCallbacks = new EventCallback<ClickEvent>[4];
 
-        private void AttackClicked(MouseDownEvent e, IAbility ability, int index)
+        private void AttackClicked(ClickEvent e, IAbility ability, int index)
         {
-            ActionData actionData = new ActionData();
+            Debug.Log("Attacked");
+            TriggerState(BattleStates.TargetSelection);
+            actionData = new ActionData();
             actionData.Action = ability;
-            //TODO: look at stub combat view for reference target selection will be triggered here which will then trigger affinity selection
-
-            //  actionData.
-            // CombatUnit selected_unit = model.GetTeam(0).GetUnit(selectedPlayer); 
-            // combatManager.PerformAction(ability.GetAbilityData());
+            actionData.UserTeamUnitIndex.team_index = 0;
+            actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
         }
 
-        private void TriggerUnitSelection(MouseDownEvent evt)
+        private void TriggerUnitSelection(ClickEvent evt)
         {
             TriggerState(BattleStates.UnitSelection);
         }
 
-        private void HandleActionSelection()
-        {
-        }
-
         private void CleanUpActionSelection(BattleStates next)
         {
-            selectedPlayer = -1;
-            backToUnits.UnregisterCallback<MouseDownEvent>(TriggerUnitSelection);
-            attackButton1.UnregisterCallback<MouseDownEvent>(attackCallbacks[0]);
-            attackButton2.UnregisterCallback<MouseDownEvent>(attackCallbacks[1]);
-            attackButton3.UnregisterCallback<MouseDownEvent>(attackCallbacks[2]);
-            attackButton4.UnregisterCallback<MouseDownEvent>(attackCallbacks[3]);
+            backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
+            attackButton1.UnregisterCallback<ClickEvent>(attackCallbacks[0]);
+            attackButton2.UnregisterCallback<ClickEvent>(attackCallbacks[1]);
+            attackButton3.UnregisterCallback<ClickEvent>(attackCallbacks[2]);
+            attackButton4.UnregisterCallback<ClickEvent>(attackCallbacks[3]);
+        }
+
+        #endregion
+
+        #region AffinityTargeting
+
+        private void StartAffinityTargeting(BattleStates previous)
+        {
+            if (actionData.Action.GetAbilityData().RequiredMetadata.Count == 0)
+            {
+                combatManager.PerformAction(actionData);
+            }
+            else
+            {
+                Debug.Log("Unsupported attack");
+            }
+        }
+
+        private void CleanUpAffinitySelection()
+        {
         }
 
         #endregion

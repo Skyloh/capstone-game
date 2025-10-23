@@ -32,11 +32,10 @@ namespace CombatSystem.View
 
         ICombatModel combatModel => combatManager.CombatModel;
 
-        private bool IsValidPlayerSelection(int index)
+        private bool IsValidPlayerSelection(int index, SelectionFlags selectionFlags)
         {
-            SelectionFlags currentFlags = requests.Peek().flags;
-            if (!currentFlags.HasFlag(SelectionFlags.Ally)) return false;
-            if (currentFlags.HasFlag(SelectionFlags.Actionable))
+            if (!selectionFlags.HasFlag(SelectionFlags.Ally)) return false;
+            if (selectionFlags.HasFlag(SelectionFlags.Actionable))
             {
                 if (combatModel.GetTeam(0).HasUnitTakenTurn(index))
                 {
@@ -44,7 +43,7 @@ namespace CombatSystem.View
                 }
             }
 
-            if (currentFlags.HasFlag(SelectionFlags.Alive))
+            if (selectionFlags.HasFlag(SelectionFlags.Alive))
             {
                 if (!combatModel.GetTeam(0).IsUnitAlive(index))
                 {
@@ -55,11 +54,10 @@ namespace CombatSystem.View
             return true;
         }
 
-        private bool IsValidEnemySelection(int index)
+        private bool IsValidEnemySelection(int index, SelectionFlags selectionFlags)
         {
-            SelectionFlags currentFlags = requests.Peek().flags;
-            if (!currentFlags.HasFlag(SelectionFlags.Enemy)) return false;
-            if (currentFlags.HasFlag(SelectionFlags.Actionable))
+            if (!selectionFlags.HasFlag(SelectionFlags.Enemy)) return false;
+            if (selectionFlags.HasFlag(SelectionFlags.Actionable))
             {
                 if (combatModel.GetTeam(0).HasUnitTakenTurn(index))
                 {
@@ -67,21 +65,20 @@ namespace CombatSystem.View
                 }
             }
 
-            if (currentFlags.HasFlag(SelectionFlags.Alive))
+            if (selectionFlags.HasFlag(SelectionFlags.Alive))
             {
-                if (!combatModel.GetTeam(0).IsUnitAlive(index))
+                if (!combatModel.GetTeam(1).IsUnitAlive(index))
                 {
                     return false;
                 }
             }
-
             return true;
         }
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
             if(requests.Count == 0) return;
-            if (IsValidPlayerSelection(index))
+            if (IsValidPlayerSelection(index, requests.Peek().flags))
             {
                 players[index].Highlight();
                 Debug.Log($"Player {index} hovered");
@@ -92,7 +89,7 @@ namespace CombatSystem.View
         private void OnEnemyHovered(int index, IUnit unit)
         {
             if(requests.Count == 0) return;
-            if (IsValidEnemySelection(index))
+            if (IsValidEnemySelection(index, requests.Peek().flags))
             {
                 enemies[index].Highlight();
                 Debug.Log($"Enemy {index} hovered");
@@ -109,7 +106,7 @@ namespace CombatSystem.View
         private void OnPlayerClicked(int index, IUnit unit)
         {
             if(requests.Count == 0) return;
-            if (IsValidPlayerSelection(index))
+            if (IsValidPlayerSelection(index, requests.Peek().flags))
             {
                 requests.Dequeue().callback(0,index);
                 Debug.Log($"Selected 0 , {index}");
@@ -120,7 +117,7 @@ namespace CombatSystem.View
         private void OnEnemyClicked(int index, IUnit unit)
         {
             if(requests.Count == 0) return;
-            if (IsValidEnemySelection(index))
+            if (IsValidEnemySelection(index, requests.Peek().flags))
             {
                 Debug.Log($"Selected 1 , {index}");
                 requests.Dequeue().callback(1,index);
@@ -134,7 +131,7 @@ namespace CombatSystem.View
 
         [SerializeField] private Unit[] players;
         [SerializeField] private EnemyUnit[] enemies;
-
+        
         public async Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags,
             CancellationToken token = default)
         {
@@ -149,6 +146,7 @@ namespace CombatSystem.View
             {
                 await Awaitable.NextFrameAsync(token);
             }
+        
             Debug.Log($"Selected {selection.team} {selection.unit}");
             return selection;
         }
@@ -158,11 +156,47 @@ namespace CombatSystem.View
             requests.Enqueue((selectionFlags, callback));
         }
 
+        public List<(int team, int unit)> SelectAll(SelectionFlags selectionFlags)
+        {
+            List<(int team, int unit)> result = new List<(int team, int unit)>();
+                for (int i = 0; i < players.Length; i++)
+                {
+                    if (!IsValidPlayerSelection(i, selectionFlags))
+                    {
+                        continue;
+                    }
+                    Debug.Log("focusing");
+                    players[i].Focus();
+                    result.Add((0, i));
+                }
+
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (!IsValidEnemySelection(i,selectionFlags))
+                    {
+                        continue;
+                    }
+                    Debug.Log("focusing");
+                    enemies[i].Focus();
+                    result.Add((1, i));
+                }
+
+            return result;
+        }
+
+        public void ClearRequests()
+        {
+            while (requests.Count > 0)
+            {
+                requests.Dequeue().callback(-1 , -1);
+            }
+        }
+
         public void ClearPlayersSelection()
         {
             foreach (var player in players)
             {
-                player.Unhighlight();
+                player.Unselect();
             }
         }
 
@@ -170,7 +204,7 @@ namespace CombatSystem.View
         {
             foreach (var enemy in enemies)
             {
-                enemy.Unhighlight();
+                enemy.Unselect();
             }
         }
 

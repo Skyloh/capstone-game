@@ -18,6 +18,7 @@ namespace CombatSystem.View
         void UpdateHp(int max, int current);
         void Highlight();
         void Unhighlight();
+        void Unselect();
         void Focus();
     }
 }
