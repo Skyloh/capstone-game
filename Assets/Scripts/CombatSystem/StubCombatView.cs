@@ -396,7 +396,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
                             // all conditions pass? good to go.
                             action_data.AddToMetadata(
-                                MetadataConstants.AFF_INDEX_TARGET_INDEX,
+                                is_optional ? MetadataConstants.OPTIONAL_AITI : MetadataConstants.AFF_INDEX_TARGET_INDEX,
                                 aiti_string);
 
                             break_loop = true;
