@@ -65,10 +65,30 @@ public class CombatManager : MonoBehaviour
             new Dictionary<int, IList<CombatUnit>>()
             {
                 { 0, new List<CombatUnit>() { 
-                    CombatUnit.MakePlayerUnit("PlayerTest1"),
-                    CombatUnit.MakePlayerUnit("PlayerTest2"),
-                    CombatUnit.MakePlayerUnit("PlayerTest3"),
-                    CombatUnit.MakePlayerUnit("PlayerTest4")
+                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest1", 
+                    new List<IAbility>() {
+                        new AttackAbility(),
+                        new EnvenomAbility(),
+                        new SweepAbility(),
+                        new InstillAbility()}),
+                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest2",
+                    new List<IAbility>() {
+                        new AttackAbility(),
+                        new SpraypaintAbility(),
+                        new DefendAbility(),
+                        new MonochromeAbility()}),
+                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest3",
+                    new List<IAbility>() {
+                        new InfuseAbility(),
+                        new PaintBucketAbility(),
+                        new BlindsideAbility(),
+                        new StaticShowerAbility()}),
+                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest14",
+                    new List<IAbility>() {
+                        new BurningHandsAbility(),
+                        new AnalyzeAbility(),
+                        new GoadAbility(),
+                        new InstillAbility()}),
                 } },
                 { 1, new List<CombatUnit>() { 
                     CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  

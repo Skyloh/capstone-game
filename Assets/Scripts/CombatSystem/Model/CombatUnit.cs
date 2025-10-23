@@ -50,6 +50,14 @@ public class CombatUnit
                 new SwapAbility()
             }));
     }
+    public static CombatUnit SHOWCASE_MakePlayerUnit(string name, List<IAbility> abilities)
+    {
+        return new CombatUnit(name)
+            .AddModule(new HealthModule(100, 100))
+            .AddModule(new AffinityModule())
+            .AddModule(new StatusModule())
+            .AddModule(new AbilityModule(abilities));
+    }
 
     public static CombatUnit MakeEnemyUnit(string name, BrainSO brain)
     {
