@@ -1,0 +1,6 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="SettingsMenu" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Shenanigans/PauseMenu.png?fileID=21300000&amp;guid=5d23887ee6d344d1aa2bfb7c3f220dc1&amp;type=3#PauseMenu&quot;); width: 1000px; height: 1000px; align-items: auto; align-self: center; display: none;">
+        <engine:Label text="Settings" name="Settings" style="align-self: center; align-items: auto; justify-content: flex-start; -unity-font-definition: url(&quot;project://database/Assets/UI%20Shenanigans/Fonts/Pixelpurl-0vBPP.ttf?fileID=12800000&amp;guid=ef152549768704337aa3d35d9035611e&amp;type=3#Pixelpurl-0vBPP&quot;); font-size: 80px; top: 192px;" />
+        <engine:Slider value="42" high-value="1" name="VolumeSlider" style="align-self: center; bottom: -246px; width: 536px; height: 50px;" />
+    </engine:VisualElement>
+</engine:UXML>
