@@ -24,38 +24,37 @@ public class PauseMenu : MonoBehaviour
     {
         if (pauseMenuDocument == null || settingsMenuDocument == null)
         {
-            Debug.LogError("PauseMenu: Please assign both UIDocuments in the Inspector.");
+           
             return;
         }
 
-        // Root elements for each document
+
         VisualElement pauseRoot = pauseMenuDocument.rootVisualElement;
         VisualElement settingsRoot = settingsMenuDocument.rootVisualElement;
 
-        // Query elements
+
         _pauseMenu = pauseRoot.Q<VisualElement>("PauseMenu");
         _settingsMenu = settingsRoot.Q<VisualElement>("SettingsMenu");
 
-        // Hide both menus initially
+
         _pauseMenu.style.display = DisplayStyle.None;
         _settingsMenu.style.display = DisplayStyle.None;
 
-        // --- Pause Menu Buttons ---
+
         _continueButton = _pauseMenu.Q<Button>("Continue");
         _settingsButton = _pauseMenu.Q<Button>("Settings");
-        _mainMenuButton = _pauseMenu.Q<Button>("MainMenu");
-
-        // --- Settings Menu Elements ---
+        _mainMenuButton = _pauseMenu.Q<Button>("ExitMain");
+        
         _backButton = _settingsMenu.Q<Button>("BackButton");
         _volumeSlider = _settingsMenu.Q<Slider>("VolumeSlider");
 
-        // --- Button Callbacks ---
+       
         _continueButton?.RegisterCallback<ClickEvent>(evt => ResumeGame());
         _settingsButton?.RegisterCallback<ClickEvent>(evt => OpenSettings());
         _mainMenuButton?.RegisterCallback<ClickEvent>(evt => BackToMainMenu());
         _backButton?.RegisterCallback<ClickEvent>(evt => BackToPauseMenu());
 
-        // --- Volume Slider ---
+
         if (_volumeSlider != null)
         {
             _volumeSlider.focusable = true;
@@ -134,4 +133,6 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
+    
+    
 }

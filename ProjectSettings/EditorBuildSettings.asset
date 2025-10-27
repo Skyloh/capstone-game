@@ -6,10 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 463e90de87692492d811254dd6dd2f5c
+  - enabled: 1
     path: Assets/Scenes/NewRoomTest.unity
     guid: 99108d608057d2f48a7c33c5ab4f57a6
   - enabled: 1
     path: Assets/Scenes/TilemapTEst.unity
     guid: 7bcb05447cc262840ae46ab58ffac392
+  - enabled: 1
+    path: Assets/Scenes/BattleScene.unity
+    guid: 19b12bd54c626fe4188557e9f9c5cb3d
+  - enabled: 1
+    path: Assets/Scenes/PauseMenuTest.unity
+    guid: 479ed20991860442997f9e283d4aac3c
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
