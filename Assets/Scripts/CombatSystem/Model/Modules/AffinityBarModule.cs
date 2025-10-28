@@ -77,6 +77,7 @@ public class AffinityBarModule : AModule
     }
 
     public void Bookmark() => m_bookmark = new List<AffinityType>(m_barSequence);
+    public IList<AffinityType> GetAffinities() => m_barSequence;
     public void ConsumeBookmark()
     {
         OnAffinityBarChanged?.Invoke(m_barSequence, m_bookmark);
@@ -103,7 +104,7 @@ public class AffinityBarModule : AModule
 
     public void BreakLeading(int count)
     {
-        if (count == 0) return; 
+        if (count == 0) return;
 
         int start = GetFirstNonNoneIndex();
         for (int i = 0; i < count; ++i)
@@ -133,8 +134,8 @@ public class AffinityBarModule : AModule
     {
         int breaks = 0;
         for (int i = GetFirstNonNoneIndex();
-            i >= 0 && i < BarLength() && break_elements.Contains(GetAtIndex(i));
-            ++i)
+             i >= 0 && i < BarLength() && break_elements.Contains(GetAtIndex(i));
+             ++i)
         {
             ++breaks;
         }

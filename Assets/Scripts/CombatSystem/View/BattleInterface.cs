@@ -25,8 +25,11 @@ namespace CombatSystem.View
         private Label playerTotalHp;
         private Button backToUnits;
         private Label actionDescription;
+        private ProgressBar enemyHealthbar;
 
         private IUnitSelector unitSelector;
+        [SerializeField]
+        private AffinityTargeter affinityTargeter;
 
         //TODO remove class and replace with non stub in own file
 
@@ -58,6 +61,7 @@ namespace CombatSystem.View
             backToUnits = ui.Q<Button>("BackToUnits");
             actionDescription = ui.Q<Label>("ActionDescription");
             confirmButton = ui.Q<Button>("Confirm");
+            enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
 
             attackButton1.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 0));
 
@@ -67,7 +71,50 @@ namespace CombatSystem.View
             attackButton4.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 3));
             confirmButton.RegisterCallback<ClickEvent>(ConfirmTargets);
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
+            unitSelector.EnemyHovered += OnEnemyHovered;
             DisplayUnit(model.GetTeam(0).GetUnit(0));
+        }
+
+        private int subscribedToEnemy = -1;
+
+        private void UpdateEnemyHealth(int max, int current)
+        {
+            enemyHealthbar.lowValue = 0;
+            enemyHealthbar.highValue = max;
+            enemyHealthbar.value = current;
+        }
+        private void OnEnemyHovered(int index, IUnit unit)
+        {
+            if (subscribedToEnemy == index)
+            {
+                return;
+            }
+
+            if (subscribedToEnemy != -1)
+            {
+                if (model.GetTeam(1).GetUnit(subscribedToEnemy).TryGetModule<HealthModule>(out var healthbar))
+                {
+                    healthbar.OnHealthChanged -= UpdateEnemyHealth;
+                }
+
+                if (model.GetTeam(1).GetUnit(subscribedToEnemy).TryGetModule<AffinityBarModule>(out var affinityBar))
+                {
+                    affinityBar.OnAffinityBarChanged -= affinityTargeter.OnAffinityBarChanged;
+                }
+            }
+            if (model.GetTeam(1).GetUnit(index).TryGetModule<AffinityBarModule>(out var affinityModule))
+            {
+                affinityTargeter.SetAffinityBar(affinityModule.GetAffinities());
+                affinityModule.OnAffinityBarChanged += affinityTargeter.OnAffinityBarChanged;
+            }
+
+            if (model.GetTeam(1).GetUnit(index).TryGetModule<HealthModule>(out var healthModule))
+            {
+                healthModule.OnHealthChanged += UpdateEnemyHealth;
+                UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth());
+            }
+
+            subscribedToEnemy = index;
         }
 
         private void OnBackToUnits(ClickEvent e)
@@ -292,6 +339,11 @@ namespace CombatSystem.View
 
         private void StartTargetSelection(BattleStates previous)
         {
+            attackButton1.style.display = DisplayStyle.None;
+            attackButton2.style.display = DisplayStyle.None;
+            attackButton3.style.display = DisplayStyle.None;
+            attackButton4.style.display = DisplayStyle.None;
+            confirmButton.style.display = DisplayStyle.Flex;
             selectedTargets.Clear();
             var abilityData = actionData.Action.GetAbilityData();
             actionData.UserTeamUnitIndex.team_index = 0;
@@ -340,6 +392,12 @@ namespace CombatSystem.View
             actionData.TargetIndices = selectedTargets.ToArray();
             unitSelector.ClearRequests();
             selectedTargets.Clear();
+            
+            attackButton1.style.display = DisplayStyle.Flex;
+            attackButton2.style.display = DisplayStyle.Flex;
+            attackButton3.style.display = DisplayStyle.Flex;
+            attackButton4.style.display = DisplayStyle.Flex;
+            confirmButton.style.display = DisplayStyle.None;
         }
 
         #endregion
