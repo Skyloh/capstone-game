@@ -28,8 +28,7 @@ namespace CombatSystem.View
         private ProgressBar enemyHealthbar;
 
         private IUnitSelector unitSelector;
-        [SerializeField]
-        private AffinityTargeter affinityTargeter;
+        [SerializeField] private AffinityTargeter affinityTargeter;
 
         //TODO remove class and replace with non stub in own file
 
@@ -83,6 +82,7 @@ namespace CombatSystem.View
             enemyHealthbar.highValue = max;
             enemyHealthbar.value = current;
         }
+
         private void OnEnemyHovered(int index, IUnit unit)
         {
             if (subscribedToEnemy == index)
@@ -102,6 +102,7 @@ namespace CombatSystem.View
                     affinityBar.OnAffinityBarChanged -= affinityTargeter.OnAffinityBarChanged;
                 }
             }
+
             if (model.GetTeam(1).GetUnit(index).TryGetModule<AffinityBarModule>(out var affinityModule))
             {
                 affinityTargeter.SetAffinityBar(affinityModule.GetAffinities());
@@ -268,8 +269,10 @@ namespace CombatSystem.View
                 case BattleStates.EnemyTurn:
                     HandleEnemyTurn();
                     break;
-                case BattleStates.UnitSelection:
                 case BattleStates.TargetSelection:
+                    HandleTargetSelection();
+                    break;
+                case BattleStates.UnitSelection:
                 case BattleStates.ActionSelection:
                     break;
             }
@@ -353,7 +356,6 @@ namespace CombatSystem.View
                 SelectionFlags additionalFlag = target.Key == 0 ? SelectionFlags.Ally : SelectionFlags.Enemy;
                 if (target.Value is { min: -1, max: -1 })
                 {
-                    Debug.Log("min");
                     selectedTargets.AddRange(unitSelector.SelectAll(abilityData.TargetCriteria | additionalFlag));
                 }
 
@@ -365,34 +367,58 @@ namespace CombatSystem.View
             }
         }
 
+        private void HandleTargetSelection()
+        {
+            if (CanPrepAbility(actionData.Action.GetAbilityData(), selectedTargets, out bool canTakeMore))
+            {
+                if (!canTakeMore)
+                {
+                    confirmButton.style.display = DisplayStyle.Flex;
+                    // somewhat feels weird
+                    // confirmButton.style.display = DisplayStyle.None;
+                    // TriggerState(BattleStates.AffinityTargeting);
+                }
+                else
+                {
+                    confirmButton.style.display = DisplayStyle.Flex;
+                }
+            }
+            else
+            {
+                    confirmButton.style.display = DisplayStyle.None;
+            }
+        }
+
         private void ConfirmTargets(ClickEvent e)
         {
             if (currentState != BattleStates.TargetSelection) return;
-            if (CanPrepAbility(actionData.Action.GetAbilityData(), selectedTargets))
+            if (CanPrepAbility(actionData.Action.GetAbilityData(), selectedTargets, out _))
             {
                 TriggerState(BattleStates.AffinityTargeting);
             }
         }
 
-        private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets)
+        private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets, out bool canTakeMore)
         {
+           canTakeMore = false;
             foreach (var entry in data.RequiredTargets)
             {
                 var (min, max) = entry.Value;
                 if (min == -1 && max == -1) continue;
                 int count = selectedTargets.Select(pair => pair.team == entry.Key).Count();
                 if (count < min || count > max) return false;
+                if( count < max) canTakeMore = true;
             }
 
             return true;
         }
-
+        
         private void CleanUpTargetSelection(BattleStates next)
         {
             actionData.TargetIndices = selectedTargets.ToArray();
             unitSelector.ClearRequests();
             selectedTargets.Clear();
-            
+
             attackButton1.style.display = DisplayStyle.Flex;
             attackButton2.style.display = DisplayStyle.Flex;
             attackButton3.style.display = DisplayStyle.Flex;

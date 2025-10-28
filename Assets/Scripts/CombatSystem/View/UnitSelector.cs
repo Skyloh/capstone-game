@@ -165,7 +165,6 @@ namespace CombatSystem.View
                     {
                         continue;
                     }
-                    Debug.Log("focusing");
                     players[i].Focus();
                     result.Add((0, i));
                 }
@@ -176,7 +175,6 @@ namespace CombatSystem.View
                     {
                         continue;
                     }
-                    Debug.Log("focusing");
                     enemies[i].Focus();
                     result.Add((1, i));
                 }
