@@ -10,7 +10,9 @@ public class NPCController : MonoBehaviour
     private Tilemap collisionTileMap;
 
     public string npcName = "Test NPC";
-    [TextArea] public string[] dialogue;
+
+    [SerializeField]
+    private TextAsset dialogueFile;
 
     // Start is called before the first frame update
     void Start()
@@ -31,12 +33,8 @@ public class NPCController : MonoBehaviour
     // If the player interacts with this NPC, start dialogue
     public void Interact()
     {
-        if (dialogue.Length == 0)
-        {
-            return;
-        }
-
-        UnityEngine.Debug.Log($"{npcName}: {dialogue[0]}");
+        Debug.Log("I am interacted with");
+        DialogueManager.GetInstance().EnterDialogueMode(dialogueFile);
     }
 
 }

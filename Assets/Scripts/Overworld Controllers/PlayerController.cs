@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public Tilemap collisionTilemap;
     public Tilemap loadingZoneTilemap;
 
+    private bool inputLocked = false;
+
     void Start()
     {
         targetPosition = transform.position;
@@ -31,6 +34,18 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // If in dialogue, only allow continuing dialogue
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+
+            if (!inputLocked && Input.GetKeyDown(KeyCode.E) && DialogueManager.GetInstance().GetCurrentChoicesCount() == 0)
+            {
+                StartCoroutine(InputCooldown());
+                DialogueManager.GetInstance().ContinueStory();
+            }
+            return;
+        }
+
         if (!isMoving)
         {
             Vector3 move = Vector3.zero;
@@ -78,9 +93,14 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            // Interact with NPCs/Continue dialogue
+            if (!inputLocked && Input.GetKeyDown(KeyCode.E))
             {
-                Interact();
+                if (!DialogueManager.GetInstance().dialogueIsPlaying)
+                {
+                    StartCoroutine(InputCooldown());
+                    Interact();
+                }
             }
                 
         }
@@ -138,15 +158,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Interact with an NPC in the facing direction
+    // Interact with an NPC in the facing direction or continue dialogue if already in one
     private void Interact()
     {
+        Debug.Log("Checking for NPC to interact with");
         Vector3Int facingCell = grid.WorldToCell(transform.position + facingDirection);
-        Collider2D npcCollider = Physics2D.OverlapPoint(grid.CellToWorld(facingCell));
+        Vector3 cellCenter = grid.GetCellCenterWorld(facingCell);
+        Collider2D npcCollider = Physics2D.OverlapPoint(cellCenter);
 
         if (npcCollider != null && npcCollider.CompareTag("NPC"))
         {
             npcCollider.GetComponent<NPCController>()?.Interact();
         }
+    }
+
+    private IEnumerator InputCooldown()
+    {
+        inputLocked = true;
+        yield return new WaitForSeconds(0.2f); // short delay
+        inputLocked = false;
     }
 }
