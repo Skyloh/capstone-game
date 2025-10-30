@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // a utility class for computations for abilities as well as handlers for metadata and targeting creation
 public static class AbilityUtils
@@ -15,16 +17,18 @@ public static class AbilityUtils
 
     public static int ApplyStatusScalars(CombatUnit attacker, CombatUnit defender, int damage)
     {
-        return Mathf.FloorToInt(damage * GetChillDamageScalar(attacker) * GetBruiseDamageScalar(defender) * GetStunDamageScalar(defender));
+        return Mathf.FloorToInt(damage * GetChillDamageScalar(attacker) * GetBruiseDamageScalar(defender) *
+                                GetStunDamageScalar(defender));
     }
 
     public static int ApplyWeaknessAffinityScalar(CombatUnit player_defender, int damage, AffinityType with_element)
     {
-        return Mathf.FloorToInt(damage * 
-            (player_defender.TryGetModule<AffinityModule>(out var aff_module) 
-            && aff_module.GetWeaknessAffinity() == with_element ?
-            2f : 1f
-        ));
+        return Mathf.FloorToInt(damage *
+                                (player_defender.TryGetModule<AffinityModule>(out var aff_module)
+                                 && aff_module.GetWeaknessAffinity() == with_element
+                                    ? 2f
+                                    : 1f
+                                ));
     }
 
     private static float GetChillDamageScalar(CombatUnit attacker)
@@ -44,14 +48,7 @@ public static class AbilityUtils
 
     public static AffinityType StringToAffinity(string str)
     {
-        return str.ToLower() switch
-        {
-            "red" => AffinityType.Red,
-            "blue" => AffinityType.Blue,
-            "yellow" => AffinityType.Yellow,
-            "green" => AffinityType.Green,
-            _ => AffinityType.None,
-        };
+        return Enum.TryParse(str, true, out AffinityType result) ? result : AffinityType.None;
     }
 
     public static string MakeAffinityIndexTargetIndexString(int aff_index, (int t_i, int u_i) unit_indices)
@@ -63,7 +60,7 @@ public static class AbilityUtils
     {
         int hyphen = input.IndexOf('-');
         int colon = input.IndexOf(':');
-        
+
         if (hyphen == -1 || colon == -1) throw new System.Exception("String is of improper format! " + input);
 
         string team_index_str = input[..hyphen];
@@ -88,10 +85,18 @@ public static class AbilityUtils
         return data.Split(METADATA_UNION_CHARACTER);
     }
 
-    public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() => new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
-    public static IReadOnlyDictionary<int, (int, int)> SingleAlly() => new Dictionary<int, (int min, int max)> { { 0, (1, 1) } };
-    public static IReadOnlyDictionary<int, (int, int)> AllEnemies() => new Dictionary<int, (int min, int max)> { { 1, (-1, -1) } };
-    public static IReadOnlyDictionary<int, (int, int)> AllAllies() => new Dictionary<int, (int min, int max)> { { 0, (-1, -1) } };
+    public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() =>
+        new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
+
+    public static IReadOnlyDictionary<int, (int, int)> SingleAlly() =>
+        new Dictionary<int, (int min, int max)> { { 0, (1, 1) } };
+
+    public static IReadOnlyDictionary<int, (int, int)> AllEnemies() =>
+        new Dictionary<int, (int min, int max)> { { 1, (-1, -1) } };
+
+    public static IReadOnlyDictionary<int, (int, int)> AllAllies() =>
+        new Dictionary<int, (int min, int max)> { { 0, (-1, -1) } };
+
     public static IReadOnlyDictionary<int, (int, int)> EmptyTargets() => new Dictionary<int, (int min, int max)>();
     public static List<string> EmptyMetadata() => new List<string>();
 }

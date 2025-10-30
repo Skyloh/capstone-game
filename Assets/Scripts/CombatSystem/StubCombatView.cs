@@ -281,25 +281,20 @@ public class StubCombatView : MonoBehaviour, ICombatView
                     while (!break_loop)
                     {
                         Debug.Log("Select Affinity for Weapon Element.");
-                        Debug.Log("red, yellow, blue, green.");
+                        Debug.Log("Fire, Lightning, Water, Physical.");
 
                         yield return new WaitUntil(() => m_hasData);
 
                         m_hasData = false;
-
-                        switch (m_data.ToLower())
+                        if (Enum.TryParse(m_data, true, out AffinityType value))
                         {
-                            case "red":
-                            case "blue":
-                            case "yellow":
-                            case "green":
-                                action_data.AddToMetadata(metadata[i], m_data.ToLower());
-                                break_loop = true;
-                                break;
-
-                            default:
-                                Debug.Log("Invalid Input.");
-                                continue;
+                            action_data.AddToMetadata(metadata[i], Enum.GetName(typeof(AffinityType), value));
+                            break_loop = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Invalid input.");
+                            continue;
                         }
                     }
 
@@ -396,7 +391,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
 
                             // all conditions pass? good to go.
                             action_data.AddToMetadata(
-                                is_optional ? MetadataConstants.OPTIONAL_AITI : MetadataConstants.AFF_INDEX_TARGET_INDEX,
+                                is_optional
+                                    ? MetadataConstants.OPTIONAL_AITI
+                                    : MetadataConstants.AFF_INDEX_TARGET_INDEX,
                                 aiti_string);
 
                             break_loop = true;

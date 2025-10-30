@@ -17,27 +17,22 @@ namespace CombatSystem.View
         {
             for (int i = 0; i < affinityTypes.Count; i++)
             {
-                Debug.Log(affinityPool[i]);
-            }
-            for (int i = 0; i < affinityTypes.Count; i++)
-            {
-                Debug.Log(Enum.GetName(typeof(AffinityType),affinityTypes[i])); 
                 affinityPool[i].SetActive(true);
                 switch (affinityTypes[i])
                 {
                     case AffinityType.None:
                         affinityPool[i].GetComponent<Image>().sprite = battleSprites.physicalEnemyWeakness;
                         break;
-                    case AffinityType.Blue:
+                    case AffinityType.Water:
                         affinityPool[i].GetComponent<Image>().sprite = battleSprites.waterEnemyWeakness;
                         break;
-                    case AffinityType.Green:
+                    case AffinityType.Physical:
                         affinityPool[i].GetComponent<Image>().sprite = battleSprites.physicalEnemyWeakness;
                         break;
-                    case AffinityType.Red:
+                    case AffinityType.Fire:
                         affinityPool[i].GetComponent<Image>().sprite = battleSprites.fireEnemyWeakness;
                         break;
-                    case AffinityType.Yellow:
+                    case AffinityType.Lightning:
                         affinityPool[i].GetComponent<Image>().sprite = battleSprites.lightningEnemyWeakness;
                         break;
                 }

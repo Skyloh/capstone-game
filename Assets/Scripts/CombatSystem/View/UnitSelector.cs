@@ -32,6 +32,18 @@ namespace CombatSystem.View
 
         ICombatModel combatModel => combatManager.CombatModel;
 
+        public void ManualSelect(int team, int unit)
+        {
+            Debug.Log("manual");
+            if (team == 0)
+            {
+                OnPlayerClicked(unit, players[unit]);
+            }
+            else
+            {
+                OnEnemyClicked(unit, enemies[unit]);
+            }
+        }
         private bool IsValidPlayerSelection(int index, SelectionFlags selectionFlags)
         {
             if (!selectionFlags.HasFlag(SelectionFlags.Ally)) return false;

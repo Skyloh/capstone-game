@@ -21,3 +21,13 @@ public static class MetadataConstants
     public const string AFFINITY_PAIR_INDEX_2 = "pair-2-affinity-index"; // for Seg Swap (pick 2 indicies on 1 enemy)
     */
 }
+
+// public enum MetadataConstants
+// {
+//     WEAPON_ELEMENT,
+//     WEAPON,
+//     WEAKNESS,
+//     AFF_INDEX_TARGET_INDEX,
+//     OPTIONAL_AITI,
+//     PAIR_AFF_INDEX_TARGET_INDEX,
+// }

@@ -62,7 +62,7 @@ public class AffinityModule : AModule
 
         m_weaponAffinity = to_type;
 
-        OnWeaponAffinityChanged.Invoke(to_type, original);
+        OnWeaponAffinityChanged?.Invoke(to_type, original);
     }
 
     public void ChangeWeaknessAffinity(AffinityType to_type)
@@ -71,17 +71,17 @@ public class AffinityModule : AModule
 
         m_weaknessAffinity = to_type;
 
-        OnWeaknessAffinityChanged.Invoke(to_type, original);
+        OnWeaknessAffinityChanged?.Invoke(to_type, original);
     }
 
     private AffinityType MorphVeilStatusToAffinity(Status status)
     {
         return status switch
         {
-            Status.MorphRed or Status.VeilRed => AffinityType.Red,
-            Status.MorphBlue or Status.VeilBlue => AffinityType.Blue,
-            Status.MorphGreen or Status.VeilGreen => AffinityType.Green,
-            Status.MorphYellow or Status.VeilYellow => AffinityType.Yellow,
+            Status.MorphRed or Status.VeilRed => AffinityType.Fire,
+            Status.MorphBlue or Status.VeilBlue => AffinityType.Water,
+            Status.MorphGreen or Status.VeilGreen => AffinityType.Physical,
+            Status.MorphYellow or Status.VeilYellow => AffinityType.Lightning,
             _ => AffinityType.None,
         };
     }

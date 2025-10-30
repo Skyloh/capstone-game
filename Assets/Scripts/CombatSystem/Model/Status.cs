@@ -30,10 +30,10 @@ public static class StatusUtils
     {
         var status = type switch
         {
-            AffinityType.Red => Status.Burn,
-            AffinityType.Blue => Status.Chill,
-            AffinityType.Yellow => Status.Shock,
-            AffinityType.Green => Status.Bruise,
+            AffinityType.Fire => Status.Burn,
+            AffinityType.Water => Status.Chill,
+            AffinityType.Lightning => Status.Shock,
+            AffinityType.Physical => Status.Bruise,
             _ => Status.None,
         };
         return status;
@@ -43,10 +43,10 @@ public static class StatusUtils
     {
         var status = type switch
         {
-            AffinityType.Red => Status.MorphRed,
-            AffinityType.Blue => Status.MorphBlue,
-            AffinityType.Yellow => Status.MorphYellow,
-            AffinityType.Green => Status.MorphGreen,
+            AffinityType.Fire => Status.MorphRed,
+            AffinityType.Water => Status.MorphBlue,
+            AffinityType.Lightning => Status.MorphYellow,
+            AffinityType.Physical => Status.MorphGreen,
             _ => Status.None,
         };
         return status;
@@ -56,10 +56,10 @@ public static class StatusUtils
     {
         var status = type switch
         {
-            AffinityType.Red => Status.VeilRed,
-            AffinityType.Blue => Status.VeilBlue,
-            AffinityType.Yellow => Status.VeilYellow,
-            AffinityType.Green => Status.VeilGreen,
+            AffinityType.Fire => Status.VeilRed,
+            AffinityType.Water => Status.VeilBlue,
+            AffinityType.Lightning => Status.VeilYellow,
+            AffinityType.Physical => Status.VeilGreen,
             _ => Status.None,
         };
         return status;

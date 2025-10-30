@@ -27,6 +27,7 @@ namespace CombatSystem.View
             ClearEnemiesSelection();
         }
 
+        void ManualSelect(int team, int unit);
         void ClearRequests();
         void ClearPlayersSelection();
         void ClearEnemiesSelection();

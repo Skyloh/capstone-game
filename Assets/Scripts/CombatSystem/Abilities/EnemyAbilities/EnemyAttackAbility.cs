@@ -43,7 +43,7 @@ public class EnemyAttackAbility : AAbility
                 AbilityUtils.ApplyWeaknessAffinityScalar(
                     target,
                     AbilityUtils.CalculateDamage(5, 10), 
-                    AffinityType.Red));
+                    AffinityType.Fire));
 
         h_module.ChangeHealth(damage);
 

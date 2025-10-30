@@ -29,7 +29,7 @@ public class StaticShowerAbility : AAbility
             var bar_module = GetModuleOrError<AffinityBarModule>(target);
             var health_module = GetModuleOrError<HealthModule>(target);
 
-            int breaks = bar_module.CalculateLeadingBreaks(new HashSet<AffinityType>() { AffinityType.Blue, AffinityType.Yellow });
+            int breaks = bar_module.CalculateLeadingBreaks(new HashSet<AffinityType>() { AffinityType.Water, AffinityType.Lightning });
 
             int damage = AbilityUtils.CalculateDamage(20, 28); // 50 - 70 to 20 - 28 (div by 2.5)
 

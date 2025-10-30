@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,16 +11,15 @@ namespace CombatSystem.View
 {
     public class BattleInterface : MonoBehaviour, ICombatView
     {
-        // Start is called before the first frame update
+        // Start is called befomre the first frame update
         public ViewSprites battleSprites;
         public BrainSO cpuBrain;
         private VisualElement ui;
         private VisualElement playerWeaknessIcon;
         private CombatManager combatManager;
-        private Button attackButton1;
-        private Button attackButton2;
-        private Button attackButton3;
-        private Button attackButton4;
+        private readonly Button[] actions = new Button[4];
+        private readonly Button[] options = new Button[4];
+
         private Button confirmButton;
         private Label playerCharacterName;
         private Label playerTotalHp;
@@ -45,15 +45,35 @@ namespace CombatSystem.View
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
+            selectedPlayer = index;
             DisplayUnit(model.GetTeam(0).GetUnit(index));
         }
 
         private void OnEnable()
         {
-            attackButton1 = ui.Q<Button>("Action1");
-            attackButton2 = ui.Q<Button>("Action2");
-            attackButton3 = ui.Q<Button>("Action3");
-            attackButton4 = ui.Q<Button>("Action4");
+            for (int i = 0; i < 4; i++)
+            {
+                int capturedi = i;
+                actions[i] = ui.Q<Button>($"Action{i + 1}");
+                actions[i].RegisterCallback<ClickEvent>((ce) =>
+                {
+                    if (attackCallbacks[capturedi] != null)
+                    {
+                        attackCallbacks[capturedi](ce);
+                    }
+                });
+                actions[i].RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, capturedi));
+
+                options[i] = ui.Q<Button>($"Option{i + 1}");
+                options[i].RegisterCallback<ClickEvent>((ce) =>
+                {
+                    if (optionCallbacks[capturedi] != null)
+                    {
+                        optionCallbacks[capturedi](ce);
+                    }
+                });
+            }
+
             playerCharacterName = ui.Q<Label>("PlayerName");
             playerWeaknessIcon = ui.Q<VisualElement>("PlayerWeaknessIcon");
             playerTotalHp = ui.Q<Label>("PlayerTotalHp");
@@ -61,14 +81,13 @@ namespace CombatSystem.View
             actionDescription = ui.Q<Label>("ActionDescription");
             confirmButton = ui.Q<Button>("Confirm");
             enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
-
-            attackButton1.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 0));
-
-            attackButton2.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 1));
-            attackButton3.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 2));
-
-            attackButton4.RegisterCallback<MouseOverEvent>((moe) => UpdateAttackDescription(moe, 3));
-            confirmButton.RegisterCallback<ClickEvent>(ConfirmTargets);
+            confirmButton.RegisterCallback<ClickEvent>((ce) =>
+            {
+                if (confirmCallback != null)
+                {
+                    confirmCallback(ce);
+                }
+            });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
             unitSelector.EnemyHovered += OnEnemyHovered;
             DisplayUnit(model.GetTeam(0).GetUnit(0));
@@ -140,6 +159,7 @@ namespace CombatSystem.View
 
         private void UpdateAttackDescription(MouseOverEvent e, int index)
         {
+            Debug.Log(index + "  " + abilityCache.GetAbilities().Count);
             actionDescription.text = abilityCache.GetAbilities()[index].GetAbilityData().Description;
         }
 
@@ -300,6 +320,16 @@ namespace CombatSystem.View
 
         private void StartUnitSelection(BattleStates previous)
         {
+            for (int i = 0; i < 4; i++)
+            {
+                Debug.Log("unit selection");
+                attackCallbacks[i] = (ce) =>
+                {
+                    unitSelector.ManualSelect(0, selectedPlayer);
+                    TriggerState(BattleStates.TargetSelection);
+                };
+            }
+
             unitSelector.ClearSelection();
             unitSelector.PlayerHovered += OnPlayerHovered;
             unitSelector.SelectOne(SelectionFlags.Alive | SelectionFlags.Ally | SelectionFlags.Actionable, SelectUnit);
@@ -338,15 +368,13 @@ namespace CombatSystem.View
         #region Target Selection
 
         private ActionData actionData;
-        private List<(int team, int unit)> selectedTargets = new();
+        private readonly List<(int team, int unit)> selectedTargets = new();
 
         private void StartTargetSelection(BattleStates previous)
         {
-            attackButton1.style.display = DisplayStyle.None;
-            attackButton2.style.display = DisplayStyle.None;
-            attackButton3.style.display = DisplayStyle.None;
-            attackButton4.style.display = DisplayStyle.None;
-            confirmButton.style.display = DisplayStyle.Flex;
+            HideActionButtons();
+            ShowConfirmButton();
+            confirmCallback = (ce) => ConfirmTargets();
             selectedTargets.Clear();
             var abilityData = actionData.Action.GetAbilityData();
             actionData.UserTeamUnitIndex.team_index = 0;
@@ -373,23 +401,23 @@ namespace CombatSystem.View
             {
                 if (!canTakeMore)
                 {
-                    confirmButton.style.display = DisplayStyle.Flex;
+                    ShowConfirmButton();
                     // somewhat feels weird
-                    // confirmButton.style.display = DisplayStyle.None;
+                    // HideConfirmButton();
                     // TriggerState(BattleStates.AffinityTargeting);
                 }
                 else
                 {
-                    confirmButton.style.display = DisplayStyle.Flex;
+                    ShowConfirmButton();
                 }
             }
             else
             {
-                    confirmButton.style.display = DisplayStyle.None;
+                HideConfirmButton();
             }
         }
 
-        private void ConfirmTargets(ClickEvent e)
+        private void ConfirmTargets()
         {
             if (currentState != BattleStates.TargetSelection) return;
             if (CanPrepAbility(actionData.Action.GetAbilityData(), selectedTargets, out _))
@@ -400,30 +428,27 @@ namespace CombatSystem.View
 
         private bool CanPrepAbility(AbilityData data, List<(int team, int unit)> targets, out bool canTakeMore)
         {
-           canTakeMore = false;
+            canTakeMore = false;
             foreach (var entry in data.RequiredTargets)
             {
                 var (min, max) = entry.Value;
                 if (min == -1 && max == -1) continue;
                 int count = selectedTargets.Select(pair => pair.team == entry.Key).Count();
                 if (count < min || count > max) return false;
-                if( count < max) canTakeMore = true;
+                if (count < max) canTakeMore = true;
             }
 
             return true;
         }
-        
+
         private void CleanUpTargetSelection(BattleStates next)
         {
             actionData.TargetIndices = selectedTargets.ToArray();
             unitSelector.ClearRequests();
             selectedTargets.Clear();
-
-            attackButton1.style.display = DisplayStyle.Flex;
-            attackButton2.style.display = DisplayStyle.Flex;
-            attackButton3.style.display = DisplayStyle.Flex;
-            attackButton4.style.display = DisplayStyle.Flex;
-            confirmButton.style.display = DisplayStyle.None;
+            confirmCallback = null;
+            ShowActionButtons();
+            HideConfirmButton();
         }
 
         #endregion
@@ -434,8 +459,10 @@ namespace CombatSystem.View
 
         private void DisplayUnit(CombatUnit selectedUnit)
         {
-            Debug.Log($"Displaying unit {selectedUnit}");
+            // Debug.Log($"Displaying unit {selectedUnit}");
+            ShowActionButtons();
             UpdateAbilityCallback(selectedUnit);
+            actionDescription.text = "";
             if (selectedUnit.TryGetModule(out HealthModule healthModule))
             {
                 //TODO prevent edge cases where this number can go out of date
@@ -446,19 +473,19 @@ namespace CombatSystem.View
             {
                 switch (affinityModule.GetWeaknessAffinity())
                 {
-                    case AffinityType.Blue:
+                    case AffinityType.Water:
                         playerWeaknessIcon.style.backgroundImage =
                             new StyleBackground(battleSprites.waterPlayerWeakness);
                         break;
-                    case AffinityType.Red:
+                    case AffinityType.Fire:
                         playerWeaknessIcon.style.backgroundImage =
                             new StyleBackground(battleSprites.firePlayerWeakness);
                         break;
-                    case AffinityType.Green:
+                    case AffinityType.Physical:
                         playerWeaknessIcon.style.backgroundImage =
                             new StyleBackground(battleSprites.physicalPlayerWeakness);
                         break;
-                    case AffinityType.Yellow:
+                    case AffinityType.Lightning:
                         playerWeaknessIcon.style.backgroundImage =
                             new StyleBackground(battleSprites.lightningPlayerWeakness);
                         break;
@@ -471,10 +498,10 @@ namespace CombatSystem.View
             if (selectedUnit.TryGetModule(out abilityCache))
             {
                 var abilities = abilityCache.GetAbilities();
-                attackButton1.text = abilities[0].GetAbilityData().Name;
-                attackButton2.text = abilities[1].GetAbilityData().Name;
-                attackButton3.text = abilities[2].GetAbilityData().Name;
-                attackButton4.text = abilities[3].GetAbilityData().Name;
+                for (int i = 0; i < 4; i++)
+                {
+                    actions[i].text = abilities[i].GetAbilityData().Name;
+                }
             }
         }
 
@@ -486,7 +513,19 @@ namespace CombatSystem.View
             for (int i = 0; i < 4; i++)
             {
                 int j = i; // prevents captured variable shenanigans 
-                attackCallbacks[i] = (mde) => AttackClicked(mde, abilities[j], j);
+                switch (currentState)
+                {
+                    case BattleStates.UnitSelection:
+                        attackCallbacks[i] = (mde) =>
+                        {
+                            unitSelector.ManualSelect(0, selectedPlayer);
+                            AttackClicked(mde, abilities[j], j);
+                        };
+                        break;
+                    case BattleStates.ActionSelection:
+                        attackCallbacks[i] = (mde) => AttackClicked(mde, abilities[j], j);
+                        break;
+                }
             }
         }
 
@@ -494,19 +533,23 @@ namespace CombatSystem.View
         {
             backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
 
-            attackButton1.RegisterCallback<ClickEvent>(attackCallbacks[0]);
-            attackButton2.RegisterCallback<ClickEvent>(attackCallbacks[1]);
-            attackButton3.RegisterCallback<ClickEvent>(attackCallbacks[2]);
-            attackButton4.RegisterCallback<ClickEvent>(attackCallbacks[3]);
-
             if (selectedPlayer == -1)
             {
                 throw new Exception("Something went wrong during unit selection");
             }
         }
 
-        // cache to unregister callbacks
+        /// <summary>
+        ///  Set attackCallbacks[i] to null to remove callback
+        /// </summary>
         private readonly EventCallback<ClickEvent>[] attackCallbacks = new EventCallback<ClickEvent>[4];
+
+        /// <summary>
+        /// Set optionCallbacks[i] to null to remove callback
+        /// </summary>
+        private readonly EventCallback<ClickEvent>[] optionCallbacks = new EventCallback<ClickEvent>[4];
+
+        [CanBeNull] private EventCallback<ClickEvent> confirmCallback = null;
 
         private void AttackClicked(ClickEvent e, IAbility ability, int index)
         {
@@ -526,26 +569,101 @@ namespace CombatSystem.View
         private void CleanUpActionSelection(BattleStates next)
         {
             backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
-            attackButton1.UnregisterCallback<ClickEvent>(attackCallbacks[0]);
-            attackButton2.UnregisterCallback<ClickEvent>(attackCallbacks[1]);
-            attackButton3.UnregisterCallback<ClickEvent>(attackCallbacks[2]);
-            attackButton4.UnregisterCallback<ClickEvent>(attackCallbacks[3]);
+            for (int i = 0; i < 4; i++)
+            {
+                attackCallbacks[i] = null;
+            }
         }
 
         #endregion
 
         #region AffinityTargeting
 
+        private int metadata_index;
+
         private void StartAffinityTargeting(BattleStates previous)
         {
-            if (actionData.Action.GetAbilityData().RequiredMetadata.Count == 0)
+            metadata_index = -1;
+            HideActionButtons();
+            actionData.ActionMetadata = new Dictionary<string, string>();
+            NextMetadata();
+        }
+
+        private void NextMetadata()
+        {
+            metadata_index++;
+            HideOptionButtons();
+            if (metadata_index >= actionData.Action.GetAbilityData().RequiredMetadata.Count)
             {
                 combatManager.PerformAction(actionData);
+                return;
             }
-            else
+
+            var meta = actionData.Action.GetAbilityData().RequiredMetadata[metadata_index];
+            switch (meta)
             {
-                Debug.Log("Unsupported attack");
+                case MetadataConstants.OPTIONAL_AITI:
+                case MetadataConstants.AFF_INDEX_TARGET_INDEX:
+                    if (meta == MetadataConstants.OPTIONAL_AITI)
+                    {
+                        ShowConfirmButton();
+                        // confirmButton.RegisterCallback();
+                    }
+
+                    affinityTargeter.SelectOne((int index) =>
+                    {
+                        metadata_index++;
+                        switch (selectedTargets.Count)
+                        {
+                            case 1:
+                                actionData.AddToMetadata(meta,
+                                    AbilityUtils.MakeAffinityIndexTargetIndexString(index, (selectedTargets[0])));
+                                break;
+                            default:
+                                throw new Exception(
+                                    $"Do not know how to handle AFF_INDEX_TARGET_INDEX for {selectedTargets.Count} players");
+                        }
+                    }, IAffinityTargeter.All);
+                    break;
+                case MetadataConstants.WEAKNESS:
+                case MetadataConstants.WEAPON:
+                    throw new Exception($"thought this metadata {meta} was unused");
+                case MetadataConstants.WEAPON_ELEMENT:
+                    ShowOptionButtons();
+                    options[0].text = "Fire";
+                    optionCallbacks[0] = (ce) =>
+                    {
+                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Fire));
+                        NextMetadata();
+                    };
+                    options[1].text = "Water";
+                    optionCallbacks[1] = (ce) =>
+                    {
+                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Water));
+                        NextMetadata();
+                    };
+                    options[2].text = "Lightning";
+                    optionCallbacks[2] = (ce) =>
+                    {
+                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Lightning));
+                        NextMetadata();
+                    };
+                    options[3].text = "Physical";
+                    optionCallbacks[3] = (ce) =>
+                    {
+                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Physical));
+                        NextMetadata();
+                    };
+                    break;
+                case MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX:
+                case MetadataConstants.WEAPON_OR_WEAKNESS:
+                    Debug.Log("unsupported attack");
+                    break;
             }
+        }
+
+        private void HandleAffinityTargeting()
+        {
         }
 
         private void CleanUpAffinitySelection()
@@ -569,5 +687,47 @@ namespace CombatSystem.View
         }
 
         #endregion
+
+        private void HideActionButtons()
+        {
+            foreach (var action in actions)
+            {
+                action.style.display = DisplayStyle.None;
+            }
+        }
+
+        private void ShowActionButtons()
+        {
+            foreach (var action in actions)
+            {
+                action.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        private void HideOptionButtons()
+        {
+            foreach (var option in options)
+            {
+                option.style.display = DisplayStyle.None;
+            }
+        }
+
+        private void ShowOptionButtons()
+        {
+            foreach (var option in options)
+            {
+                option.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        private void HideConfirmButton()
+        {
+            confirmButton.style.display = DisplayStyle.None;
+        }
+
+        private void ShowConfirmButton()
+        {
+            confirmButton.style.display = DisplayStyle.Flex;
+        }
     }
 }

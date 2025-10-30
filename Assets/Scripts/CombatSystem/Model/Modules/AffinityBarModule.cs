@@ -43,10 +43,10 @@ public class AffinityBarModule : AModule
         {
             var affinity = Random.Range(0, 3) switch
             {
-                0 => AffinityType.Red,
-                1 => AffinityType.Blue,
-                2 => AffinityType.Yellow,
-                3 => AffinityType.Green,
+                0 => AffinityType.Fire,
+                1 => AffinityType.Water,
+                2 => AffinityType.Lightning,
+                3 => AffinityType.Physical,
                 // unreachable
                 _ => AffinityType.None,
             };

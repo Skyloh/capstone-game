@@ -29,7 +29,7 @@ public class BurningHandsAbility : AAbility
             var bar_module = GetModuleOrError<AffinityBarModule>(target);
             var health_module = GetModuleOrError<HealthModule>(target);
 
-            int breaks = bar_module.CalculateLeadingBreaks(new HashSet<AffinityType>() { AffinityType.Red, AffinityType.Green });
+            int breaks = bar_module.CalculateLeadingBreaks(new HashSet<AffinityType>() { AffinityType.Fire, AffinityType.Physical });
 
             int damage = AbilityUtils.CalculateDamage(20, 28); // 50 - 70 to 20 - 28 (div by 2.5)
 
