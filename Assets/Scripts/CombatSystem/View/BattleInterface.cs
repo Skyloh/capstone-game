@@ -612,52 +612,63 @@ namespace CombatSystem.View
 
                     affinityTargeter.SelectOne((int index) =>
                     {
-                        metadata_index++;
                         switch (selectedTargets.Count)
                         {
                             case 1:
                                 actionData.AddToMetadata(meta,
                                     AbilityUtils.MakeAffinityIndexTargetIndexString(index, (selectedTargets[0])));
+                                NextMetadata();
                                 break;
                             default:
+                                TriggerState(BattleStates.UnitSelection);
                                 throw new Exception(
-                                    $"Do not know how to handle AFF_INDEX_TARGET_INDEX for {selectedTargets.Count} players");
+                                    $"Do not know how to handle AFF_INDEX_TARGET_INDEX for {selectedTargets.Count} players returning to unit selection");
                         }
                     }, IAffinityTargeter.All);
                     break;
-                case MetadataConstants.WEAKNESS:
-                case MetadataConstants.WEAPON:
-                    throw new Exception($"thought this metadata {meta} was unused");
+
                 case MetadataConstants.WEAPON_ELEMENT:
-                    ShowOptionButtons();
-                    options[0].text = "Fire";
+                    ShowOptionButtons(4);
+                    int index = 0;
+                    foreach (var affinity in Enum.GetValues(typeof(AffinityType)))
+                    {
+                        switch (affinity)
+                        {
+                            case AffinityType.Fire:
+                            case AffinityType.Water:
+                            case AffinityType.Lightning:
+                            case AffinityType.Physical:
+                                options[index].text = Enum.GetName(typeof(AffinityType), affinity);
+                                optionCallbacks[index] = (ce) =>
+                                {
+                                    actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), affinity));
+                                    NextMetadata();
+                                };
+                                index++;
+                                break;
+                        }
+                    }
+
+                    break;
+                case MetadataConstants.WEAPON_OR_WEAKNESS:
+                    ShowOptionButtons(2);
+                    options[0].text = "Weapon";
                     optionCallbacks[0] = (ce) =>
                     {
-                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Fire));
+                        actionData.AddToMetadata(meta, MetadataConstants.WEAPON);
                         NextMetadata();
                     };
-                    options[1].text = "Water";
+                    options[1].text = "Weakness";
                     optionCallbacks[1] = (ce) =>
                     {
-                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Water));
-                        NextMetadata();
-                    };
-                    options[2].text = "Lightning";
-                    optionCallbacks[2] = (ce) =>
-                    {
-                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Lightning));
-                        NextMetadata();
-                    };
-                    options[3].text = "Physical";
-                    optionCallbacks[3] = (ce) =>
-                    {
-                        actionData.AddToMetadata(meta, Enum.GetName(typeof(AffinityType), AffinityType.Physical));
+                        actionData.AddToMetadata(meta, MetadataConstants.WEAKNESS);
                         NextMetadata();
                     };
                     break;
+                case MetadataConstants.WEAKNESS:
+                case MetadataConstants.WEAPON:
                 case MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX:
-                case MetadataConstants.WEAPON_OR_WEAKNESS:
-                    Debug.Log("unsupported attack");
+                    Debug.Log($"unsupported attack {meta}");
                     break;
             }
         }
@@ -712,11 +723,11 @@ namespace CombatSystem.View
             }
         }
 
-        private void ShowOptionButtons()
+        private void ShowOptionButtons(int num)
         {
-            foreach (var option in options)
+            for (int i = 0; i < num && i < options.Length; i++)
             {
-                option.style.display = DisplayStyle.Flex;
+                options[i].style.display = DisplayStyle.Flex;
             }
         }
 
