@@ -620,9 +620,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3048080773091131853, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: e40e698f6798aa24886acb2d4a788cd8, type: 2}
     - target: {fileID: 6041275737397660165, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943852954098478420, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6943852954098478420, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: e40e698f6798aa24886acb2d4a788cd8, type: 2}
+    - target: {fileID: 8094338584383827328, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8094338584383827328, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
       propertyPath: m_IsActive
@@ -631,6 +647,10 @@ PrefabInstance:
     - target: {fileID: 8310484771882914607, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
       propertyPath: m_Name
       value: PauseMenuUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8310484771882914607, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8310484771882914607, guid: 0577976e2b77c4c0bbc69d1686605f29, type: 3}
       propertyPath: m_IsActive
@@ -686,7 +706,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220447492}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
@@ -918,25 +938,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: affinitybar
       objectReference: {fileID: 0}
+    - target: {fileID: 500041225309183220, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 500041225309183220, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2642647554587577514, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3835137647091698128, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8263097857770858592, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8482656648905476980, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_Pivot.x
