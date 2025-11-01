@@ -47,7 +47,9 @@ public class CombatUnit
                 new BlindsideAbility(),
                 new SpraypaintAbility(),
                 new InfuseAbility(),
-                new SwapAbility()
+                new SwapAbility(),
+                new DelayAbility(),
+                new SegmentSwapAbility()
             }));
     }
     public static CombatUnit SHOWCASE_MakePlayerUnit(string name, List<IAbility> abilities)
@@ -63,7 +65,7 @@ public class CombatUnit
     {
         return new CombatUnit(name)
             .AddModule(new HealthModule(70, 70))
-            .AddModule(new AffinityBarModule(3))
+            .AddModule(new AffinityBarModule(5))
             .AddModule(new StatusModule())
             .AddModule(new CPUModule(brain))
             .AddModule(new AbilityModule(new List<IAbility>() { new EnemyAttackAbility() }));

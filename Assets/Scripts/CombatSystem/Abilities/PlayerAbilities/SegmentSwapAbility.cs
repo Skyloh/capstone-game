@@ -23,7 +23,7 @@ public class SegmentSwapAbility : AAbility
     public override IEnumerator IE_ProcessAbility(ActionData data, ICombatModel model, ICombatView _)
     {
         // split the two aiti entries that we expect to have for targeting the element indices
-        string[] split_paiti_entries = AbilityUtils.SplitMetadataEntry(data.ActionMetadata[MetadataConstants.AFF_INDEX_TARGET_INDEX]);
+        string[] split_paiti_entries = AbilityUtils.SplitMetadataEntry(data.ActionMetadata[MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX]);
 
         if (split_paiti_entries.Length != 2) throw new System.Exception("Invalid number of PAITI entries!");
 

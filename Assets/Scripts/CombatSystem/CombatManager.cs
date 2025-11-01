@@ -69,25 +69,25 @@ public class CombatManager : MonoBehaviour
                     new List<IAbility>() {
                         new AttackAbility(),
                         new EnvenomAbility(),
-                        new SweepAbility(),
+                        new SegmentSwapAbility(),
                         new InstillAbility()}),
                     CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest2",
                     new List<IAbility>() {
                         new AttackAbility(),
                         new SpraypaintAbility(),
-                        new DefendAbility(),
+                        new SegmentSwapAbility(),
                         new MonochromeAbility()}),
                     CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest3",
                     new List<IAbility>() {
                         new InfuseAbility(),
                         new PaintBucketAbility(),
-                        new BlindsideAbility(),
+                        new DelayAbility(),
                         new StaticShowerAbility()}),
-                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest14",
+                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest4",
                     new List<IAbility>() {
                         new BurningHandsAbility(),
                         new AnalyzeAbility(),
-                        new GoadAbility(),
+                        new DelayAbility(),
                         new InstillAbility()}),
                 } },
                 { 1, new List<CombatUnit>() { 
