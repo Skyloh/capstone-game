@@ -33,7 +33,7 @@ public class NPCController : MonoBehaviour
     // If the player interacts with this NPC, start dialogue
     public void Interact()
     {
-        Debug.Log("I am interacted with");
+        //Debug.Log("I am interacted with");
         DialogueManager.GetInstance().EnterDialogueMode(dialogueFile);
     }
 

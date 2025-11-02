@@ -78,9 +78,9 @@ public class DialogueManager : MonoBehaviour
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
-        Debug.Log("EnterDialogueMode called");
-        Debug.Log("InkJSON name: " + inkJSON.name);
-        Debug.Log("InkJSON instance ID: " + inkJSON.GetInstanceID());
+        //Debug.Log("EnterDialogueMode called");
+        //Debug.Log("InkJSON name: " + inkJSON.name);
+        //Debug.Log("InkJSON instance ID: " + inkJSON.GetInstanceID());
 
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
@@ -100,7 +100,7 @@ public class DialogueManager : MonoBehaviour
 
     public void ContinueStory()
     {
-        Debug.Log("ContinueStory called from: " + System.Environment.StackTrace);
+        //Debug.Log("ContinueStory called from: " + System.Environment.StackTrace);
         if (currentStory.canContinue)
         {
             dialogueText.text = currentStory.Continue();
@@ -115,6 +115,12 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayChoices()
     {
+        if (currentStory.currentChoices.Count == 0)
+        {
+            canSelect = false;
+            return;
+        }
+
         // clear highlight color
         for (int i = 0; i < choices.Length; i++)
         {
@@ -142,19 +148,20 @@ public class DialogueManager : MonoBehaviour
         currentChoiceIndex = 0;
         HighlightChoice(currentChoiceIndex);
 
-        // ADD THIS: Wait one frame before allowing selection
+        
         StartCoroutine(EnableSelectionNextFrame());
     }
 
+    // wait one frame
     private IEnumerator EnableSelectionNextFrame()
     {
-        yield return null; // Wait one frame
+        yield return null; 
         canSelect = true;
     }
 
     private void ChangeChoice(int direction)
     {
-        // Deactivate current highlight
+        // deactivate current highlight
         UnhighlightChoice(currentChoiceIndex);
 
         int choicesCount = currentStory.currentChoices.Count;
@@ -178,20 +185,24 @@ public class DialogueManager : MonoBehaviour
     {
         canSelect = false;
 
-        // Pass the selected choice to Ink
+        // pass the selected choice to Ink
         currentStory.ChooseChoiceIndex(currentChoiceIndex);
 
-        // Continue twice: once to skip choice echo, once to get actual content
+        // continue twice: once to skip choice echo, once to get actual content
         if (currentStory.canContinue)
         {
-            currentStory.Continue(); // Skip choice echo
+            // skip choice echo
+            currentStory.Continue(); 
         }
 
-        // Now display the actual content
+        // now display the actual content
         if (currentStory.canContinue)
         {
             dialogueText.text = currentStory.Continue();
-            DisplayChoices();
+            if (currentStory.currentChoices.Count > 0)
+            {
+                DisplayChoices();
+            }
         }
         else
         {

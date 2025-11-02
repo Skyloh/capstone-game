@@ -161,7 +161,6 @@ public class PlayerController : MonoBehaviour
     // Interact with an NPC in the facing direction or continue dialogue if already in one
     private void Interact()
     {
-        Debug.Log("Checking for NPC to interact with");
         Vector3Int facingCell = grid.WorldToCell(transform.position + facingDirection);
         Vector3 cellCenter = grid.GetCellCenterWorld(facingCell);
         Collider2D npcCollider = Physics2D.OverlapPoint(cellCenter);
