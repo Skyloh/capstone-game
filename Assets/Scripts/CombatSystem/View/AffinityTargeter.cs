@@ -26,10 +26,7 @@ namespace CombatSystem.View
         public void SetAffinityBar(IList<AffinityType> affinityTypes)
         {
             referenceBar = affinityTypes.Where((aff) => aff != AffinityType.None).ToArray();
-            foreach (GameObject i in affinityPool.ActivePool())
-            {
-                i.SetActive(false);
-            }
+            affinityPool.Clear((obj) => obj.SetActive(false));
 
             for (int i = affinityTypes.Count - 1; i >= 0; i--)
             {

@@ -26,6 +26,7 @@ namespace CombatSystem.View
         private Button backToUnits;
         private Label actionDescription;
         private ProgressBar enemyHealthbar;
+        private VisualElement playerWeaponIcon;
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
@@ -76,6 +77,7 @@ namespace CombatSystem.View
 
             playerCharacterName = ui.Q<Label>("PlayerName");
             playerWeaknessIcon = ui.Q<VisualElement>("PlayerWeaknessIcon");
+            playerWeaponIcon = ui.Q<VisualElement>("PlayerWeaponIcon");
             playerTotalHp = ui.Q<Label>("PlayerTotalHp");
             backToUnits = ui.Q<Button>("BackToUnits");
             actionDescription = ui.Q<Label>("ActionDescription");
@@ -465,28 +467,36 @@ namespace CombatSystem.View
 
             if (selectedUnit.TryGetModule(out AffinityModule affinityModule))
             {
-                switch (affinityModule.GetWeaknessAffinity())
+                void SetIcon(VisualElement ui, AffinityType affinity)
                 {
-                    case AffinityType.Water:
-                        playerWeaknessIcon.style.backgroundImage =
-                            new StyleBackground(battleSprites.waterPlayerWeakness);
-                        break;
-                    case AffinityType.Fire:
-                        playerWeaknessIcon.style.backgroundImage =
-                            new StyleBackground(battleSprites.firePlayerWeakness);
-                        break;
-                    case AffinityType.Physical:
-                        playerWeaknessIcon.style.backgroundImage =
-                            new StyleBackground(battleSprites.physicalPlayerWeakness);
-                        break;
-                    case AffinityType.Lightning:
-                        playerWeaknessIcon.style.backgroundImage =
-                            new StyleBackground(battleSprites.lightningPlayerWeakness);
-                        break;
-                    case AffinityType.None:
-                        break;
+                    switch (affinity)
+                    {
+                        case AffinityType.Water:
+                            ui.style.backgroundImage =
+                                new StyleBackground(battleSprites.waterPlayerWeakness);
+                            break;
+                        case AffinityType.Fire:
+                            ui.style.backgroundImage =
+                                new StyleBackground(battleSprites.firePlayerWeakness);
+                            break;
+                        case AffinityType.Physical:
+                            ui.style.backgroundImage =
+                                new StyleBackground(battleSprites.physicalPlayerWeakness);
+                            break;
+                        case AffinityType.Lightning:
+                            ui.style.backgroundImage =
+                                new StyleBackground(battleSprites.lightningPlayerWeakness);
+                            break;
+                        case AffinityType.None:
+                            break;
+                    }
                 }
+
+                SetIcon(playerWeaknessIcon, affinityModule.GetWeaknessAffinity());
+                SetIcon(playerWeaponIcon, affinityModule.GetWeaponAffinity());
+                //TODO: listend to change callbacks
             }
+
 
             playerCharacterName.text = selectedUnit.GetName();
             if (selectedUnit.TryGetModule(out abilityCache))

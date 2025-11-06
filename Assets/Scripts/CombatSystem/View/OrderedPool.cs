@@ -91,5 +91,14 @@ namespace CombatSystem.View
             action(array[activeLength - 1]);
             activeLength--;
         }
+
+        public void Clear(Action<T> action)
+        {
+            for (int i = activeLength - 1; i >= 0; i--)
+            {
+               action(array[i]); 
+            }
+            activeLength = 0;
+        }
     }
 }
