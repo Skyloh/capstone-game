@@ -159,7 +159,7 @@ namespace CombatSystem.View
 
         private void UpdateAttackDescription(MouseOverEvent e, int index)
         {
-            Debug.Log(index + "  " + abilityCache.GetAbilities().Count);
+            // Debug.Log(index + "  " + abilityCache.GetAbilities().Count);
             actionDescription.text = abilityCache.GetAbilities()[index].GetAbilityData().Description;
         }
 
@@ -213,6 +213,7 @@ namespace CombatSystem.View
             {
                 return;
             }
+
             switch (currentState)
             {
                 case BattleStates.Setup:
@@ -343,7 +344,6 @@ namespace CombatSystem.View
             {
                 DisplayUnit(selectedUnit);
                 selectedPlayer = unit;
-                Debug.Log("un" + selectedPlayer);
                 TriggerState(BattleStates.ActionSelection);
             }
             else
@@ -367,7 +367,7 @@ namespace CombatSystem.View
         private void StartTargetSelection(BattleStates previous)
         {
             HideActionButtons();
-            ShowConfirmButton();
+            // ShowConfirmButton();
             confirmCallback = (ce) => ConfirmTargets();
             selectedTargets.Clear();
             var abilityData = actionData.Action.GetAbilityData();
@@ -547,7 +547,6 @@ namespace CombatSystem.View
 
         private void AttackClicked(ClickEvent e, IAbility ability, int index)
         {
-            Debug.Log("Attacked");
             TriggerState(BattleStates.TargetSelection);
             actionData = new ActionData();
             actionData.Action = ability;
@@ -589,28 +588,28 @@ namespace CombatSystem.View
             HideOptionButtons();
             if (metadata_index >= actionData.Action.GetAbilityData().RequiredMetadata.Count)
             {
+                Debug.Log("Performing Action");
                 combatManager.PerformAction(actionData);
                 return;
+            }
+
+            for (int i = 0; i < selectedTargets.Count; i++)
+            {
+                Debug.Log(selectedTargets[i]);
             }
 
             var meta = actionData.Action.GetAbilityData().RequiredMetadata[metadata_index];
             switch (meta)
             {
-                case MetadataConstants.OPTIONAL_AITI:
                 case MetadataConstants.AFF_INDEX_TARGET_INDEX:
-                    if (meta == MetadataConstants.OPTIONAL_AITI)
-                    {
-                        ShowConfirmButton();
-                        // confirmButton.RegisterCallback();
-                    }
-
                     affinityTargeter.SelectOne((int index) =>
                     {
-                        switch (selectedTargets.Count)
+                        switch (actionData.TargetIndices.Length)
                         {
                             case 1:
                                 actionData.AddToMetadata(meta,
-                                    AbilityUtils.MakeAffinityIndexTargetIndexString(index, (selectedTargets[0])));
+                                    AbilityUtils.MakeAffinityIndexTargetIndexString(index,
+                                        (actionData.TargetIndices[0])));
                                 NextMetadata();
                                 break;
                             default:
@@ -621,6 +620,36 @@ namespace CombatSystem.View
                     }, IAffinityTargeter.All);
                     break;
 
+                case MetadataConstants.OPTIONAL_AITI:
+                    ShowConfirmButton();
+                    confirmCallback = (ce) =>
+                    {
+                        HideConfirmButton();
+                        affinityTargeter.CancelRequests();
+                        confirmCallback = null;
+                        NextMetadata();
+                    };
+                    IAffinityTargeter.SelectedOne request_callback = (int index) =>
+                    {
+                        switch (actionData.TargetIndices.Length)
+                        {
+                            case 0:
+                                NextMetadata();
+                                break;
+                            case 1:
+                                actionData.AddToMetadata(meta,
+                                    AbilityUtils.MakeAffinityIndexTargetIndexString(index,
+                                        (actionData.TargetIndices[0])));
+                                NextMetadata();
+                                break;
+                            default:
+                                TriggerState(BattleStates.UnitSelection);
+                                throw new Exception(
+                                    $"Do not know how to handle OPTIONAL_AITI for {selectedTargets.Count} players returning to unit selection");
+                        }
+                    };
+                    affinityTargeter.SelectOne(request_callback, IAffinityTargeter.All);
+                    break;
                 case MetadataConstants.WEAPON_ELEMENT:
                     ShowOptionButtons(4);
                     int index = 0;

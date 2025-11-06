@@ -29,6 +29,10 @@ namespace CombatSystem.View
         {
             SelectOne(selectedCallback, All);
         }
+
+        void SelectPair(SelectedOne selectedCallback, Selectable pairCallback);
+
+        void CancelRequests();
         // Task<int[]> SelectAdjacentAsync(Selectable selectableFilter, int amount);
     }
 }

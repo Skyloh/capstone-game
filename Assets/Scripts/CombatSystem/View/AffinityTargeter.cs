@@ -11,109 +11,22 @@ namespace CombatSystem.View
 {
     public class AffinityTargeter : MonoBehaviour, IAffinityTargeter
     {
-        private Queue<(IAffinityTargeter.Selectable predicate, IAffinityTargeter.SelectedOne callback)>
+        private readonly Queue<(IAffinityTargeter.Selectable predicate, IAffinityTargeter.SelectedOne callback)>
             requests = new();
 
-        private class OrderedPool<T>
-        {
-            private readonly T[] array;
-
-            private int activeLength = 0;
-
-            public OrderedPool(int capacity)
-            {
-                array = new T[capacity];
-            }
-
-            public T this[Index i]
-            {
-                get
-                {
-                    if (i.IsFromEnd)
-                    {
-                        return array[activeLength - i.Value];
-                    }
-
-                    if (i.Value >= activeLength)
-                    {
-                        throw new IndexOutOfRangeException(
-                            $"Index: {i.Value} not within active range of pool {activeLength}");
-                    }
-
-                    return array[i.Value];
-                }
-                set
-                {
-                    if (i.IsFromEnd)
-                    {
-                        if (i.Value == 0)
-                        {
-                            throw new IndexOutOfRangeException("Out side of active range of pool");
-                        }
-
-                        array[activeLength - i.Value] = value;
-                    }
-
-                    if (i.Value >= activeLength)
-                    {
-                        throw new IndexOutOfRangeException("Out side of active range of pool");
-                    }
-
-                    array[i.Value] = value;
-                }
-            }
-
-            public void Initialize(int index, T obj)
-            {
-                array[index] = obj;
-            }
-
-            public IEnumerable<T> ActivePool()
-            {
-                for (int i = 0; i < activeLength; i++)
-                {
-                    yield return array[i];
-                }
-            }
-
-            public IEnumerable<T> EntirePool()
-            {
-                foreach (var t in array)
-                {
-                    yield return t;
-                }
-            }
-
-            public int GetActiveCount()
-            {
-                return activeLength;
-            }
-
-            public int PoolSize => array.Length;
-
-            public void AddToBack(Action<T> action)
-            {
-                action(array[activeLength]);
-                activeLength++;
-            }
-
-            public void RemoveFromBack(Action<T> action)
-            {
-                action(array[activeLength - 1]);
-                activeLength--;
-            }
-        }
 
         [SerializeField] private ViewSprites battleSprites;
 
         [SerializeField] GameObject affinity;
 
         // readonly GameObject[] affinityPool = new GameObject[22];
-        readonly OrderedPool<GameObject> affinityPool2 = new OrderedPool<GameObject>(22);
+        readonly OrderedPool<GameObject> affinityPool = new OrderedPool<GameObject>(22);
+        private AffinityType[] referenceBar;
 
         public void SetAffinityBar(IList<AffinityType> affinityTypes)
         {
-            foreach (GameObject i in affinityPool2.ActivePool())
+            referenceBar = affinityTypes.Where((aff) => aff != AffinityType.None).ToArray();
+            foreach (GameObject i in affinityPool.ActivePool())
             {
                 i.SetActive(false);
             }
@@ -125,28 +38,28 @@ namespace CombatSystem.View
                     case AffinityType.None:
                         continue;
                     case AffinityType.Water:
-                        affinityPool2.AddToBack((gobj) =>
+                        affinityPool.AddToBack((gobj) =>
                         {
                             gobj.SetActive(true);
                             gobj.GetComponent<Image>().sprite = battleSprites.waterEnemyWeakness;
                         });
                         break;
                     case AffinityType.Physical:
-                        affinityPool2.AddToBack((gobj) =>
+                        affinityPool.AddToBack((gobj) =>
                         {
                             gobj.SetActive(true);
                             gobj.GetComponent<Image>().sprite = battleSprites.physicalEnemyWeakness;
                         });
                         break;
                     case AffinityType.Fire:
-                        affinityPool2.AddToBack((gobj) =>
+                        affinityPool.AddToBack((gobj) =>
                         {
                             gobj.SetActive(true);
                             gobj.GetComponent<Image>().sprite = battleSprites.fireEnemyWeakness;
                         });
                         break;
                     case AffinityType.Lightning:
-                        affinityPool2.AddToBack((gobj) =>
+                        affinityPool.AddToBack((gobj) =>
                         {
                             gobj.SetActive(true);
                             gobj.GetComponent<Image>().sprite = battleSprites.lightningEnemyWeakness;
@@ -168,42 +81,75 @@ namespace CombatSystem.View
             {
                 left.SetActive(true);
                 right.SetActive(true);
-                Hover(affinityPool2.GetActiveCount() - 1);
+                Hover(0);
             }
 
             requests.Enqueue((isSelectablePredicate, selectCallback));
         }
 
+        public void SelectPair(IAffinityTargeter.SelectedOne selectedCallback,
+            IAffinityTargeter.Selectable pairCallback)
+        {
+        }
+
+        public void CancelRequests()
+        {
+            requests.Clear();
+        }
+
         void Start()
         {
             affinity.SetActive(false);
-            affinityPool2.Initialize(0, affinity);
+            affinityPool.Initialize(0, affinity);
             for (int i = 1; i < 22; i++)
             {
-                affinityPool2.Initialize(i, Instantiate(affinity, this.transform));
+                affinityPool.Initialize(i, Instantiate(affinity, this.transform));
             }
         }
 
+        private void FullfillRequest(int index)
+        {
+            if (requests.Count == 0)
+            {
+                return;
+            }
+
+            Debug.Log("Fullfilling " + index);
+            requests.Dequeue().callback(index);
+            if (requests.Count == 0)
+            {
+                left.SetActive(false);
+                right.SetActive(false);
+            }
+            else
+            {
+                hoverIndex = 0;
+                if (!requests.Peek().predicate(hoverIndex, referenceBar.Length, referenceBar[0]))
+                {
+                    FindNextSelectable(requests.Peek().predicate, 0, referenceBar);
+                }
+            }
+        }
 
         [SerializeField] public GameObject left;
         [SerializeField] public GameObject right;
 
-        void Hover(int element_index)
+        private Vector3 get_affinity_position(int element_index)
         {
-            hoverIndex = element_index;
             Vector3[] corners = new Vector3[4];
             if (element_index < 0)
             {
-                affinityPool2[Mathf.Abs(element_index + 1)].GetComponent<RectTransform>().GetWorldCorners(corners);
+                affinityPool[Mathf.Abs(element_index + 1)].GetComponent<RectTransform>().GetWorldCorners(corners);
             }
             else
             {
-                affinityPool2[^(element_index + 1)].GetComponent<RectTransform>().GetWorldCorners(corners);
+                affinityPool[^(element_index + 1)].GetComponent<RectTransform>().GetWorldCorners(corners);
             }
 
             float x1 = corners[0].x;
             float y1 = corners[0].y;
-            float x2 = x1, y2 = y1;
+            float x2 = x1;
+            float y2 = y1;
             for (int i = 1; i < corners.Length; i++)
             {
                 if (corners[0].x != corners[i].x)
@@ -217,39 +163,166 @@ namespace CombatSystem.View
                 }
             }
 
-            left.GetComponent<Transform>().position = new Vector3(Mathf.Lerp(x1, x2, .5f), Mathf.Lerp(y1, y2, .5f), 0);
+            return new Vector3(Mathf.Lerp(x1, x2, .5f), Mathf.Lerp(y1, y2, .5f), 0);
+        }
+
+        void Hover(int element_index)
+        {
+            hoverIndex = element_index;
+            Vector3 pos = get_affinity_position(hoverIndex);
+
+            left.GetComponent<Transform>().position = pos;
             left.GetComponent<Animator>().Play("hovered_left");
-            right.GetComponent<Transform>().position = new Vector3(Mathf.Lerp(x1, x2, .5f), Mathf.Lerp(y1, y2, .5f), 0);
+            right.GetComponent<Transform>().position = pos;
             right.GetComponent<Animator>().Play("hovered_right");
+        }
+
+        void HoverPair(int element_index)
+        {
+            hoverIndex = element_index;
+            Vector3 pos = get_affinity_position(hoverIndex);
+            Vector3 pos2 = get_affinity_position(hoverIndex + 1);
+
+            left.GetComponent<Transform>().position = pos;
+            left.GetComponent<Animator>().Play("hovered_left");
+            right.GetComponent<Transform>().position = pos2;
+            right.GetComponent<Animator>().Play("hovered_right");
+        }
+
+        void Select(int element_index)
+        {
+            hoverIndex = element_index;
+            Vector3 pos = get_affinity_position(hoverIndex);
+
+            left.GetComponent<Transform>().position = pos;
+            left.GetComponent<Animator>().Play("selected_left");
+            right.GetComponent<Transform>().position = pos;
+            right.GetComponent<Animator>().Play("selected_right");
+        }
+
+        void SelectPair(int element_index)
+        {
+            hoverIndex = element_index;
+            Vector3 pos = get_affinity_position(hoverIndex);
+            Vector3 pos2 = get_affinity_position(hoverIndex + 1);
+
+            left.GetComponent<Transform>().position = pos;
+            left.GetComponent<Animator>().Play("selected_left");
+            right.GetComponent<Transform>().position = pos2;
+            right.GetComponent<Animator>().Play("selected_right");
         }
 
         private int hoverIndex
         {
             get => hover_index_backing;
-            set { hover_index_backing = value % affinityPool2.GetActiveCount(); }
+            set
+            {
+                if (value < 0)
+                {
+                    hover_index_backing = affinityPool.GetActiveCount() + value;
+                }
+                else
+                {
+                    hover_index_backing = value % affinityPool.GetActiveCount();
+                }
+            }
         }
 
         private int hover_index_backing;
 
+        public static int FindNextSelectable(IAffinityTargeter.Selectable predicate, int start_index,
+            AffinityType[] affinityBar)
+        {
+            for (int i = 0; i < affinityBar.Length; i++)
+            {
+                int index = (start_index + 1 + i) % affinityBar.Length;
+                if (predicate(index, affinityBar.Length, affinityBar[index]))
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        public static int FindPreviousSelectable(IAffinityTargeter.Selectable predicate, int start_index,
+            AffinityType[] affinityBar)
+        {
+            for (int i = 0; i < affinityBar.Length; i++)
+            {
+                int index = (start_index - 1 - i) % affinityBar.Length;
+                if (index < 0)
+                {
+                    index = affinityBar.Length + index;
+                }
+
+                if (predicate(index, affinityBar.Length, affinityBar[index]))
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
         public void Navigate(InputAction.CallbackContext context)
         {
+            if (requests.Count == 0)
+            {
+                return;
+            }
+
             if (context.performed)
             {
                 var value = context.ReadValue<Vector2>();
+                int selectableIndex;
                 switch (value.x)
                 {
                     case < 0:
+                        selectableIndex = FindPreviousSelectable(requests.Peek().predicate, hoverIndex, referenceBar);
+                        if (selectableIndex == -1)
+                        {
+                            Debug.Log("No valid selections available");
+                        }
+                        else if (selectableIndex == hoverIndex)
+                        {
+                            Debug.Log("only valid selection is the current one");
+                        }
+                        else
+                        {
+                            hoverIndex = selectableIndex;
+                            Hover(hoverIndex);
+                        }
 
-                        hoverIndex--;
-                        Hover(hoverIndex);
-                        Debug.Log("left" + hoverIndex);
                         break;
                     case > 0:
-                        hoverIndex++;
-                        Hover(hoverIndex);
-                        Debug.Log("right" + hoverIndex);
+                        selectableIndex = FindNextSelectable(requests.Peek().predicate, hoverIndex, referenceBar);
+                        if (selectableIndex == -1)
+                        {
+                            Debug.Log("No valid selections available");
+                        }
+                        else if (selectableIndex == hoverIndex)
+                        {
+                            Debug.Log("only valid selection is the current one");
+                        }
+                        else
+                        {
+                            hoverIndex = selectableIndex;
+                            Hover(hoverIndex);
+                        }
+
                         break;
                 }
+            }
+        }
+
+
+        public void Confirm(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                FullfillRequest(hoverIndex);
+                // Select(hoverIndex);
             }
         }
     }

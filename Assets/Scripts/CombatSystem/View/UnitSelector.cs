@@ -36,7 +36,6 @@ namespace CombatSystem.View
 
         public void ManualSelect(int team, int unit)
         {
-            Debug.Log("manual");
             if (team == 0)
             {
                 OnPlayerClicked(unit, players[unit]);
@@ -98,7 +97,7 @@ namespace CombatSystem.View
             if (IsValidPlayerSelection(index, requests.Peek().flags))
             {
                 players[index].Highlight();
-                Debug.Log($"Player {index} hovered");
+                // Debug.Log($"Player {index} hovered");
                 SelectablePlayerHovered?.Invoke(index, unit);
             }
         }
@@ -110,7 +109,7 @@ namespace CombatSystem.View
             if (IsValidEnemySelection(index, requests.Peek().flags))
             {
                 enemies[index].Highlight();
-                Debug.Log($"Enemy {index} hovered");
+                // Debug.Log($"Enemy {index} hovered");
                 SelectableEnemyHovered?.Invoke(index, enemies[index]);
             }
         }
@@ -145,7 +144,7 @@ namespace CombatSystem.View
             if (requests.Count == 0) return;
             if (IsValidEnemySelection(index, requests.Peek().flags))
             {
-                Debug.Log($"Selected 1 , {index}");
+                // Debug.Log($"Selected 1 , {index}");
                 requests.Dequeue().callback(1, index);
                 unit.Focus();
             }
