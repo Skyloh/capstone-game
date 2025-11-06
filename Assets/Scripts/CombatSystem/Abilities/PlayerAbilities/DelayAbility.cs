@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class DelayAbility : AAbility
@@ -36,7 +37,16 @@ public class DelayAbility : AAbility
         // add the optionals to the list if need be
         if (data.ActionMetadata.ContainsKey(MetadataConstants.OPTIONAL_AITI))
         {
-            string[] split_aiti_entries = AbilityUtils.SplitMetadataEntry(data.ActionMetadata[MetadataConstants.OPTIONAL_AITI]);
+            string[] split_aiti_entries = null;
+            string content = data.ActionMetadata[MetadataConstants.OPTIONAL_AITI];
+            if (content.Contains(AbilityUtils.METADATA_UNION_CHARACTER))
+            {
+                split_aiti_entries = AbilityUtils.SplitMetadataEntry(data.ActionMetadata[MetadataConstants.OPTIONAL_AITI]);
+            }
+            else
+            {
+                split_aiti_entries = new string[1] { content };
+            }
 
             // INVARIANT: there are only unique indices of affinities in the list due to the uniqueness enforced
             // during the metadata fill step in the View implementations.
