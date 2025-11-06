@@ -7,10 +7,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    
-    public float moveSpeed = 5f; // speed for player movement
-    private Vector3 targetPosition;
-    private bool isMoving = false;
+    public float moveSpeed = 8f; // speed for player movement
+    private Vector2 moveInput;
     private Vector3 facingDirection = Vector3.down;
 
     public Grid grid;
@@ -26,10 +24,31 @@ public class PlayerController : MonoBehaviour
 
     private bool inputLocked = false;
 
+    private Rigidbody2D rb;
+    private BoxCollider2D playerCollider;
+
+    public float interactionDistance = 1f;
+
     void Start()
     {
-        targetPosition = transform.position;
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Get or add Rigidbody2D for physics-based movement
+        rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody2D>();
+        }
+        rb.gravityScale = 0; // No gravity for top-down
+        rb.freezeRotation = true; // Prevent rotation
+
+        // Get or add collider
+        playerCollider = GetComponent<BoxCollider2D>();
+        if (playerCollider == null)
+        {
+            playerCollider = gameObject.AddComponent<BoxCollider2D>();
+            playerCollider.size = new Vector2(0.8f, 0.8f); // Adjust size as needed
+        }
     }
 
     void Update()
@@ -37,7 +56,6 @@ public class PlayerController : MonoBehaviour
         // If in dialogue, only allow continuing dialogue
         if (DialogueManager.GetInstance().dialogueIsPlaying)
         {
-
             if (!inputLocked && Input.GetKeyDown(KeyCode.E) && DialogueManager.GetInstance().GetCurrentChoicesCount() == 0)
             {
                 StartCoroutine(InputCooldown());
@@ -46,75 +64,81 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (!isMoving)
+        // Get input
+        moveInput = Vector2.zero;
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            Vector3 move = Vector3.zero;
-
-            // store vertical movement
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-            {
-                move.y += 1;
-            }
-            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            {
-                move.y -= 1;
-            }
-            
-            // store horizontal movement
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                move.x -= 1;
-            }
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            {
-                move.x += 1;
-            }
-
-            // move the player based on what inputs are given
-            if (move != Vector3.zero)
-            {
-                // Prioritizes horizontal movement for facing direction if both horiz/vert are given
-                if (Mathf.Abs(move.x) >= Mathf.Abs(move.y))
-                {
-                    facingDirection = new Vector3(Mathf.Sign(move.x), 0, 0);
-                }
-                else
-                {
-                    facingDirection = new Vector3(0, Mathf.Sign(move.y), 0);
-                }
-
-                UpdateSpriteDirection();
-
-                Vector3Int nextCell = grid.WorldToCell(transform.position + move);
-                if (!IsBlocked(nextCell))
-                {
-                    targetPosition = transform.position + move;
-                    isMoving = true;
-                }
-            }
-
-            // Interact with NPCs/Continue dialogue
-            if (!inputLocked && Input.GetKeyDown(KeyCode.E))
-            {
-                if (!DialogueManager.GetInstance().dialogueIsPlaying)
-                {
-                    StartCoroutine(InputCooldown());
-                    Interact();
-                }
-            }
-                
+            moveInput.y += 1;
         }
-        else
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            // movement smoothing
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            moveInput.y -= 1;
+        }
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            moveInput.x -= 1;
+        }
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            moveInput.x += 1;
+        }
 
-            if (Vector3.Distance(transform.position, targetPosition) < 0.001f)
+        // Update facing direction and sprite
+        if (moveInput != Vector2.zero)
+        {
+            // Prioritize horizontal movement for facing direction
+            if (Mathf.Abs(moveInput.x) >= Mathf.Abs(moveInput.y))
             {
-                transform.position = targetPosition;
-                isMoving = false;
+                facingDirection = new Vector3(Mathf.Sign(moveInput.x), 0, 0);
+            }
+            else
+            {
+                facingDirection = new Vector3(0, Mathf.Sign(moveInput.y), 0);
+            }
+            UpdateSpriteDirection();
+        }
 
-                CheckForLoadingZone();
+        // Interact with NPCs/Continue dialogue
+        if (!inputLocked && Input.GetKeyDown(KeyCode.E))
+        {
+            if (!DialogueManager.GetInstance().dialogueIsPlaying)
+            {
+                StartCoroutine(InputCooldown());
+                Interact();
+            }
+        }
+
+        // Check for loading zones
+        CheckForLoadingZone();
+    }
+
+    void FixedUpdate()
+    {
+        // Handle movement in FixedUpdate for physics
+        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            Vector2 movement = moveInput.normalized * moveSpeed;
+            Vector2 newPosition = rb.position + movement * Time.fixedDeltaTime;
+
+            // Check if new position would collide with tiles
+            if (!IsPositionBlocked(newPosition))
+            {
+                rb.MovePosition(newPosition);
+            }
+            else
+            {
+                Vector2 horizontalMove = new Vector2(movement.x * Time.fixedDeltaTime, 0);
+                Vector2 verticalMove = new Vector2(0, movement.y * Time.fixedDeltaTime);
+
+                if (!IsPositionBlocked(rb.position + horizontalMove))
+                {
+                    rb.MovePosition(rb.position + horizontalMove);
+                }
+                else if (!IsPositionBlocked(rb.position + verticalMove))
+                {
+                    rb.MovePosition(rb.position + verticalMove);
+                }
             }
         }
     }
@@ -132,20 +156,48 @@ public class PlayerController : MonoBehaviour
             playerSpriteRenderer.sprite = playerSpriteDown;
     }
 
-    // Check if the target cell is blocked by a collision tile or an NPC
-    private bool IsBlocked(Vector3Int cell)
+    // Check if a position would collide with tiles or NPCs
+    private bool IsPositionBlocked(Vector2 position)
     {
-        if (collisionTilemap.HasTile(cell)) return true;
+        // Check corners and center of the player's collider at the new position
+        Vector2 colliderSize = playerCollider.size * 0.9f;
+        Vector2[] checkPoints = new Vector2[]
+        {
+            // Center
+            position, 
+            // Top-right
+            position + new Vector2(colliderSize.x / 2, colliderSize.y / 2), 
+            // Top-left
+            position + new Vector2(-colliderSize.x / 2, colliderSize.y / 2), 
+            // Bottom-right
+            position + new Vector2(colliderSize.x / 2, -colliderSize.y / 2), 
+            // Bottom-left
+            position + new Vector2(-colliderSize.x / 2, -colliderSize.y / 2) 
+        };
 
-        Vector3 cellcCenter = grid.GetCellCenterWorld(cell);
-        Collider2D npcCollider = Physics2D.OverlapPoint(cellcCenter);
-        if (npcCollider != null && npcCollider.CompareTag("NPC"))
-            return true;
+        foreach (Vector2 point in checkPoints)
+        {
+            Vector3Int cell = grid.WorldToCell(point);
+            if (collisionTilemap.HasTile(cell))
+            {
+                return true;
+            }
+        }
+
+        // Check for NPC collision
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(position, playerCollider.size * 0.9f, 0f);
+        foreach (Collider2D col in colliders)
+        {
+            if (col != playerCollider && col.CompareTag("NPC"))
+            {
+                return true;
+            }
+        }
 
         return false;
     }
 
-    // Check if player stops movement on a loading zone tile
+    // Check if player is on a loading zone tile
     private void CheckForLoadingZone()
     {
         Vector3Int playerCell = grid.WorldToCell(transform.position);
@@ -158,23 +210,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Interact with an NPC in the facing direction or continue dialogue if already in one
+    // Interact with an NPC in the facing direction
     private void Interact()
     {
-        Vector3Int facingCell = grid.WorldToCell(transform.position + facingDirection);
-        Vector3 cellCenter = grid.GetCellCenterWorld(facingCell);
-        Collider2D npcCollider = Physics2D.OverlapPoint(cellCenter);
+        // Raycast in facing direction to find NPCs
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            facingDirection,
+            interactionDistance,
+            LayerMask.GetMask("Default")
+        );
 
-        if (npcCollider != null && npcCollider.CompareTag("NPC"))
+        if (hit.collider != null && hit.collider.CompareTag("NPC"))
         {
-            npcCollider.GetComponent<NPCController>()?.Interact();
+            hit.collider.GetComponent<NPCController>()?.Interact();
+        }
+        else
+        {
+            Vector3 checkPosition = transform.position + facingDirection * interactionDistance;
+            // Number here can be changed to adjust interaction range along with the variable up top
+            Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(checkPosition, 0.3f);
+
+            foreach (Collider2D col in nearbyColliders)
+            {
+                if (col.CompareTag("NPC"))
+                {
+                    col.GetComponent<NPCController>()?.Interact();
+                    break;
+                }
+            }
         }
     }
 
     private IEnumerator InputCooldown()
     {
         inputLocked = true;
-        yield return new WaitForSeconds(0.2f); // short delay
+        yield return new WaitForSeconds(0.2f);
         inputLocked = false;
     }
 }
