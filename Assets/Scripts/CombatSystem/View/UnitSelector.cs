@@ -32,7 +32,7 @@ namespace CombatSystem.View
             combatManager = GetComponent<CombatManager>();
         }
 
-        ICombatModel combatModel => combatManager.CombatModel;
+        // ICombatModel combatModel => combatManager.CombatModel;
 
         public void ManualSelect(int team, int unit)
         {
@@ -48,6 +48,9 @@ namespace CombatSystem.View
 
         private bool IsValidPlayerSelection(int index, SelectionFlags selectionFlags)
         {
+            return combatManager.TrySelectUnit(0, 0, index, selectionFlags, out var selected);
+
+            /*
             if (!selectionFlags.HasFlag(SelectionFlags.Ally)) return false;
             if (selectionFlags.HasFlag(SelectionFlags.Actionable))
             {
@@ -66,10 +69,14 @@ namespace CombatSystem.View
             }
 
             return true;
+            */
         }
 
         private bool IsValidEnemySelection(int index, SelectionFlags selectionFlags)
         {
+            return combatManager.TrySelectUnit(0, 1, index, selectionFlags, out var selected);
+
+            /*
             if (!selectionFlags.HasFlag(SelectionFlags.Enemy)) return false;
             if (selectionFlags.HasFlag(SelectionFlags.Actionable))
             {
@@ -88,6 +95,7 @@ namespace CombatSystem.View
             }
 
             return true;
+            */
         }
 
         private void OnPlayerHovered(int index, IUnit unit)

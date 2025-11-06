@@ -33,7 +33,7 @@ public class CombatManager : MonoBehaviour
     /// <summary>
     /// Ideally should be read only version of  ICombatModel interface
     /// </summary>
-    public ICombatModel CombatModel { get => m_combatModel;}
+    // public ICombatModel CombatModel { get => m_combatModel;}
 
     /// <summary>
     /// The view interface associated with this combat manager. Serialized for convenience in linking with
@@ -128,6 +128,7 @@ public class CombatManager : MonoBehaviour
     {
         selected = null;
         
+        // if you DO NOT have the allied flag or enemy flag and are trying to get a unit of that relation to your perspective, fail.
         if ((!selection_flags.HasFlag(SelectionFlags.Ally) && team_index == team_perspective) 
             || (!selection_flags.HasFlag(SelectionFlags.Enemy) && team_index != team_perspective))
         {
@@ -138,6 +139,7 @@ public class CombatManager : MonoBehaviour
         var selected_team = m_combatModel.GetTeam(team_index);
         selected_team.GetUnit(unit_index);
 
+        // if you have the actionable or alive flags and the unit violates them, fail.
         if (selection_flags.HasFlag(SelectionFlags.Actionable) && selected_team.HasUnitTakenTurn(unit_index)
             || (selection_flags.HasFlag(SelectionFlags.Alive) && !selected_team.IsUnitAlive(unit_index)))
         {

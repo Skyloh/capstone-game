@@ -33,7 +33,27 @@ namespace CombatSystem.View
 
         //TODO remove class and replace with non stub in own file
 
-        public ICombatModel model => combatManager.CombatModel;
+        // public ICombatModel model => combatManager.CombatModel;
+
+        private CombatUnit GetPlayerUnit(int player_index)
+        {
+            if (!combatManager.TrySelectUnit(0, 0, player_index, SelectionFlags.Ally, out var unit))
+            {
+                throw new Exception("Unable to access unit.");
+            }
+
+            return unit;
+        }
+
+        private CombatUnit GetEnemyUnit(int enemy_index)
+        {
+            if (!combatManager.TrySelectUnit(0, 1, enemy_index, SelectionFlags.Enemy, out var unit))
+            {
+                throw new Exception("Unable to access unit.");
+            }
+
+            return unit;
+        }
 
         private void Awake()
         {
@@ -47,7 +67,8 @@ namespace CombatSystem.View
         private void OnSelectablePlayerHovered(int index, IUnit unit)
         {
             selectedPlayer = index;
-            DisplayUnit(model.GetTeam(0).GetUnit(index));
+            // DisplayUnit(model.GetTeam(0).GetUnit(index));
+            DisplayUnit(GetPlayerUnit(index));
         }
 
         private void OnEnable()
@@ -92,7 +113,8 @@ namespace CombatSystem.View
             });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
             unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
-            DisplayUnit(model.GetTeam(0).GetUnit(0));
+            // DisplayUnit(model.GetTeam(0).GetUnit(0));
+            DisplayUnit(GetPlayerUnit(0));
         }
 
         private int subscribedToEnemy = -1;
@@ -113,24 +135,28 @@ namespace CombatSystem.View
 
             if (subscribedToEnemy != -1)
             {
-                if (model.GetTeam(1).GetUnit(subscribedToEnemy).TryGetModule<HealthModule>(out var healthbar))
+                var sub_enemy_unit = GetEnemyUnit(subscribedToEnemy);
+
+                if (sub_enemy_unit.TryGetModule<HealthModule>(out var healthbar))
                 {
                     healthbar.OnHealthChanged -= UpdateEnemyHealth;
                 }
 
-                if (model.GetTeam(1).GetUnit(subscribedToEnemy).TryGetModule<AffinityBarModule>(out var affinityBar))
+                if (sub_enemy_unit.TryGetModule<AffinityBarModule>(out var affinityBar))
                 {
                     affinityBar.OnAffinityBarChanged -= affinityTargeter.OnAffinityBarChanged;
                 }
             }
 
-            if (model.GetTeam(1).GetUnit(index).TryGetModule<AffinityBarModule>(out var affinityModule))
+            var enemy_unit = GetEnemyUnit(index);
+
+            if (enemy_unit.TryGetModule<AffinityBarModule>(out var affinityModule))
             {
                 affinityTargeter.SetAffinityBar(affinityModule.GetAffinities());
                 affinityModule.OnAffinityBarChanged += affinityTargeter.OnAffinityBarChanged;
             }
 
-            if (model.GetTeam(1).GetUnit(index).TryGetModule<HealthModule>(out var healthModule))
+            if (enemy_unit.TryGetModule<HealthModule>(out var healthModule))
             {
                 healthModule.OnHealthChanged += UpdateEnemyHealth;
                 UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth());
