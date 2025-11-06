@@ -43,7 +43,7 @@ namespace CombatSystem.View
             BeginUnitSelection();
         }
 
-        private void OnPlayerHovered(int index, IUnit unit)
+        private void OnSelectablePlayerHovered(int index, IUnit unit)
         {
             selectedPlayer = index;
             DisplayUnit(model.GetTeam(0).GetUnit(index));
@@ -89,7 +89,7 @@ namespace CombatSystem.View
                 }
             });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
-            unitSelector.EnemyHovered += OnEnemyHovered;
+            unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
             DisplayUnit(model.GetTeam(0).GetUnit(0));
         }
 
@@ -102,7 +102,7 @@ namespace CombatSystem.View
             enemyHealthbar.value = current;
         }
 
-        private void OnEnemyHovered(int index, IUnit unit)
+        private void OnSelectableEnemyHovered(int index, IUnit unit)
         {
             if (subscribedToEnemy == index)
             {
@@ -209,6 +209,10 @@ namespace CombatSystem.View
 
         private void StartState(BattleStates previous)
         {
+            if (previous == currentState)
+            {
+                return;
+            }
             switch (currentState)
             {
                 case BattleStates.Setup:
@@ -320,18 +324,8 @@ namespace CombatSystem.View
 
         private void StartUnitSelection(BattleStates previous)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                Debug.Log("unit selection");
-                attackCallbacks[i] = (ce) =>
-                {
-                    unitSelector.ManualSelect(0, selectedPlayer);
-                    TriggerState(BattleStates.TargetSelection);
-                };
-            }
-
             unitSelector.ClearSelection();
-            unitSelector.PlayerHovered += OnPlayerHovered;
+            unitSelector.SelectablePlayerHovered += OnSelectablePlayerHovered;
             unitSelector.SelectOne(SelectionFlags.Alive | SelectionFlags.Ally | SelectionFlags.Actionable, SelectUnit);
         }
 
@@ -360,7 +354,7 @@ namespace CombatSystem.View
 
         private void CleanUpUnitSelection(BattleStates next)
         {
-            unitSelector.PlayerHovered -= OnPlayerHovered;
+            unitSelector.SelectablePlayerHovered -= OnSelectablePlayerHovered;
         }
 
         #endregion
@@ -401,10 +395,10 @@ namespace CombatSystem.View
             {
                 if (!canTakeMore)
                 {
-                    ShowConfirmButton();
+                    // ShowConfirmButton();
                     // somewhat feels weird
-                    // HideConfirmButton();
-                    // TriggerState(BattleStates.AffinityTargeting);
+                    HideConfirmButton();
+                    TriggerState(BattleStates.AffinityTargeting);
                 }
                 else
                 {

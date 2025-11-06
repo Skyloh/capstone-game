@@ -35,7 +35,11 @@ namespace CombatSystem.View
         EnemyUnit[] Enemies { get; }
         
         public delegate void UnitHovered(int index, IUnit unit);
+        public event UnitHovered SelectablePlayerHovered;
         public event UnitHovered PlayerHovered;
+        public event UnitHovered PlayerUnhovered;
+        public event UnitHovered SelectableEnemyHovered;
         public event UnitHovered EnemyHovered;
+        public event UnitHovered EnemyUnhovered;
     }
 }

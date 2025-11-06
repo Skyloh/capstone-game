@@ -938,41 +938,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: affinitybar
       objectReference: {fileID: 0}
-    - target: {fileID: 500041225309183220, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 500041225309183220, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2642647554587577514, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2791731020643655552, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3835137647091698128, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8263097857770858592, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
-      propertyPath: m_Layer
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8482656648905476980, guid: 34c9dfba236e68548b81befd7702e4db, type: 3}
       propertyPath: m_Pivot.x

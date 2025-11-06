@@ -13,6 +13,7 @@ namespace CombatSystem.View
     {
         private readonly Queue<(SelectionFlags flags, IUnitSelector.SelectionUnitCallback callback)> requests = new();
         private CombatManager combatManager;
+
         private void Awake()
         {
             // throw new NotImplementedException();
@@ -21,12 +22,13 @@ namespace CombatSystem.View
                 //Prevents captured variable shenanigans
                 var i1 = i;
                 players[i].Hover += () => OnPlayerHovered(i1, players[i1]);
-                players[i].Unhover += () => OnUnitUnhovered(i1, players[i1]);
+                players[i].Unhover += () => OnUnitUnhovered(0, i1, players[i1]);
                 players[i].Click += () => OnPlayerClicked(i1, players[i1]);
                 enemies[i].Hover += () => OnEnemyHovered(i1, enemies[i1]);
-                enemies[i].Unhover += () => OnUnitUnhovered(i1, enemies[i1]);
+                enemies[i].Unhover += () => OnUnitUnhovered(0, i1, enemies[i1]);
                 enemies[i].Click += () => OnEnemyClicked(i1, enemies[i1]);
             }
+
             combatManager = GetComponent<CombatManager>();
         }
 
@@ -44,6 +46,7 @@ namespace CombatSystem.View
                 OnEnemyClicked(unit, enemies[unit]);
             }
         }
+
         private bool IsValidPlayerSelection(int index, SelectionFlags selectionFlags)
         {
             if (!selectionFlags.HasFlag(SelectionFlags.Ally)) return false;
@@ -84,43 +87,54 @@ namespace CombatSystem.View
                     return false;
                 }
             }
+
             return true;
         }
 
         private void OnPlayerHovered(int index, IUnit unit)
         {
-            if(requests.Count == 0) return;
+            PlayerHovered?.Invoke(index, unit);
+            if (requests.Count == 0) return;
             if (IsValidPlayerSelection(index, requests.Peek().flags))
             {
                 players[index].Highlight();
                 Debug.Log($"Player {index} hovered");
-                PlayerHovered?.Invoke(index, unit);
+                SelectablePlayerHovered?.Invoke(index, unit);
             }
         }
 
         private void OnEnemyHovered(int index, IUnit unit)
         {
-            if(requests.Count == 0) return;
+            EnemyHovered?.Invoke(index, unit);
+            if (requests.Count == 0) return;
             if (IsValidEnemySelection(index, requests.Peek().flags))
             {
                 enemies[index].Highlight();
                 Debug.Log($"Enemy {index} hovered");
-                EnemyHovered?.Invoke(index, enemies[index]);
+                SelectableEnemyHovered?.Invoke(index, enemies[index]);
             }
         }
 
-        private void OnUnitUnhovered(int index, IUnit unit)
+        private void OnUnitUnhovered(int team, int unit_index, IUnit unit)
         {
-            if (requests.Count == 0)return;
+            if (requests.Count == 0) return;
             unit.Unhighlight();
+            if (team == 0)
+            {
+                PlayerUnhovered?.Invoke(unit_index, unit);
+            }
+            else
+            {
+                EnemyUnhovered?.Invoke(unit_index, unit);
+            }
         }
 
         private void OnPlayerClicked(int index, IUnit unit)
         {
-            if(requests.Count == 0) return;
+            if (requests.Count == 0) return;
             if (IsValidPlayerSelection(index, requests.Peek().flags))
             {
-                requests.Dequeue().callback(0,index);
+                requests.Dequeue().callback(0, index);
                 Debug.Log($"Selected 0 , {index}");
                 unit.Focus();
             }
@@ -128,28 +142,32 @@ namespace CombatSystem.View
 
         private void OnEnemyClicked(int index, IUnit unit)
         {
-            if(requests.Count == 0) return;
+            if (requests.Count == 0) return;
             if (IsValidEnemySelection(index, requests.Peek().flags))
             {
                 Debug.Log($"Selected 1 , {index}");
-                requests.Dequeue().callback(1,index);
+                requests.Dequeue().callback(1, index);
                 unit.Focus();
             }
         }
 
 
+        public event IUnitSelector.UnitHovered SelectablePlayerHovered;
         public event IUnitSelector.UnitHovered PlayerHovered;
+        public event IUnitSelector.UnitHovered PlayerUnhovered;
+        public event IUnitSelector.UnitHovered SelectableEnemyHovered;
         public event IUnitSelector.UnitHovered EnemyHovered;
+        public event IUnitSelector.UnitHovered EnemyUnhovered;
 
         [SerializeField] private Unit[] players;
         [SerializeField] private EnemyUnit[] enemies;
-        
+
         public async Task<(int team, int unit)> SelectOneAsync(SelectionFlags selectionFlags,
             CancellationToken token = default)
         {
             bool inSelectionMode = true;
             (int team, int unit) selection = (-1, -1);
-            SelectOne(selectionFlags,(team, unit)=>
+            SelectOne(selectionFlags, (team, unit) =>
             {
                 inSelectionMode = false;
                 selection = (team, unit);
@@ -158,7 +176,7 @@ namespace CombatSystem.View
             {
                 await Awaitable.NextFrameAsync(token);
             }
-        
+
             Debug.Log($"Selected {selection.team} {selection.unit}");
             return selection;
         }
@@ -171,34 +189,60 @@ namespace CombatSystem.View
         public List<(int team, int unit)> SelectAll(SelectionFlags selectionFlags)
         {
             List<(int team, int unit)> result = new List<(int team, int unit)>();
-                for (int i = 0; i < players.Length; i++)
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (!IsValidPlayerSelection(i, selectionFlags))
                 {
-                    if (!IsValidPlayerSelection(i, selectionFlags))
-                    {
-                        continue;
-                    }
-                    players[i].Focus();
-                    result.Add((0, i));
+                    continue;
                 }
 
-                for (int i = 0; i < enemies.Length; i++)
+                players[i].Focus();
+                result.Add((0, i));
+            }
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (!IsValidEnemySelection(i, selectionFlags))
                 {
-                    if (!IsValidEnemySelection(i,selectionFlags))
-                    {
-                        continue;
-                    }
-                    enemies[i].Focus();
-                    result.Add((1, i));
+                    continue;
                 }
+
+                enemies[i].Focus();
+                result.Add((1, i));
+            }
 
             return result;
+        }
+
+
+        public void HighlightAll(SelectionFlags selectionFlags)
+        {
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (!IsValidPlayerSelection(i, selectionFlags))
+                {
+                    continue;
+                }
+
+                players[i].Highlight();
+            }
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (!IsValidEnemySelection(i, selectionFlags))
+                {
+                    continue;
+                }
+
+                enemies[i].Highlight();
+            }
         }
 
         public void ClearRequests()
         {
             while (requests.Count > 0)
             {
-                requests.Dequeue().callback(-1 , -1);
+                requests.Dequeue().callback(-1, -1);
             }
         }
 
@@ -220,11 +264,5 @@ namespace CombatSystem.View
 
         public Unit[] Players => players;
         public EnemyUnit[] Enemies => enemies;
-
-
-
-        
-
-
     }
 }
