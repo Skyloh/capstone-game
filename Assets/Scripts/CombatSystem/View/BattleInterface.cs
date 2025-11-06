@@ -11,6 +11,11 @@ namespace CombatSystem.View
 {
     public class BattleInterface : MonoBehaviour, ICombatView
     {
+        [SerializeField] private PlayerUnitSO[] DEBUG_PARTY;
+        [SerializeField] private EncounterSO DEBUG_ENCOUNTER;
+
+        [Space]
+
         // Start is called befomre the first frame update
         public ViewSprites battleSprites;
         public BrainSO cpuBrain;
@@ -60,7 +65,9 @@ namespace CombatSystem.View
             ui = GetComponent<UIDocument>().rootVisualElement;
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
-            combatManager.InitCombat(cpuBrain);
+
+            combatManager.InitCombat(DEBUG_PARTY, DEBUG_ENCOUNTER);
+
             BeginUnitSelection();
         }
 

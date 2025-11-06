@@ -54,49 +54,41 @@ public class CombatManager : MonoBehaviour
 
 
     /// <summary>
-    /// TODO: add arguments to this func for building a combat from SOs
-    /// 
-    /// Creates a model and an enemy CPU core from the basic CombatUnit.MakePlayer/EnemyUnit methods.
-    /// Each team has 4 units of the respective initialization.
+    /// Starts combat by creating units from the given SO templates.
     /// </summary>
-    public void InitCombat(BrainSO cpu_brain_TEMP) // TODO split unit addition into a public method based off of a data SO or something
+    /// <param name="party"></param>
+    /// <param name="encounter"></param>
+    public void InitCombat(PlayerUnitSO[] party, EncounterSO encounter)
     {
-        var unit_dict =
-            new Dictionary<int, IList<CombatUnit>>()
-            {
-                { 0, new List<CombatUnit>() { 
-                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest1", 
-                    new List<IAbility>() {
-                        new AttackAbility(),
-                        new EnvenomAbility(),
-                        new SegmentSwapAbility(),
-                        new InstillAbility()}),
-                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest2",
-                    new List<IAbility>() {
-                        new AttackAbility(),
-                        new SpraypaintAbility(),
-                        new SegmentSwapAbility(),
-                        new MonochromeAbility()}),
-                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest3",
-                    new List<IAbility>() {
-                        new InfuseAbility(),
-                        new PaintBucketAbility(),
-                        new DelayAbility(),
-                        new StaticShowerAbility()}),
-                    CombatUnit.SHOWCASE_MakePlayerUnit("PlayerTest4",
-                    new List<IAbility>() {
-                        new BurningHandsAbility(),
-                        new AnalyzeAbility(),
-                        new DelayAbility(),
-                        new InstillAbility()}),
-                } },
-                { 1, new List<CombatUnit>() { 
-                    CombatUnit.MakeEnemyUnit("EnemyTest1", cpu_brain_TEMP),  
-                    CombatUnit.MakeEnemyUnit("EnemyTest2", cpu_brain_TEMP),  
-                    CombatUnit.MakeEnemyUnit("EnemyTest3", cpu_brain_TEMP),  
-                    CombatUnit.MakeEnemyUnit("EnemyTest4", cpu_brain_TEMP) 
-                } }
-            };
+        var unit_dict = new Dictionary<int, IList<CombatUnit>>();
+        unit_dict.Add(0, new List<CombatUnit>());
+
+        foreach (var party_data in party)
+        {
+            var player_unit = new CombatUnit(party_data.Name);
+            player_unit.AddModule(new HealthModule(party_data.MaxHealth, party_data.MaxHealth))
+                .AddModule(new AffinityModule(party_data.WeaponAffinity, party_data.WeaknessAffinity))
+                .AddModule(new StatusModule())
+                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(party_data.Abilities)));
+
+            unit_dict[0].Add(player_unit);
+        }
+
+        unit_dict.Add(1, new List<CombatUnit>());
+        foreach (var enemy_kv in encounter.EnemyBrainMap)
+        {
+            var enemy_data = enemy_kv.key;
+            var enemy_brain = enemy_kv.value;
+
+            var enemy_unit = new CombatUnit(enemy_data.Name);
+            enemy_unit.AddModule(new HealthModule(enemy_data.MaxHealth, enemy_data.MaxHealth))
+                .AddModule(new AffinityBarModule(enemy_data.AffinityBarSlotCount))
+                .AddModule(new StatusModule())
+                .AddModule(new CPUModule(enemy_brain))
+                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(enemy_data.Abilities)));
+
+            unit_dict[1].Add(enemy_unit);
+        }
 
         m_combatModel = new CombatModel(unit_dict);
 

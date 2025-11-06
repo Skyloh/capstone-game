@@ -15,7 +15,7 @@ public class AbilityFactory
     /// </summary>
     /// <param name="namespace_qualified_typenames"></param>
     /// <returns></returns>
-    public static IList<IAbility> MakeAbilities(string[] namespace_qualified_typenames)
+    public static IList<IAbility> MakeAbilities(IEnumerable<string> namespace_qualified_typenames)
     {
         var assembly = typeof(AttackAbility).Assembly;
         var list = new List<IAbility>();

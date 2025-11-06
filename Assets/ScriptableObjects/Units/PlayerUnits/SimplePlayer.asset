@@ -9,9 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7207177d18ab99e45aeaafc0be244632, type: 3}
-  m_Name: SimpleBrain
+  m_Script: {fileID: 11500000, guid: 68a9fcca75e9cd447b7deb3bd86cbd66, type: 3}
+  m_Name: SimplePlayer
   m_EditorClassIdentifier: 
-  m_branches: []
-  m_randomFallbackAbilities:
-  - EnemyAttackAbility
+  m_name: Toast
+  m_maxHealth: 100
+  m_abilities:
+  - AttackAbility
+  - EnvenomAbility
+  - DelayAbility
+  - StaticShowerAbility
+  m_weaponAffinity: 1
+  m_weaknessAffinity: 2

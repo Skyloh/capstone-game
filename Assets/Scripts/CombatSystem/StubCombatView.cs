@@ -10,6 +10,11 @@ using UnityEngine.UI;
 
 public class StubCombatView : MonoBehaviour, ICombatView
 {
+    [SerializeField] private PlayerUnitSO[] DEBUG_PARTY;
+    [SerializeField] private EncounterSO DEBUG_ENCOUNTER;
+
+    [Space]
+
     [SerializeField] private CombatTestingScript m_unitViewPrefab;
     [SerializeField] private BrainSO m_simpleEnemyCPUBrain;
     [SerializeField] private Transform m_playerRow;
@@ -27,7 +32,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
     {
         m_dataField.onSubmit.AddListener(UpdateData);
 
-        m_manager.InitCombat(m_simpleEnemyCPUBrain);
+        m_manager.InitCombat(DEBUG_PARTY, DEBUG_ENCOUNTER);
         BeginUnitSelection();
     }
 

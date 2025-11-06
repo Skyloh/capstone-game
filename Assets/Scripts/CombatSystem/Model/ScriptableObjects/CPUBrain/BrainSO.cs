@@ -2,16 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/CPUBrain", fileName = "CPUBrain", order = 0)]
+[CreateAssetMenu(menuName = "ScriptableObjects/CPUBrain", fileName = "CPUBrainObject", order = 0)]
 public class BrainSO : ScriptableObject
 {
-    [System.Serializable]
-    public struct SerialKeyValuePair<K,V>
-    {
-        public K key; public V value;
-    }
-
-    [SerializeField] private List<SerialKeyValuePair<ADecisionSO, string>> m_branches;
+    [SerializeField] private List<SerializableKVPair<ADecisionSO, string>> m_branches;
     [SerializeField] private string[] m_randomFallbackAbilities;
 
     private void OnValidate()
