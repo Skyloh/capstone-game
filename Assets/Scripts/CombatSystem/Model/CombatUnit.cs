@@ -72,6 +72,11 @@ public class CombatUnit
     }
     #endregion
 
+    public static CombatUnit MakeEnemyUnit(string unit_name, IList<string> ability_names, BrainSO cpu_brain)
+    {
+        return null;
+    }
+
     /// <summary>
     /// Builder method pattern for adding modules to a CombatUnit. Uses the module's type
     /// to source the key for the dictionary.

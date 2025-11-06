@@ -28,7 +28,7 @@ public class CPUModule : AModule
         }
         else
         {
-            chosen = MatchAbility(module, m_cpuBrain.GetFallbackName());
+            chosen = MatchAbility(module, m_cpuBrain.GetRandomFallbackAbility());
         }
 
         var data = new ActionData()

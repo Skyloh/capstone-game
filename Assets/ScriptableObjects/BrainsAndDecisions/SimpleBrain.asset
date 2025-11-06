@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: SimpleBrain
   m_EditorClassIdentifier: 
   m_branches: []
-  m_fallbackAbility: en_Attack
+  m_randomFallbackAbilities:
+  - AttackAbility
