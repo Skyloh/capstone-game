@@ -32,6 +32,7 @@ namespace CombatSystem.View
         private Label actionDescription;
         private ProgressBar enemyHealthbar;
         private VisualElement playerWeaponIcon;
+        private VisualElement portrait;
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
@@ -67,6 +68,10 @@ namespace CombatSystem.View
             unitSelector = GetComponent<UnitSelector>();
 
             combatManager.InitCombat(DEBUG_PARTY, DEBUG_ENCOUNTER);
+            for (int i = 0; i < DEBUG_PARTY.Length; i++)
+            {
+                unitSelector.Players[i].SetUnit(DEBUG_PARTY[i]);
+            }
 
             BeginUnitSelection();
         }
@@ -74,7 +79,10 @@ namespace CombatSystem.View
         private void OnSelectablePlayerHovered(int index, IUnit unit)
         {
             selectedPlayer = index;
+            // portrait = 
             // DisplayUnit(model.GetTeam(0).GetUnit(index));
+            //HACK: fragile
+            portrait.style.backgroundImage =new StyleBackground(DEBUG_PARTY[index].portrait);
             DisplayUnit(GetPlayerUnit(index));
         }
 
@@ -111,6 +119,7 @@ namespace CombatSystem.View
             actionDescription = ui.Q<Label>("ActionDescription");
             confirmButton = ui.Q<Button>("Confirm");
             enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
+            portrait = ui.Q<VisualElement>("Portrait");
             confirmButton.RegisterCallback<ClickEvent>((ce) =>
             {
                 if (confirmCallback != null)

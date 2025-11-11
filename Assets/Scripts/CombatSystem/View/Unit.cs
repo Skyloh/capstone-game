@@ -9,7 +9,7 @@ namespace CombatSystem.View
 {
     public class Unit : MonoBehaviour, IUnit
     {
-        public SpriteRenderer playerSpriteRenderer;
+        private GameObject character;
 
         public event Action Hover;
         public event Action Unhover;
@@ -37,7 +37,7 @@ namespace CombatSystem.View
 
         public void SetUnit(ACombatUnitSO unit)
         {
-            throw new NotImplementedException();
+            character = Instantiate(unit.prefab, this.transform);
         }
 
         public ACombatUnitSO GetUnitDefinition()
