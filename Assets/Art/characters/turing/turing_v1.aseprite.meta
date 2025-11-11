@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 997fc8eb53c9e314c82bb3f380476502
+guid: 09d23f84e77fcd14b837f9a761f12992
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ambys_Frame_0
+  - name: turing_v1_Frame_0
     originalName: 
-    pivot: {x: 0.5357143, y: 0}
+    pivot: {x: 0.6538462, y: -0.25641027}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 83
-      width: 28
-      height: 31
-    spriteID: 1f8589145f25a054dae2863ae69bc265
+      x: 39
+      y: 49
+      width: 26
+      height: 39
+    spriteID: 7993a874e27ffda4b9d8544f8412c488
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -140,10 +140,30 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 83}
-  - name: ambys_Frame_1
+    uvTransform: {x: 39, y: 49}
+  - name: turing_v1_Frame_1
     originalName: 
-    pivot: {x: 0.51724136, y: 0}
+    pivot: {x: 0.6666667, y: -0.25641027}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 49
+      width: 27
+      height: 39
+    spriteID: 27a6aa4c5fbd2f84e8c9d3e61c1336f4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 49}
+  - name: turing_v1_Frame_2
+    originalName: 
+    pivot: {x: 0.6551724, y: -0.2702703}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -151,8 +171,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 29
-      height: 32
-    spriteID: fc06b3d041bd05548b0b8bdb39298ec6
+      height: 37
+    spriteID: b946a7327a2b8f249b8339445c8eb030
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -161,18 +181,18 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  - name: ambys_Frame_2
+  - name: turing_v1_Frame_3
     originalName: 
-    pivot: {x: 0.4827586, y: 0}
+    pivot: {x: 0.6923077, y: -0.25641027}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 44
-      width: 29
-      height: 31
-    spriteID: 2d3734f1eb5c68649992a19692b64b8e
+      x: 73
+      y: 49
+      width: 26
+      height: 39
+    spriteID: 815be4f38b628804082b287fe85169e9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -180,40 +200,48 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 44}
+    uvTransform: {x: 73, y: 49}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -674248350
-    name: ambys
+    guid: 394598703
+    name: turing_v1
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ambys_Frame_0
+    - name: turing_v1_Frame_0
       frameIndex: 0
       cellRect:
-        x: 17
-        y: 0
-        width: 28
-        height: 31
-      spriteId: 1f8589145f25a054dae2863ae69bc265
-    - name: ambys_Frame_1
+        x: 15
+        y: 10
+        width: 26
+        height: 39
+      spriteId: 7993a874e27ffda4b9d8544f8412c488
+    - name: turing_v1_Frame_1
       frameIndex: 1
       cellRect:
-        x: 17
-        y: 0
-        width: 29
-        height: 32
-      spriteId: fc06b3d041bd05548b0b8bdb39298ec6
-    - name: ambys_Frame_2
+        x: 14
+        y: 10
+        width: 27
+        height: 39
+      spriteId: 27a6aa4c5fbd2f84e8c9d3e61c1336f4
+    - name: turing_v1_Frame_2
       frameIndex: 2
       cellRect:
-        x: 18
-        y: 0
+        x: 13
+        y: 10
         width: 29
-        height: 31
-      spriteId: 2d3734f1eb5c68649992a19692b64b8e
+        height: 37
+      spriteId: b946a7327a2b8f249b8339445c8eb030
+    - name: turing_v1_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 14
+        y: 10
+        width: 26
+        height: 39
+      spriteId: 815be4f38b628804082b287fe85169e9
     linkedCells: []
     parentIndex: -1
   platformSettings: []

@@ -19,4 +19,11 @@ public abstract class ACombatUnitSO : ScriptableObject
     public string Name => m_name;
     public int MaxHealth => m_maxHealth;
     public IReadOnlyList<string> Abilities => m_abilities;
+
+    public Sprite portrait;
+    public string characterDescription;
+    /// <summary>
+    /// prefab should have an animator 
+    /// </summary>
+    public GameObject prefab;
 }

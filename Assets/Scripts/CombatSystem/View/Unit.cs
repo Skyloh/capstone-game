@@ -35,12 +35,12 @@ namespace CombatSystem.View
             Unhover?.Invoke();
         }
 
-        public void SetUnit(UnitDefinition unit)
+        public void SetUnit(ACombatUnitSO unit)
         {
             throw new NotImplementedException();
         }
 
-        public UnitDefinition GetUnitDefinition()
+        public ACombatUnitSO GetUnitDefinition()
         {
             throw new NotImplementedException();
         }

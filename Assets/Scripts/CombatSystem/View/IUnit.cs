@@ -8,8 +8,8 @@ namespace CombatSystem.View
         event Action Unhover;
         event Action Click;
 
-        void SetUnit(UnitDefinition unit);
-        UnitDefinition GetUnitDefinition();
+        void SetUnit(ACombatUnitSO unit);
+        ACombatUnitSO GetUnitDefinition();
         void HideUnit();
         void PlayEntrance();
         void PlayAttack();
