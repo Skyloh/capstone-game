@@ -10,8 +10,7 @@ using UnityEngine.UI;
 
 public class StubCombatView : MonoBehaviour, ICombatView
 {
-    [SerializeField] private PlayerUnitSO[] DEBUG_PARTY;
-    [SerializeField] private EncounterSO DEBUG_ENCOUNTER;
+    [SerializeField] private CombatDataSO m_runtimeCombatData;
 
     [Space]
 
@@ -32,7 +31,7 @@ public class StubCombatView : MonoBehaviour, ICombatView
     {
         m_dataField.onSubmit.AddListener(UpdateData);
 
-        m_manager.InitCombat(DEBUG_PARTY, DEBUG_ENCOUNTER);
+        m_manager.InitCombat(m_runtimeCombatData.PlayerUnits, m_runtimeCombatData.Encounter);
         BeginUnitSelection();
     }
 

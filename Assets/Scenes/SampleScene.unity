@@ -1057,12 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42eef493ac5110544bcc115a6a23344a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_PARTY:
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  DEBUG_ENCOUNTER: {fileID: 11400000, guid: 173287f44cd609443be1d8f729c61a72, type: 2}
+  m_runtimeCombatData: {fileID: 11400000, guid: 32b5de1fc6f221842adc64349a999b04, type: 2}
   m_unitViewPrefab: {fileID: 2163684357704061762, guid: a9190c7f6331bb244a0b664117178b87, type: 3}
   m_simpleEnemyCPUBrain: {fileID: 11400000, guid: 00f71bc3ca079db4695b269bd9905bd7, type: 2}
   m_playerRow: {fileID: 78195961}

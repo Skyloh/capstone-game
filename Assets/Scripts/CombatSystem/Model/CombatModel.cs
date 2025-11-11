@@ -1,7 +1,14 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// An implementation of the combat model interface that exposes Team data (combat units) with accessors in order
+/// to allow modifications to their modules. 
+/// 
+/// Additionally stores the index of the currently active team, as well as the turn number.
+/// </summary>
 public class CombatModel : ICombatModel
 {
+    // an array of the teams currently in a combat
     private readonly Team[] m_units;
 
     private int m_turnCount; // what turn number is it?

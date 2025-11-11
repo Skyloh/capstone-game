@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using System.Collections;
+using Ink.Runtime;
 
 public class PlayerController : MonoBehaviour
 {
+    public delegate void OnVector2Change(Vector2 new_value, Vector2 old_value);
+    public event OnVector2Change OnPlayerMove;
+
     public float moveSpeed = 8f; // speed for player movement
     private Vector2 moveInput;
     private Vector3 facingDirection = Vector3.down;
@@ -119,12 +123,14 @@ public class PlayerController : MonoBehaviour
         if (!DialogueManager.GetInstance().dialogueIsPlaying)
         {
             Vector2 movement = moveInput.normalized * moveSpeed;
+            Vector2 oldPosition = rb.position;
             Vector2 newPosition = rb.position + movement * Time.fixedDeltaTime;
 
             // Check if new position would collide with tiles
             if (!IsPositionBlocked(newPosition))
             {
                 rb.MovePosition(newPosition);
+                OnPlayerMove?.Invoke(newPosition, oldPosition);
             }
             else
             {
@@ -134,10 +140,12 @@ public class PlayerController : MonoBehaviour
                 if (!IsPositionBlocked(rb.position + horizontalMove))
                 {
                     rb.MovePosition(rb.position + horizontalMove);
+                    OnPlayerMove?.Invoke(rb.position + horizontalMove, oldPosition);
                 }
                 else if (!IsPositionBlocked(rb.position + verticalMove))
                 {
                     rb.MovePosition(rb.position + verticalMove);
+                    OnPlayerMove?.Invoke(rb.position + verticalMove, oldPosition);
                 }
             }
         }

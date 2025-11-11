@@ -11,8 +11,7 @@ namespace CombatSystem.View
 {
     public class BattleInterface : MonoBehaviour, ICombatView
     {
-        [SerializeField] private PlayerUnitSO[] DEBUG_PARTY;
-        [SerializeField] private EncounterSO DEBUG_ENCOUNTER;
+        [SerializeField] private CombatDataSO runtimeCombatData;
 
         [Space]
 
@@ -67,10 +66,19 @@ namespace CombatSystem.View
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
 
-            combatManager.InitCombat(DEBUG_PARTY, DEBUG_ENCOUNTER);
-            for (int i = 0; i < DEBUG_PARTY.Length; i++)
+            if (runtimeCombatData == null || !runtimeCombatData.HasData())
             {
-                unitSelector.Players[i].SetUnit(DEBUG_PARTY[i]);
+                throw new Exception("Combat data is null or has invalid combat data.");
+            }
+
+            var player_unit_sos = runtimeCombatData.PlayerUnits;
+            var encounter_so = runtimeCombatData.Encounter;
+
+            combatManager.InitCombat(player_unit_sos, encounter_so);
+
+            for (int i = 0; i < player_unit_sos.Length; i++)
+            {
+                unitSelector.Players[i].SetUnit(player_unit_sos[i]);
             }
 
             BeginUnitSelection();
@@ -82,7 +90,7 @@ namespace CombatSystem.View
             // portrait = 
             // DisplayUnit(model.GetTeam(0).GetUnit(index));
             //HACK: fragile
-            portrait.style.backgroundImage =new StyleBackground(DEBUG_PARTY[index].portrait);
+            portrait.style.backgroundImage =new StyleBackground(runtimeCombatData.PlayerUnits[index].portrait);
             DisplayUnit(GetPlayerUnit(index));
         }
 

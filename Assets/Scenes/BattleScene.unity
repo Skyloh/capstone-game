@@ -578,12 +578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e60bc7af9c34bb4c80f6801407771a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DEBUG_PARTY:
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  - {fileID: 11400000, guid: 96f185e707aa4d44ba039f3ef3097850, type: 2}
-  DEBUG_ENCOUNTER: {fileID: 11400000, guid: 173287f44cd609443be1d8f729c61a72, type: 2}
+  runtimeCombatData: {fileID: 11400000, guid: 32b5de1fc6f221842adc64349a999b04, type: 2}
   battleSprites: {fileID: 11400000, guid: 244b08f6b59703947861982074a67b07, type: 2}
   cpuBrain: {fileID: 11400000, guid: 00f71bc3ca079db4695b269bd9905bd7, type: 2}
   affinityTargeter: {fileID: 1363942132}
