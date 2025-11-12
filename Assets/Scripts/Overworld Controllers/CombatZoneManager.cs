@@ -1,6 +1,4 @@
-using Ink.Parsed;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,15 +34,26 @@ public class CombatZoneManager : MonoBehaviour
         player_controller.OnPlayerMove -= CheckForEncounter;
     }
 
-    private void StartCombat()
+    /// <summary>
+    /// Given an encounter data object, loads the data into the runtime combat SO and changes to the combat scene.
+    /// </summary>
+    /// <param name="encounter"></param>
+    private void StartCombat(EncounterSO encounter)
     {
         // set runtime combat data to the encounter data
-        
+        m_runtimeCombatData.Encounter = encounter;
 
         // swap into combat scene
         // the CombatManager will be initialized with data sourced from the runtime combat data SO
+        SceneManager.LoadScene("BattleScene");
     }
 
+    /// <summary>
+    /// Run whenever the player changes their position. Checks to see if they've entered a new tile,
+    /// the zones overlapping that tile, and polls them in priority order to check for an encounter.
+    /// </summary>
+    /// <param name="new_pos"></param>
+    /// <param name="old_pos"></param>
     private void CheckForEncounter(Vector2 new_pos, Vector2 old_pos)
     {
         var new_cell_pos = m_worldGrid.WorldToCell(new_pos);
@@ -69,13 +78,19 @@ public class CombatZoneManager : MonoBehaviour
         {
             if (zone.Roll())
             {
-                m_runtimeCombatData.Encounter = zone.GetEncounter();
-                SceneManager.LoadScene("BattleScene");
+                StartCombat(zone.GetEncounter());
                 break;
             }
         }
     }
 
+    /// <summary>
+    /// Uses binary insertion to maintain a sorted list of zones. Inserts via a zone's priority.
+    /// </summary>
+    /// <param name="zones"></param>
+    /// <param name="item"></param>
+    /// <param name="lower"></param>
+    /// <param name="upper"></param>
     private void BinsertZone(IList<CombatZone> zones, CombatZone item, int lower, int upper)
     {
         if (upper <= lower)
@@ -101,6 +116,7 @@ public class CombatZoneManager : MonoBehaviour
         }
     }
 
+    // debug tool to draw the encounter zones on the grid
     private void OnDrawGizmos()
     {
         if (m_worldGrid == null || m_combatZones == null || m_debugZoneGradient == null) return;
