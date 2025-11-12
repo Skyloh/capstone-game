@@ -85,6 +85,18 @@ public static class AbilityUtils
         return data.Split(METADATA_UNION_CHARACTER);
     }
 
+    public static char AffinityToEffectSuffix(AffinityType t)
+    {
+        return t switch
+        {
+            AffinityType.Fire => 'r',
+            AffinityType.Physical => 'g',
+            AffinityType.Lightning => 'y',
+            AffinityType.Water => 'b',
+            _ => 'n',
+        };
+    }
+
     public static IReadOnlyDictionary<int, (int, int)> SingleEnemy() =>
         new Dictionary<int, (int min, int max)> { { 1, (1, 1) } };
 

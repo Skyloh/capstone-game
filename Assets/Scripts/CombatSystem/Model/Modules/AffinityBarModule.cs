@@ -143,6 +143,17 @@ public class AffinityBarModule : AModule
         return breaks;
     }
 
+    public IReadOnlyList<AffinityType> GetSubrange(int start, int end)
+    {
+        var range = new List<AffinityType>();
+
+        for (int i = start; i < end && i < BarLength(); ++i)
+        {
+            range.Add(GetAtIndex(i));
+        }
+
+        return range;
+    }
 
     // helpers for other functionality eventually
 }

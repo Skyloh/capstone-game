@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: EffectDatabase
   m_EditorClassIdentifier: 
   m_systemEntries:
-  - key: 
-    value: {fileID: 0}
+  - key: break_r
+    value: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  - key: break_b
+    value: {fileID: 4021103657954561961, guid: f467d2a92bcca5340b77d1f1a3d000d3, type: 3}
+  - key: break_g
+    value: {fileID: 4021103657954561961, guid: b83e60366f15cee4da5a187e076a800d, type: 3}
+  - key: break_y
+    value: {fileID: 4021103657954561961, guid: e86a28af018fe1749adfe10644df1f07, type: 3}

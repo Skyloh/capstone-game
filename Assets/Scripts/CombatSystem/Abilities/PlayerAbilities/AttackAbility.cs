@@ -33,20 +33,27 @@ public class AttackAbility : AAbility
         int breaks = abar_module.CalculateLeadingBreaks(aff_module.GetWeaponAffinity());
 
         int damage = AbilityUtils.CalculateDamage(50, 70);
-
         for (int i = 0; i < breaks; ++i)
         {
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
-
         damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
-
-        abar_module.BreakLeading(breaks);
-
-        h_module.ChangeHealth(damage);
 
         Debug.Log($"Damaging {target.GetName()} for {damage}.");
 
-        yield return new WaitForSeconds(0.5f);
+        // Break VFX
+        int index = abar_module.GetFirstNonNoneIndex();
+        var elements_broken = abar_module.GetSubrange(index, index + breaks);
+        foreach (var affinity in elements_broken)
+        {
+            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // Application of data
+        yield return new WaitForSeconds(0.2f);
+
+        abar_module.BreakLeading(breaks);
+        h_module.ChangeHealth(damage);
     }
 }
