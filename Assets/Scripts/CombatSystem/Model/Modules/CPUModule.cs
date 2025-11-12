@@ -193,7 +193,7 @@ public class CPUModule : AModule
     {
         foreach (var ability in module.GetAbilities())
         {
-            if (ability.GetAbilityData().Name == match_name) return ability;
+            if (ability.GetType().Name == match_name) return ability;
         }
 
         throw new System.Exception($"No ability of name {match_name} is on {module.GetOwner().GetName()}'s ability list!");
