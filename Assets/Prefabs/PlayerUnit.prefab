@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.03125, y: -1.09375}
-  m_SizeDelta: {x: 4, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_SizeDelta: {x: 4, y: 0.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1719287868835092848
 Canvas:
@@ -180,7 +180,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -895010295
+  m_SortingLayerID: 1718001059
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &6471756078882575203
@@ -488,7 +488,7 @@ SpriteRenderer:
   m_SortingLayerID: 1718001059
   m_SortingLayer: -1
   m_SortingOrder: -1
-  m_Sprite: {fileID: 7106833754604427254, guid: cab058e573d8c8e428349baf45e0dc3e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1771ed4c35aee114ea19b0475e24dbb7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -533,17 +533,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 2}
+  m_Offset: {x: 0, y: 1.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6, y: 2}
+    oldSize: {x: 4, y: 1}
     newSize: {x: 6, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 6, y: 6}
+  m_Size: {x: 4, y: 5}
   m_EdgeRadius: 0
 --- !u!114 &1545796900410931930
 MonoBehaviour:
@@ -611,7 +611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 09185c88a4a7b534ba8b9d7062153a31, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 09185c88a4a7b534ba8b9d7062153a31, type: 3}
       propertyPath: m_LocalPosition.z

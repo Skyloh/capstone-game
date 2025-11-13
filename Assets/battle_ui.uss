@@ -3,7 +3,7 @@
     font-size: 16px;
     -unity-text-outline-color: rgba(56, 56, 56, 0);
     background-color: rgba(160, 255, 249, 0);
-    background-image: url("project://database/Assets/UI%20Shenanigans/buttonsmall.png?fileID=2800000&guid=e7aa0053d1cb74585a16ad340e51d356&type=3#buttonsmall");
+    background-image: url("project://database/Assets/Art/UI/button_panel.png?fileID=21300000&guid=b0c504ff58c6fb54392b579ea555803d&type=3#button_panel");
     -unity-font-definition: url("project://database/Assets/UI%20Shenanigans/Fonts/Pixelpurl-0vBPP.ttf?fileID=12800000&guid=ef152549768704337aa3d35d9035611e&type=3#Pixelpurl-0vBPP");
     border-left-color: rgba(255, 255, 255, 0);
     border-right-color: rgba(255, 255, 255, 0);
@@ -12,11 +12,23 @@
 }
 
 .unity-button:hover {
-    -unity-background-image-tint-color: rgb(74, 231, 248);
+    -unity-background-image-tint-color: rgb(255, 238, 146);
+    translate: 0 0;
+    scale: 1.1 1.1;
+    transition-duration: 0.2s;
+    transition-property: scale;
+    transition-timing-function: ease-in-sine;
 }
 
 .unity-button:focus {
-    -unity-background-image-tint-color: rgb(120, 120, 120);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .unity-progress-bar__background {
@@ -41,4 +53,8 @@
     border-top-right-radius: 1px;
     border-bottom-right-radius: 1px;
     border-bottom-left-radius: 1px;
+}
+
+.unity-button:active {
+    translate: 0 2px;
 }

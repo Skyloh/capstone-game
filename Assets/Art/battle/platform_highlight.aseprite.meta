@@ -75,7 +75,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -88,7 +88,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638961423052831831
+  platformSettingsDirtyTick: 638985824825576992
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,15 +123,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: platform_highlight
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 96
-      height: 35
+      width: 63
+      height: 22
     spriteID: 70e63111eea98e3478fe808fe4cd6470
     spriteBone: []
     spriteOutline: []
@@ -143,15 +143,15 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: platform_highlight_Frame_1
     originalName: 
-    pivot: {x: 0.5, y: 0}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
-      y: 47
-      width: 96
-      height: 35
+      y: 34
+      width: 63
+      height: 22
     spriteID: e035c6d624db7fb4db53fc7c34072b2f
     spriteBone: []
     spriteOutline: []
@@ -160,7 +160,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 47}
+    uvTransform: {x: 4, y: 34}
   spriteSheetImportData:
   - name: front
     originalName: 
@@ -214,17 +214,17 @@ ScriptedImporter:
       frameIndex: 0
       cellRect:
         x: 0
-        y: 0
-        width: 96
-        height: 35
+        y: 1
+        width: 63
+        height: 22
       spriteId: 70e63111eea98e3478fe808fe4cd6470
     - name: platform_highlight_Frame_1
       frameIndex: 1
       cellRect:
         x: 0
-        y: 0
-        width: 96
-        height: 35
+        y: 1
+        width: 63
+        height: 22
       spriteId: e035c6d624db7fb4db53fc7c34072b2f
     linkedCells: []
     parentIndex: -1
@@ -268,4 +268,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 96, y: 48}
+  canvasSize: {x: 63, y: 31}

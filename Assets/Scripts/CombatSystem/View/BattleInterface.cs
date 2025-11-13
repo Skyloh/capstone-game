@@ -75,10 +75,18 @@ namespace CombatSystem.View
             var encounter_so = runtimeCombatData.Encounter;
 
             combatManager.InitCombat(player_unit_sos, encounter_so);
-
+            for (int i = 0; i < 4; i++)
+            {
+                unitSelector.Players[i].SetUnit(null);
+                unitSelector.Enemies[i].SetUnit(null);
+            }
             for (int i = 0; i < player_unit_sos.Length; i++)
             {
                 unitSelector.Players[i].SetUnit(player_unit_sos[i]);
+            }
+            for (int i = 0; i < encounter_so.EnemyBrainMap.Count; i++)
+            {
+                unitSelector.Enemies[i].SetUnit(encounter_so.EnemyBrainMap[i].key);
             }
 
             BeginUnitSelection();
@@ -90,7 +98,7 @@ namespace CombatSystem.View
             // portrait = 
             // DisplayUnit(model.GetTeam(0).GetUnit(index));
             //HACK: fragile
-            portrait.style.backgroundImage =new StyleBackground(runtimeCombatData.PlayerUnits[index].portrait);
+            portrait.style.backgroundImage = new StyleBackground(runtimeCombatData.PlayerUnits[index].portrait);
             DisplayUnit(GetPlayerUnit(index));
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ namespace CombatSystem.View
 {
     public class Unit : MonoBehaviour, IUnit
     {
-        private GameObject character;
+        private GameObject character = null;
 
         public event Action Hover;
         public event Action Unhover;
@@ -22,21 +23,40 @@ namespace CombatSystem.View
         [SerializeField] private Slider healthSlider;
         public void OnMouseEnter()
         {
-            Hover?.Invoke();
+            if (character != null)
+            {
+                Hover?.Invoke();
+            }
         }
 
         public void OnMouseDown()
         {
-            Click?.Invoke();
+            if(character != null){
+                Click?.Invoke();
+            }
         }
 
         public void OnMouseExit()
         {
-            Unhover?.Invoke();
+            if (character != null)
+            {
+                Unhover?.Invoke();
+            }
         }
 
         public void SetUnit(ACombatUnitSO unit)
         {
+            if(character != null)
+            {
+                Destroy(character);
+            }
+            if(unit == null)
+            {
+                character = null;
+                HideUnit();
+                return;
+            }
+            this.gameObject.SetActive(true);
             character = Instantiate(unit.prefab, this.transform);
         }
 
@@ -47,7 +67,7 @@ namespace CombatSystem.View
 
         public void HideUnit()
         {
-            throw new NotImplementedException();
+            this.gameObject.SetActive(false);
         }
 
         public void PlayEntrance()
