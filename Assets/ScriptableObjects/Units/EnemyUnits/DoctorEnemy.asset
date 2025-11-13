@@ -16,7 +16,7 @@ MonoBehaviour:
   m_maxHealth: 999
   m_abilities:
   - EnemyAttackAbility
-  portrait: {fileID: 0}
+  portrait: {fileID: 21300000, guid: 57b34f7d1b894cb4499075772cd84f16, type: 3}
   characterDescription: 
   prefab: {fileID: 3790470187814087830, guid: 5327dd669cdf5aa4cb16fa627934d478, type: 3}
   m_affinityBarSlotCount: 5
