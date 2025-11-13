@@ -213,6 +213,8 @@ public class PlayerController : MonoBehaviour
 
         if (tile is LoadingZoneTile loadingZoneTile && !string.IsNullOrEmpty(loadingZoneTile.sceneToLoad))
         {
+            PlayerSpawnManager.nextSpawnPointID = loadingZoneTile.targetSpawnPointID;
+
             UnityEngine.Debug.Log($"Loading scene: {loadingZoneTile.sceneToLoad}");
             UnityEngine.SceneManagement.SceneManager.LoadScene(loadingZoneTile.sceneToLoad);
         }

@@ -8,6 +8,8 @@ using UnityEngine.Tilemaps;
 public class LoadingZoneTile : TileBase
 {
     public string sceneToLoad;
+    // ID for spawn point to support multiple spawn points in a scene
+    public string targetSpawnPointID;
     public Sprite tileSprite;
 
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)

@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/NewRoomTest.unity
     guid: 99108d608057d2f48a7c33c5ab4f57a6
   - enabled: 1
-    path: Assets/Scenes/TilemapTEst.unity
+    path: Assets/Scenes/TilemapTest.unity
     guid: 7bcb05447cc262840ae46ab58ffac392
   - enabled: 1
     path: Assets/Scenes/BattleScene.unity
