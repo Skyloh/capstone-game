@@ -15,4 +15,4 @@ MonoBehaviour:
   PlayerUnits:
   - {fileID: 11400000, guid: 5ced7b4e67739be44b50d723ff475dd9, type: 2}
   - {fileID: 11400000, guid: e4f90a75edfc83c49913bf62927cd741, type: 2}
-  Encounter: {fileID: 11400000, guid: 3821a598f4762424e843a39edaffb7d6, type: 2}
+  Encounter: {fileID: 11400000, guid: c475ecbda84abfa48ac14caa93804709, type: 2}
