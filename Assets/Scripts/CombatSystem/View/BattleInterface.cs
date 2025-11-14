@@ -32,6 +32,7 @@ namespace CombatSystem.View
         private ProgressBar enemyHealthbar;
         private VisualElement playerWeaponIcon;
         private VisualElement portrait;
+        private VisualElement enemyPortrait;
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
@@ -65,7 +66,11 @@ namespace CombatSystem.View
             ui = GetComponent<UIDocument>().rootVisualElement;
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
+            InitializeCombat();
 
+        }
+        public void InitializeCombat(/*probably take some values here at some point*/)
+        {
             if (runtimeCombatData == null || !runtimeCombatData.HasData())
             {
                 throw new Exception("Combat data is null or has invalid combat data.");
@@ -73,32 +78,20 @@ namespace CombatSystem.View
 
             var player_unit_sos = runtimeCombatData.PlayerUnits;
             var encounter_so = runtimeCombatData.Encounter;
-
-            combatManager.InitCombat(player_unit_sos, encounter_so);
             for (int i = 0; i < 4; i++)
             {
                 unitSelector.Players[i].SetUnit(null);
                 unitSelector.Enemies[i].SetUnit(null);
             }
-            for (int i = 0; i < player_unit_sos.Length; i++)
-            {
-                unitSelector.Players[i].SetUnit(player_unit_sos[i]);
-            }
-            for (int i = 0; i < encounter_so.EnemyBrainMap.Count; i++)
-            {
-                unitSelector.Enemies[i].SetUnit(encounter_so.EnemyBrainMap[i].key);
-            }
 
+
+            combatManager.InitCombat(player_unit_sos, encounter_so);
             BeginUnitSelection();
         }
 
         private void OnSelectablePlayerHovered(int index, IUnit unit)
         {
             selectedPlayer = index;
-            // portrait = 
-            // DisplayUnit(model.GetTeam(0).GetUnit(index));
-            //HACK: fragile
-            portrait.style.backgroundImage = new StyleBackground(runtimeCombatData.PlayerUnits[index].portrait);
             DisplayUnit(GetPlayerUnit(index));
         }
 
@@ -136,6 +129,7 @@ namespace CombatSystem.View
             confirmButton = ui.Q<Button>("Confirm");
             enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
             portrait = ui.Q<VisualElement>("Portrait");
+            enemyPortrait = ui.Q<VisualElement>("EnemyPortrait");
             confirmButton.RegisterCallback<ClickEvent>((ce) =>
             {
                 if (confirmCallback != null)
@@ -146,7 +140,7 @@ namespace CombatSystem.View
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
             unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
-            DisplayUnit(GetPlayerUnit(0));
+            // DisplayUnit(GetPlayerUnit(0));
         }
 
         private int subscribedToEnemy = -1;
@@ -192,6 +186,9 @@ namespace CombatSystem.View
             {
                 healthModule.OnHealthChanged += UpdateEnemyHealth;
                 UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth());
+            }
+            if (enemy_unit.TryGetModule<ReferenceModule>(out var refModule)) {
+                enemyPortrait.style.backgroundImage = new StyleBackground(refModule.CombatUnit.portrait);
             }
 
             subscribedToEnemy = index;
@@ -244,10 +241,29 @@ namespace CombatSystem.View
                 if (team_id == 0)
                 {
                     healthbar.OnHealthChanged += unitSelector.Players[unit_index].UpdateHp;
+                    if (new_unit.TryGetModule<ReferenceModule>(out var module))
+                    {
+                        Debug.Log(module, module.CombatUnit);
+                        unitSelector.Players[unit_index].SetUnit(module.CombatUnit);
+                    }
+                    else
+                    {
+                        Debug.Log("could not display unit");
+                    }
                 }
                 else if (team_id == 1)
                 {
                     healthbar.OnHealthChanged += unitSelector.Enemies[unit_index].UpdateHp;
+                    if (new_unit.TryGetModule<ReferenceModule>(out var module))
+                    {
+
+                        Debug.Log(module);
+                        unitSelector.Enemies[unit_index].SetUnit(module.CombatUnit);
+                    }
+                    else
+                    {
+                        Debug.Log("could not display unit");
+                    }
                 }
             }
         }
@@ -552,6 +568,10 @@ namespace CombatSystem.View
 
                 SetIcon(playerWeaknessIcon, affinityModule.GetWeaknessAffinity());
                 SetIcon(playerWeaponIcon, affinityModule.GetWeaponAffinity());
+                if (selectedUnit.TryGetModule<ReferenceModule>(out var module))
+                {
+                    portrait.style.backgroundImage = new StyleBackground(module.CombatUnit.portrait);
+                }
                 //TODO: listend to change callbacks
             }
 

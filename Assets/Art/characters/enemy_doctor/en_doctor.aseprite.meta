@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 997fc8eb53c9e314c82bb3f380476502
+guid: 28cb6ef6342a94a468c0689a479ad237
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638984108551378903
+  platformSettingsDirtyTick: 638986815492635839
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,38 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ambys_Frame_0
+  - name: en_doctor_Frame_0
     originalName: 
-    pivot: {x: 0.5357143, y: 0}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 78
-      y: 4
-      width: 28
-      height: 31
-    spriteID: 1f8589145f25a054dae2863ae69bc265
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 78, y: 4}
-  - name: ambys_Frame_1
-    originalName: 
-    pivot: {x: 0.51724136, y: 0}
+    pivot: {x: 0.5294118, y: 0.15254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 29
-      height: 32
-    spriteID: fc06b3d041bd05548b0b8bdb39298ec6
+      width: 51
+      height: 59
+    spriteID: f873fbd70e20b9541ac5e57494f5955f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -160,19 +140,59 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
-  - name: ambys_Frame_2
+    uvTransform: {x: -1, y: 3}
+  - name: en_doctor_Frame_1
     originalName: 
-    pivot: {x: 0.4827586, y: 0}
+    pivot: {x: 0.5294118, y: 0.15254237}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 41
+      x: 4
+      y: 71
+      width: 51
+      height: 59
+    spriteID: 5351062e5f757cd4ebb2f85078e6e2ac
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: -1, y: 70}
+  - name: en_doctor_Frame_2
+    originalName: 
+    pivot: {x: 0.5294118, y: 0.15517241}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 138
+      width: 51
+      height: 58
+    spriteID: 052b31ee217299f43a17cf7978e7061e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: -1, y: 137}
+  - name: en_doctor_Frame_3
+    originalName: 
+    pivot: {x: 0.54901963, y: 0.15789473}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 63
       y: 4
-      width: 29
-      height: 31
-    spriteID: 2d3734f1eb5c68649992a19692b64b8e
+      width: 51
+      height: 57
+    spriteID: 632ced7ea1905414283a7c2910b048ba
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -180,19 +200,19 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 41, y: 4}
-  - name: ambys_Frame_3
+    uvTransform: {x: 59, y: 3}
+  - name: en_doctor_Frame_4
     originalName: 
-    pivot: {x: 0.6052632, y: 0}
+    pivot: {x: 0.54901963, y: 0.15789473}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 78
-      y: 43
-      width: 38
-      height: 12
-    spriteID: ab89a5269c3e7a24a8b12a8927627980
+      x: 63
+      y: 69
+      width: 51
+      height: 57
+    spriteID: cd8adecf00e74d849bd52fe79c26d6bd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -200,48 +220,84 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 78, y: 43}
+    uvTransform: {x: 59, y: 68}
+  - name: en_doctor_Frame_5
+    originalName: 
+    pivot: {x: 0.5263158, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 63
+      y: 134
+      width: 57
+      height: 37
+    spriteID: 4ad0a2869a966a24893573c78df5f787
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 63, y: 134}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -674248350
-    name: ambys
+    guid: 372036897
+    name: en_doctor
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ambys_Frame_0
+    - name: en_doctor_Frame_0
       frameIndex: 0
       cellRect:
-        x: 17
+        x: 0
         y: 0
-        width: 28
-        height: 31
-      spriteId: 1f8589145f25a054dae2863ae69bc265
-    - name: ambys_Frame_1
+        width: 64
+        height: 64
+      spriteId: f873fbd70e20b9541ac5e57494f5955f
+    - name: en_doctor_Frame_1
       frameIndex: 1
       cellRect:
-        x: 17
+        x: 0
         y: 0
-        width: 29
-        height: 32
-      spriteId: fc06b3d041bd05548b0b8bdb39298ec6
-    - name: ambys_Frame_2
+        width: 64
+        height: 64
+      spriteId: 5351062e5f757cd4ebb2f85078e6e2ac
+    - name: en_doctor_Frame_2
       frameIndex: 2
       cellRect:
-        x: 18
+        x: 0
         y: 0
-        width: 29
-        height: 31
-      spriteId: 2d3734f1eb5c68649992a19692b64b8e
-    - name: ambys_Frame_3
+        width: 64
+        height: 64
+      spriteId: 052b31ee217299f43a17cf7978e7061e
+    - name: en_doctor_Frame_3
       frameIndex: 3
       cellRect:
-        x: 9
+        x: 0
         y: 0
-        width: 38
-        height: 12
-      spriteId: ab89a5269c3e7a24a8b12a8927627980
+        width: 64
+        height: 64
+      spriteId: 632ced7ea1905414283a7c2910b048ba
+    - name: en_doctor_Frame_4
+      frameIndex: 4
+      cellRect:
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      spriteId: cd8adecf00e74d849bd52fe79c26d6bd
+    - name: en_doctor_Frame_5
+      frameIndex: 5
+      cellRect:
+        x: 2
+        y: 0
+        width: 57
+        height: 37
+      spriteId: 4ad0a2869a966a24893573c78df5f787
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -258,18 +314,6 @@ ScriptedImporter:
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
   - name: Standalone
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
-  - name: WebGL
     overridden: 0
     ignorePlatformSupport: 0
     maxTextureSize: 2048

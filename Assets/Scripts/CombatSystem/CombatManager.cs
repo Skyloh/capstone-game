@@ -69,7 +69,8 @@ public class CombatManager : MonoBehaviour
             player_unit.AddModule(new HealthModule(party_data.MaxHealth, party_data.MaxHealth))
                 .AddModule(new AffinityModule(party_data.WeaponAffinity, party_data.WeaknessAffinity))
                 .AddModule(new StatusModule())
-                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(party_data.Abilities)));
+                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(party_data.Abilities)))
+                .AddModule(new ReferenceModule(party_data));
 
             unit_dict[0].Add(player_unit);
         }
@@ -85,7 +86,7 @@ public class CombatManager : MonoBehaviour
                 .AddModule(new AffinityBarModule(enemy_data.AffinityBarSlotCount))
                 .AddModule(new StatusModule())
                 .AddModule(new CPUModule(enemy_brain))
-                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(enemy_data.Abilities)));
+                .AddModule(new AbilityModule(AbilityFactory.MakeAbilities(enemy_data.Abilities))).AddModule(new ReferenceModule(enemy_data));
 
             unit_dict[1].Add(enemy_unit);
         }

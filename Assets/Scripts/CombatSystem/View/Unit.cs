@@ -31,7 +31,8 @@ namespace CombatSystem.View
 
         public void OnMouseDown()
         {
-            if(character != null){
+            if (character != null)
+            {
                 Click?.Invoke();
             }
         }
@@ -46,11 +47,11 @@ namespace CombatSystem.View
 
         public void SetUnit(ACombatUnitSO unit)
         {
-            if(character != null)
+            if (character != null)
             {
                 Destroy(character);
             }
-            if(unit == null)
+            if (unit == null)
             {
                 character = null;
                 HideUnit();
@@ -83,18 +84,39 @@ namespace CombatSystem.View
         public void PlayStatus(Status status)
         {
             Debug.Log("Status animation should play");
+            switch (status)
+            {
+                case Status.None:
+                case Status.Stun:
+                case Status.Burn:
+                case Status.Shock:
+                case Status.Bruise:
+                case Status.Chill:
+                case Status.MorphRed:
+                case Status.MorphBlue:
+                case Status.MorphYellow:
+                case Status.MorphGreen:
+                case Status.MorphNone:
+                case Status.VeilRed:
+                case Status.VeilBlue:
+                case Status.VeilYellow:
+                case Status.VeilGreen:
+                case Status.VeilNone:
+                case Status.Goad:
+                    break;
+            }
         }
 
         public void PlayDead()
         {
-            throw new NotImplementedException();
+            character.GetComponent<Animator>().Play("dead");
         }
 
         public Color highlightColor = Color.yellow;
         public Color focusColor = Color.white;
         public void Focus()
         {
-            highlight.color =focusColor;
+            highlight.color = focusColor;
             isFocused = true;
         }
         [ContextMenu("Highlight")]
@@ -122,6 +144,15 @@ namespace CombatSystem.View
             if (healthSlider == null)
             {
                 Debug.unityLogger.Log("Health slider not set " + name);
+            }
+            if(current == 0)
+            {
+                PlayDead();
+                healthSlider.gameObject.SetActive(false);
+            }
+            else
+            {
+                healthSlider.gameObject.SetActive(true);
             }
             healthSlider.maxValue = max;
             healthSlider.value = current;

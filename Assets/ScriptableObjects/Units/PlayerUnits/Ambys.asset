@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ambys
   m_EditorClassIdentifier: 
   m_name: Ambys
-  m_maxHealth: 100
+  m_maxHealth: 5
   m_abilities:
   - AttackAbility
   - AttackAbility

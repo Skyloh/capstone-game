@@ -16,7 +16,7 @@ MonoBehaviour:
   waterPlayerWeakness: {fileID: 959226755, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
   lightningPlayerWeakness: {fileID: -1540257828, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
   physicalPlayerWeakness: {fileID: -83540121, guid: 8ce8eca604c8c4a438fb383a3f198917, type: 3}
-  fireEnemyWeakness: {fileID: -2166772086404783946, guid: 98b879104b451f644b85972705000519, type: 3}
-  waterEnemyWeakness: {fileID: -5395836127740734367, guid: 0e803f189461f664f81d7b3822c43769, type: 3}
-  lightningEnemyWeakness: {fileID: 4982683123850169577, guid: 9f63f346ba0892d48adabb9c01a3434f, type: 3}
-  physicalEnemyWeakness: {fileID: -7345193890989114959, guid: d8a55899a5f500e4384f333e6532f50c, type: 3}
+  fireEnemyWeakness: {fileID: 21300000, guid: 7d5afa947554c984496560802a6eaecf, type: 3}
+  waterEnemyWeakness: {fileID: 21300000, guid: 0a8c5070685f93b4b9bd9cfbfc54a0fc, type: 3}
+  lightningEnemyWeakness: {fileID: 21300000, guid: 8a9e8c1dbe516c641b4a23669fb70ef9, type: 3}
+  physicalEnemyWeakness: {fileID: 21300000, guid: 71a8c7499be60054981abf6ef18eb470, type: 3}
