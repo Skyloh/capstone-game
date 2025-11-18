@@ -154,6 +154,8 @@ public class CombatManager : MonoBehaviour
     /// <param name="action_information"></param>
     public void PerformAction(ActionData action_information)
     {
+ FindObjectOfType<AttackBannerUI>().ShowBanner(action_information.Action.ToString());
+
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 

@@ -1,0 +1,7 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="AbilityBanner" style="flex-grow: 1; display: none;">
+        <engine:VisualElement name="VisualElement" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI%20Shenanigans/enemyboxsmall-export.png?fileID=21300000&amp;guid=7d590802c21f64b9282a1c814d5bdf03&amp;type=3#enemyboxsmall-export&quot;); position: relative; width: 150px; height: 50px; max-height: 50px; min-height: 50px; justify-content: flex-end; align-items: center; align-self: center; left: -25px;">
+            <engine:Label name="AbilityBannerText" enable-rich-text="true" style="justify-content: space-between; align-self: center; top: -8px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Shenanigans/Fonts/Colora-zrVwa.otf?fileID=12800000&amp;guid=641213c03d332482794068d13907c017&amp;type=3#Colora-zrVwa&quot;); font-size: 15px; flex-wrap: nowrap; white-space: normal;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
