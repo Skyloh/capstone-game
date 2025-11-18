@@ -49,7 +49,8 @@ public class SegmentSwapAbility : AAbility
         affbar.SetAtIndex(t2_index + 1, pair_cache.Item2);
 
         Debug.Log("Swapped!");
+        EffectManager.DoEffectOn(t_unit_index, t_team_index, "hit_light", 2f, 2f);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
     }
 }

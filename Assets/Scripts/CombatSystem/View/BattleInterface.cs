@@ -17,7 +17,6 @@ namespace CombatSystem.View
 
         // Start is called befomre the first frame update
         public ViewSprites battleSprites;
-        public BrainSO cpuBrain;
         private VisualElement ui;
         private VisualElement playerWeaknessIcon;
         private CombatManager combatManager;
@@ -36,10 +35,6 @@ namespace CombatSystem.View
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
-
-        //TODO remove class and replace with non stub in own file
-
-        // public ICombatModel model => combatManager.CombatModel;
 
         private CombatUnit GetPlayerUnit(int player_index)
         {

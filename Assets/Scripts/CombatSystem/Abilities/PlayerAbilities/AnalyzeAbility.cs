@@ -49,6 +49,7 @@ public class AnalyzeAbility : AAbility
             throw new System.Exception("Invalid metadata value: " + metadata);
         }
 
-        yield return new WaitForSeconds(0.5f);
+        EffectManager.DoEffectOn(unit_index_2, team_index_2, "force", 2f, 2f);
+        yield return new WaitForSeconds(2f);
     }
 }

@@ -28,6 +28,8 @@ public class DefendAbility : AAbility
         unit.TryGetModule<AffinityModule>(out var DEBUG);
         Debug.Log($"Your weakness is now read as {DEBUG.GetWeaknessAffinity()}!");
 
-        yield return new WaitForSeconds(0.5f);
+        EffectManager.DoEffectOn(unit_index, team_index, "diamond_nooutline", 1f, 2f);
+
+        yield return new WaitForSeconds(1f);
     }
 }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68a9fcca75e9cd447b7deb3bd86cbd66, type: 3}
-  m_Name: Ambys
+  m_Name: Ambus
   m_EditorClassIdentifier: 
   m_name: Ambys
   m_maxHealth: 5
   m_abilities:
-  - AttackAbility
-  - DefendAbility
-  - InstillAbility
-  - SweepAbility
+  - InfuseAbility
+  - ProtectAbility
+  - GoadAbility
+  - TradeWeaponAbility
   portrait: {fileID: 21300000, guid: c1fdb316b94f0b04f80e0a87b3a9ad62, type: 3}
   characterDescription: 
   prefab: {fileID: -2253911629886400664, guid: 997fc8eb53c9e314c82bb3f380476502, type: 3}
-  m_weaponAffinity: 2
+  m_weaponAffinity: 4
   m_weaknessAffinity: 1

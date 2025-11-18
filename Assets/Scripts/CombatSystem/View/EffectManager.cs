@@ -15,6 +15,7 @@ public class EffectManager : MonoBehaviour
     [Space]
 
     [SerializeField] private Transform m_effectParent;
+    [SerializeField] private int m_maxTeamSize = 4;
 
     private void Awake()
     {
@@ -28,20 +29,36 @@ public class EffectManager : MonoBehaviour
         m_database.Init();
     }
 
-    public static void DoEffectOn(int unit_index, int team_index, string effect_name, float duration, float scale)
+    public static void DoEffectOn(int unit_index, int team_index, string effect_name, float duration, float scale, bool do_jitter = false)
     {
         var ths = Instance;
 
-        int index = unit_index >= 0 && team_index >= 0 ? unit_index + team_index * 4 : ths.m_effectLocuses.Count - 1;
+        // assumes max team sizes of 4
+        // if both unit and team index are -1, then put in center
+        int index = unit_index >= 0 && team_index >= 0 ? unit_index + team_index * ths.m_maxTeamSize : ths.m_effectLocuses.Count - 1;
 
         var instance = GameObject.Instantiate(ths.m_database.GetSystem(effect_name), ths.m_effectParent);
 
         instance.transform.position = ths.m_effectLocuses[index].position;
+
+        if (do_jitter)
+        {
+            var displace = Random.insideUnitCircle;
+            var pos = instance.transform.position;
+
+            pos.x += displace.x;
+            pos.y += displace.y;
+
+            instance.transform.position = pos;
+        }
+
         instance.transform.localScale = Vector3.one * scale;
 
         // TODO add builder pattern support for DOTween integration of animations
 
-        //ths.StartCoroutine(ths.IEWaitThenDestroy(instance, duration));
+        Debug.Log("Playing animation for: " + effect_name + ", obj name: " + instance.name);
+
+        ths.StartCoroutine(ths.IEWaitThenDestroy(instance, duration));
     }
 
     private IEnumerator IEWaitThenDestroy(GameObject g, float duration)

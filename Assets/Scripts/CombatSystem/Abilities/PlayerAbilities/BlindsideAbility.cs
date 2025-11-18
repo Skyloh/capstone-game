@@ -49,8 +49,20 @@ public class BlindsideAbility : AAbility
 
         damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
-        abar_module.BreakLeading(breaks);
+        // Attack VFX
+        EffectManager.DoEffectOn(unit_index, team_index, "blood", 2f, 4f);
 
+        // Break VFX
+        int index = abar_module.GetFirstNonNoneIndex();
+        var elements_broken = abar_module.GetSubrange(index, index + breaks);
+        foreach (var affinity in elements_broken)
+        {
+            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        // data application
+        abar_module.BreakLeading(breaks);
         h_module.ChangeHealth(damage);
 
         Debug.Log($"Damaging {target.GetName()} for {damage}.");

@@ -33,6 +33,7 @@ public class SpraypaintAbility : AAbility
             status.AddStatus(aff_status, 1);
 
             Debug.Log("Inflicting " + aff_status);
+            EffectManager.DoEffectOn(unit_index, team_index, "magic_poof", 2f, 2f);
         }
 
         yield return new WaitForSeconds(0.5f);

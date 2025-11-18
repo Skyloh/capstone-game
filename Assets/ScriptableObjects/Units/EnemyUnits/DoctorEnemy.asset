@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DoctorEnemy
   m_EditorClassIdentifier: 
   m_name: Doctor
-  m_maxHealth: 1
+  m_maxHealth: 250
   m_abilities:
   - EnemyAttackAbility
   portrait: {fileID: 21300000, guid: 57b34f7d1b894cb4499075772cd84f16, type: 3}

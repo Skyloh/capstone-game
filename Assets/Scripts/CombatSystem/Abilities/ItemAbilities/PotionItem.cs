@@ -24,6 +24,8 @@ public class PotionItem : AAbility
         var health_module = GetModuleOrError<HealthModule>(target);
         health_module.ChangeHealth(-AbilityUtils.CalculateDamage(30, 50)); // - is because changehealth takes a DECREASE value. Flipping it makes it heal.
 
+        EffectManager.DoEffectOn(unit_index_2, team_index_2, "heart", 1f, 2f);
+
         yield return new WaitForSeconds(0.5f);
     }
 }

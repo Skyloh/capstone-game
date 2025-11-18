@@ -47,6 +47,13 @@ public class EnemyAttackAbility : AAbility
 
         h_module.ChangeHealth(damage);
 
-        yield return new WaitForSeconds(0.5f);
+        // VFX
+        for (int i = 0; i < 4; ++i)
+        {
+            EffectManager.DoEffectOn(unit_index, team_index, "magic_hit", 1f, 1f, true);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return new WaitForSeconds(2f);
     }
 }

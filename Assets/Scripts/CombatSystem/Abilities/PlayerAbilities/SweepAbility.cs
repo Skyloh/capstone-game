@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -47,17 +46,26 @@ public class SweepAbility : AAbility
             var health_module = GetModuleOrError<HealthModule>(target);
 
             int base_damage = AbilityUtils.CalculateDamage(10, 20);
-            Debug.Log("Base damage = " + base_damage);
 
             int damage = base_damage + SumAdditionalDamage(break_sum, 5, 10);
 
             damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
+            // Attack VFX
+            EffectManager.DoEffectOn(unit_index, team_index, "magic_poof", 1f, 2f);
+
+            // Break VFX
+            int first_index = bar_module.GetFirstNonNoneIndex();
+            var elements_broken = bar_module.GetSubrange(first_index, first_index + breaks_array[t_index]);
+            foreach (var affinity in elements_broken)
+            {
+                EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            // Data application
             bar_module.BreakLeading(breaks_array[t_index++]);
-
             health_module.ChangeHealth(damage);
-
-            Debug.Log($"Damaging {target.GetName()} for {damage} with per-unit break {breaks_array[t_index-1]} and breaks {break_sum}.");
 
             yield return new WaitForSeconds(0.5f);
         }
@@ -70,8 +78,6 @@ public class SweepAbility : AAbility
         {
             int amount = AbilityUtils.CalculateDamage(min, max);
             sum += amount;
-
-            Debug.Log($"Compounding {amount} onto {sum - amount} for {sum}."); // NOTE there might be a weird formula issue thing
         }
 
         return sum;

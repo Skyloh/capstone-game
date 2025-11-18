@@ -48,6 +48,10 @@ public class SwapAbility : AAbility
         var t1_affbar = GetModuleOrError<AffinityBarModule>(target_1);
         var t2_affbar = GetModuleOrError<AffinityBarModule>(target_2);
 
+        // VFX
+        EffectManager.DoEffectOn(t_unit_index, t_team_index, "hit_light", 1f, 2f);
+        EffectManager.DoEffectOn(t2_unit_index, t2_team_index, "hit_light", 1f, 2f);
+
         // perform swap
         AffinityType t1_cache = t1_affbar.GetAtIndex(t1_index);
         t1_affbar.SetAtIndex(t1_index, t2_affbar.GetAtIndex(t2_index));

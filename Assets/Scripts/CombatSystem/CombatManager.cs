@@ -215,7 +215,7 @@ public class CombatManager : MonoBehaviour
         {
             Debug.LogError("BATTLE RESOLVED WITH STATE: " + state);
 
-            SceneTransitionManager.Transition("TilemapTEst");
+            StartCoroutine(IE_DelayThenExitCombat());
 
             return;
         }
@@ -356,6 +356,14 @@ public class CombatManager : MonoBehaviour
         {
             m_enemyCPU.SelectNext(true); // mark a resetting of the enemy phase
         }
+    }
+
+    // Replace with end state screen
+    private IEnumerator IE_DelayThenExitCombat()
+    {
+        yield return new WaitForSeconds(2f);
+
+        SceneTransitionManager.Transition("TilemapTEst");
     }
 
     private void TestForStunStatus(Team team)

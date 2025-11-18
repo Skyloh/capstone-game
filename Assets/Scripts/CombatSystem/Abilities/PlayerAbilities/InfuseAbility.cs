@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class InfuseAbility : AAbility
 {
@@ -31,7 +32,11 @@ public class InfuseAbility : AAbility
             throw new System.Exception($"No metadata key found for {MetadataConstants.WEAPON_ELEMENT}");
         }
 
+        EffectManager.DoEffectOn(u_unit_index, u_team_index, "bubble_glows", 3f, 2f);
+
         aff_module.ChangeWeaponAffinity(AbilityUtils.StringToAffinity(element));
+
+        yield return new WaitForSeconds(1f);
 
         // cheeky way to do a REGULAR ATTACK CALCULATION
         yield return m_internalFallback.IE_ProcessAbility(data, model, _);

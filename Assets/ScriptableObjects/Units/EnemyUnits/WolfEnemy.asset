@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WolfEnemy
   m_EditorClassIdentifier: 
   m_name: Zombie Wolf
-  m_maxHealth: 999
+  m_maxHealth: 250
   m_abilities:
   - EnemyAttackAbility
   portrait: {fileID: 0}

@@ -29,6 +29,8 @@ public class PaintBucketAbility : AAbility
 
             Debug.Log($"{StatusUtils.AffinityToVeil(weakness_aff)} granted to {target}!");
 
+            EffectManager.DoEffectOn(target.unit_index, target.team_index, "aura", 1f, 2f);
+
             yield return new WaitForSeconds(0.5f);
         }
 

@@ -64921,7 +64921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1987185118
 Transform:
   m_ObjectHideFlags: 0
@@ -64959,6 +64959,13 @@ MonoBehaviour:
     m_maxY: 0
     m_encounterChance: 0.254
     m_encounterObject: {fileID: 11400000, guid: ac6853a70795e5e4da28cacf95fcd9d6, type: 2}
+  - m_priority: 0
+    m_minX: -9
+    m_minY: -2
+    m_maxX: -7
+    m_maxY: 0
+    m_encounterChance: 0.254
+    m_encounterObject: {fileID: 11400000, guid: c475ecbda84abfa48ac14caa93804709, type: 2}
   m_debugZoneGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}

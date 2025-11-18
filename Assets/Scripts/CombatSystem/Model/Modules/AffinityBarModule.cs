@@ -41,7 +41,7 @@ public class AffinityBarModule : AModule
 
         for (int i = 0; i < m_slotCount; i++)
         {
-            var affinity = Random.Range(0, 3) switch
+            var affinity = Random.Range(0, 4) switch
             {
                 0 => AffinityType.Fire,
                 1 => AffinityType.Water,
@@ -107,6 +107,10 @@ public class AffinityBarModule : AModule
         if (count == 0) return;
 
         int start = GetFirstNonNoneIndex();
+
+        // if the full bar is already broken, dont continue.
+        if (start == -1) return;
+
         for (int i = 0; i < count; ++i)
         {
             if (i + start >= BarLength()) break;

@@ -48,7 +48,14 @@ namespace CombatSystem.View
 
         private bool IsValidPlayerSelection(int index, SelectionFlags selectionFlags)
         {
-            return combatManager.TrySelectUnit(0, 0, index, selectionFlags, out var selected);
+            try
+            {
+                return combatManager.TrySelectUnit(0, 0, index, selectionFlags, out var selected);
+            }
+            catch // if OoB, fail
+            {
+                return false;
+            }
 
             /*
             if (!selectionFlags.HasFlag(SelectionFlags.Ally)) return false;
@@ -74,7 +81,13 @@ namespace CombatSystem.View
 
         private bool IsValidEnemySelection(int index, SelectionFlags selectionFlags)
         {
-            return combatManager.TrySelectUnit(0, 1, index, selectionFlags, out var selected);
+            try
+            {
+                return combatManager.TrySelectUnit(0, 1, index, selectionFlags, out var selected);
+            } catch // if OoB, fail
+            {
+                return false;
+            }
 
             /*
             if (!selectionFlags.HasFlag(SelectionFlags.Enemy)) return false;

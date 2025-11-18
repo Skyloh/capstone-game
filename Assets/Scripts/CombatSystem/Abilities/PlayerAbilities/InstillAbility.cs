@@ -32,6 +32,9 @@ public class InstillAbility : AAbility
             aff_bar.SetAtIndex(i, aff.GetWeaponAffinity());
         }
 
+        EffectManager.DoEffectOn(target_index.unit_index, target_index.team_index, "vortex", 2f, 2f);
+        EffectManager.DoEffectOn(unit_index, team_index, "hit_light", 1f, 2f);
+
         Debug.Log("Affinity bar changed.");
 
         yield return new WaitForSeconds(0.5f);

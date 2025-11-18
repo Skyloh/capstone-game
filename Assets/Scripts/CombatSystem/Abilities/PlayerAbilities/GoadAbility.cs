@@ -25,7 +25,12 @@ public class GoadAbility : AAbility
 
         module.AddStatus(Status.Goad, 3);
 
-        Debug.Log("Taunting enemies!");
+        // enemy vfx
+        EffectManager.DoEffectOn(unit_index, team_index, "fire_swirl", 3f, 2f);
+
+        // player vfx
+        var (user_t_index, user_index) = data.UserTeamUnitIndex;
+        EffectManager.DoEffectOn(user_index, user_t_index, "smile", 3f, 2f);
 
         yield return new WaitForSeconds(0.5f);
     }

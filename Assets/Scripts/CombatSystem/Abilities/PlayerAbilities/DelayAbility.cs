@@ -74,6 +74,8 @@ public class DelayAbility : AAbility
         foreach (AffinityType type in seq) bar_module.SilentPushBack(type);
         bar_module.ConsumeBookmark();
 
+        EffectManager.DoEffectOn(elements[0].u_i, elements[0].t_i, "hit_light", 2f, 2f);
+
         yield return new WaitForSeconds(0.5f);
     }
 }

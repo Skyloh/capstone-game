@@ -39,7 +39,8 @@ public class AttackAbility : AAbility
         }
         damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
-        Debug.Log($"Damaging {target.GetName()} for {damage}.");
+        // Attack VFX
+        EffectManager.DoEffectOn(unit_index, team_index, "hit_pow", 1f, 2f);
 
         // Break VFX
         int index = abar_module.GetFirstNonNoneIndex();

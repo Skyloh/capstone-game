@@ -26,6 +26,10 @@ public class ProtectAbility : AAbility
         var aff_module = GetModuleOrError<AffinityModule>(user);
         var t_aff_module = GetModuleOrError<AffinityModule>(target);
 
+        // VFX
+        EffectManager.DoEffectOn(u_unit_index, u_team_index, "diamond", 2f, 2f);
+        EffectManager.DoEffectOn(t_unit_index, t_team_index, "diamond", 2f, 2f);
+
         // swapping RAW weaknesses
         AffinityType user_weakness_aff = aff_module.GetRawWeaknessAffinity();
         aff_module.ChangeWeaknessAffinity(t_aff_module.GetRawWeaknessAffinity());

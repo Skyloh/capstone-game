@@ -21,3 +21,39 @@ MonoBehaviour:
     value: {fileID: 4021103657954561961, guid: b83e60366f15cee4da5a187e076a800d, type: 3}
   - key: break_y
     value: {fileID: 4021103657954561961, guid: e86a28af018fe1749adfe10644df1f07, type: 3}
+  - key: blood
+    value: {fileID: 100000, guid: e67f85c779c5c954babd46bad0ce4cc3, type: 3}
+  - key: death_skull
+    value: {fileID: 100004, guid: b9854f0f425211d49b1c7094a6570cde, type: 3}
+  - key: diamond
+    value: {fileID: 100000, guid: 77f15c0d4fa7c234e8197f920374fecc, type: 3}
+  - key: diamond_nooutline
+    value: {fileID: 100000, guid: 99bcffdbd5c01714eaa75e1275884fbb, type: 3}
+  - key: heart
+    value: {fileID: 100004, guid: de3077ae93c537a44b86386a6b417c04, type: 3}
+  - key: fire_swirl
+    value: {fileID: 1727626132299242, guid: 3c48131267e24274dbe4083d1ea5a382, type: 3}
+  - key: electric
+    value: {fileID: 1628744458893394, guid: afad17eba43630c4cb9bc86292dfb566, type: 3}
+  - key: aura
+    value: {fileID: 100006, guid: 6771db83bce5fec499756d71a68b18f0, type: 3}
+  - key: vortex
+    value: {fileID: 100000, guid: 8a7fd4686abf08f4b965a29c8214f380, type: 3}
+  - key: force
+    value: {fileID: 100002, guid: ad1270873304d8043b1660d434c306da, type: 3}
+  - key: hit_pow
+    value: {fileID: 100004, guid: 1f99f82c2af2b9a4eb4d9c48115d8729, type: 3}
+  - key: magic_hit
+    value: {fileID: 1845240806346120, guid: e5514a6481de7a44fb67fdbe287b5f30, type: 3}
+  - key: magic_poof
+    value: {fileID: 100018, guid: 62155817cdd530c4a88a2db37954f501, type: 3}
+  - key: glowing_blue
+    value: {fileID: 2708598583397607911, guid: 36854d69839d48c4cbb94b0a1ec910a6, type: 3}
+  - key: hit_fire
+    value: {fileID: 2504214343621411470, guid: 4c59b491b7b46184c9550f992d6ade19, type: 3}
+  - key: hit_light
+    value: {fileID: 8771972552311404799, guid: 70ba2836c96e54543920403191d2aaf8, type: 3}
+  - key: bubble_glows
+    value: {fileID: 5824670795371433373, guid: 7b479cec281f1eb49aa9e556df1ecb38, type: 3}
+  - key: smile
+    value: {fileID: 100000, guid: 1bc4a709f24528b40984e62f32e398a0, type: 3}

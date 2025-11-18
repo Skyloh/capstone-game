@@ -40,8 +40,11 @@ public class BurningHandsAbility : AAbility
 
             damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
-            bar_module.BreakLeading(breaks);
+            // VFX
+            // no break vfx for this and static shower
+            EffectManager.DoEffectOn(unit_index, team_index, "hit_fire", 1f, 2f);
 
+            bar_module.BreakLeading(breaks);
             health_module.ChangeHealth(damage);
 
             Debug.Log($"Damaging {target.GetName()} for {damage}.");

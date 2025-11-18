@@ -33,6 +33,9 @@ public class TradeWeaponAbility : AAbility
 
         Debug.Log($"Weapons changed to user: {aff_module.GetRawWeaponAffinity()} and target: {t_aff_module.GetRawWeaponAffinity()}!");
 
+        EffectManager.DoEffectOn(u_unit_index, u_team_index, "electric", 2f, 2f);
+        EffectManager.DoEffectOn(t_unit_index, t_team_index, "electric", 2f, 2f);
+
         yield return new WaitForSeconds(0.5f);
     }
 }
