@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/NewRoomTest.unity
     guid: 99108d608057d2f48a7c33c5ab4f57a6
   - enabled: 1
-    path: Assets/Scenes/TilemapTest.unity
+    path: Assets/Scenes/TilemapTEst.unity
     guid: 7bcb05447cc262840ae46ab58ffac392
   - enabled: 1
     path: Assets/Scenes/BattleScene.unity
@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PauseMenuTest.unity
     guid: 479ed20991860442997f9e283d4aac3c
+  - enabled: 1
+    path: Assets/Scenes/BlankScene.unity
+    guid: 3d88e93cfa9a4d647bec5373972df641
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: cfd2e47940b32074e87b7682ae79847e, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -214,6 +214,9 @@ public class CombatManager : MonoBehaviour
         if (CheckBattleEnded(out var state))
         {
             Debug.LogError("BATTLE RESOLVED WITH STATE: " + state);
+
+            SceneTransitionManager.Transition("TilemapTEst");
+
             return;
         }
 

@@ -64082,6 +64082,50 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1229359766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1229359767}
+  - component: {fileID: 1229359768}
+  m_Layer: 0
+  m_Name: DDL_SceneTransitionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1229359767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229359766}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1229359768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229359766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b2eab7823e70e45a8ad6b2aa9ac548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1246156890
 GameObject:
   m_ObjectHideFlags: 0
@@ -64861,7 +64905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1987185118
 Transform:
   m_ObjectHideFlags: 0
@@ -64893,19 +64937,12 @@ MonoBehaviour:
   m_worldGrid: {fileID: 1032576368}
   m_combatZones:
   - m_priority: 0
-    m_minX: -2
+    m_minX: 3
     m_minY: -2
-    m_maxX: 2
+    m_maxX: 5
     m_maxY: 0
-    m_encounterChance: 0.25
-    m_encounterObject: {fileID: 11400000, guid: 3821a598f4762424e843a39edaffb7d6, type: 2}
-  - m_priority: 1
-    m_minX: 0
-    m_minY: -1
-    m_maxX: 2
-    m_maxY: 1
-    m_encounterChance: 0.5
-    m_encounterObject: {fileID: 11400000, guid: 0bc1266702304ea458b95d88806af539, type: 2}
+    m_encounterChance: 0.254
+    m_encounterObject: {fileID: 11400000, guid: ac6853a70795e5e4da28cacf95fcd9d6, type: 2}
   m_debugZoneGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
@@ -65079,3 +65116,4 @@ SceneRoots:
   - {fileID: 1703007145}
   - {fileID: 261118379}
   - {fileID: 2002635477}
+  - {fileID: 1229359767}

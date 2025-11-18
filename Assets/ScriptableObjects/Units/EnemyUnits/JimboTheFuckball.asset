@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70bf660a9a636244f941ae0c2124787b, type: 3}
+  m_Name: JimboTheFuckball
+  m_EditorClassIdentifier: 
+  m_name: Jimbo
+  m_maxHealth: 1
+  m_abilities:
+  - EnemyAttackAbility
+  portrait: {fileID: 7457233804260446255, guid: 27915a39dde8e434f8f1c9f4ed0470f2, type: 3}
+  characterDescription: Them.
+  prefab: {fileID: -2253911629886400664, guid: 86ceb09238cfd784f82e6485c4e5d054, type: 3}
+  m_affinityBarSlotCount: 1

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +15,7 @@ public class CombatZoneManager : MonoBehaviour
     [Space]
 
     [SerializeField] private Grid m_worldGrid;
-    [SerializeField] private CombatZone[] m_combatZones; // TODO make into a quadtree?
+    [SerializeField] private List<CombatZone> m_combatZones; // TODO make into a quadtree?
 
     [Space]
 
@@ -45,7 +47,8 @@ public class CombatZoneManager : MonoBehaviour
 
         // swap into combat scene
         // the CombatManager will be initialized with data sourced from the runtime combat data SO
-        SceneManager.LoadScene("BattleScene");
+        //SceneManager.LoadScene("BattleScene");
+        SceneTransitionManager.Transition("BattleScene");
     }
 
     /// <summary>
@@ -133,7 +136,7 @@ public class CombatZoneManager : MonoBehaviour
             center.z = 0.5f;
             var size = tr_world_position - bl_world_position;
 
-            var color = m_debugZoneGradient.Evaluate((float)index++ / m_combatZones.Length);
+            var color = m_debugZoneGradient.Evaluate((float)index++ / m_combatZones.Count);
             color.a = m_zoneAlpha;
             Gizmos.color = color;
             Gizmos.DrawCube(center, size);
