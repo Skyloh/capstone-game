@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer playerSpriteRenderer;
 
     public Tilemap collisionTilemap;
+    public Tilemap collisionDecorTilemap;
     public Tilemap loadingZoneTilemap;
 
     private bool inputLocked = false;
@@ -186,7 +187,7 @@ public class PlayerController : MonoBehaviour
         foreach (Vector2 point in checkPoints)
         {
             Vector3Int cell = grid.WorldToCell(point);
-            if (collisionTilemap.HasTile(cell))
+            if (collisionTilemap.HasTile(cell) || collisionDecorTilemap.HasTile(cell))
             {
                 return true;
             }
