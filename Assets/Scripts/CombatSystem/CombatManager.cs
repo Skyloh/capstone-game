@@ -102,6 +102,7 @@ public class CombatManager : MonoBehaviour
         }
 
         m_enemyCPU = new CPUCore(1, m_combatModel, this);
+         FindObjectOfType<BattlebackSpriteManager>().SetRandomBattleback();
     }
 
     /// <summary>
