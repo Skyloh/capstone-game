@@ -58,3 +58,9 @@
 .unity-button:active {
     translate: 0 2px;
 }
+
+.off-screen {
+    translate: -142px 0;
+    transition-property: translate;
+    transition-duration: 0.3s;
+}

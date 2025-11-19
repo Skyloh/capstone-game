@@ -18,6 +18,7 @@ namespace CombatSystem.View
         // Start is called befomre the first frame update
         public ViewSprites battleSprites;
         private VisualElement ui;
+        private VisualElement commandMenu;
         private VisualElement playerWeaknessIcon;
         private CombatManager combatManager;
         private readonly Button[] actions = new Button[4];
@@ -86,6 +87,7 @@ namespace CombatSystem.View
 
         private void OnSelectablePlayerHovered(int index, IUnit unit)
         {
+            commandMenu.RemoveFromClassList("off-screen");
             selectedPlayer = index;
             DisplayUnit(GetPlayerUnit(index));
         }
@@ -123,6 +125,7 @@ namespace CombatSystem.View
             actionDescription = ui.Q<Label>("ActionDescription");
             confirmButton = ui.Q<Button>("Confirm");
             enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
+            commandMenu =ui.Q<VisualElement>("CommandMenu");
             portrait = ui.Q<VisualElement>("Portrait");
             enemyPortrait = ui.Q<VisualElement>("EnemyPortrait");
             confirmButton.RegisterCallback<ClickEvent>((ce) =>
@@ -137,6 +140,7 @@ namespace CombatSystem.View
             unitSelector.EnemyHovered += OnEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
             // DisplayUnit(GetPlayerUnit(0));
+
         }
 
         private int subscribedToEnemy = -1;
