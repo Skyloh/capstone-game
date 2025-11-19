@@ -64,3 +64,9 @@
     transition-property: translate;
     transition-duration: 0.3s;
 }
+
+.off-screen-top {
+    translate: 0 -110px;
+    transition-property: translate;
+    transition-duration: 0.3s;
+}

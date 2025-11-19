@@ -33,6 +33,7 @@ namespace CombatSystem.View
         private VisualElement playerWeaponIcon;
         private VisualElement portrait;
         private VisualElement enemyPortrait;
+        private VisualElement enemyInfo;
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
@@ -128,6 +129,7 @@ namespace CombatSystem.View
             commandMenu =ui.Q<VisualElement>("CommandMenu");
             portrait = ui.Q<VisualElement>("Portrait");
             enemyPortrait = ui.Q<VisualElement>("EnemyPortrait");
+            enemyInfo = ui.Q<VisualElement>("EnemyInfo");
             confirmButton.RegisterCallback<ClickEvent>((ce) =>
             {
                 if (confirmCallback != null)
@@ -162,6 +164,7 @@ namespace CombatSystem.View
             {
                 return;
             }
+            enemyInfo.RemoveFromClassList("off-screen-top");
 
             OnSelectableEnemyHovered(index, unit);
         }
@@ -172,6 +175,7 @@ namespace CombatSystem.View
                 return;
             }
 
+            enemyInfo.RemoveFromClassList("off-screen-top");
             if (subscribedToEnemy != -1)
             {
                 var sub_enemy_unit = GetEnemyUnit(subscribedToEnemy);
