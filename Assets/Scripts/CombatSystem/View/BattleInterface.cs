@@ -134,11 +134,13 @@ namespace CombatSystem.View
             });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
             unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
+            unitSelector.EnemyHovered += OnEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
             // DisplayUnit(GetPlayerUnit(0));
         }
 
         private int subscribedToEnemy = -1;
+        private int subscribedToHoverEnemy = -1;
 
         private void UpdateEnemyHealth(int max, int current)
         {
@@ -146,7 +148,19 @@ namespace CombatSystem.View
             enemyHealthbar.highValue = max;
             enemyHealthbar.value = current;
         }
+        private void OnEnemyHovered(int index, IUnit unit)
+        {
+            if(currentState == BattleStates.TargetSelection || currentState == BattleStates.AffinityTargeting)
+            {
+                return;
+            }
+            if (subscribedToHoverEnemy == index)
+            {
+                return;
+            }
 
+            OnSelectableEnemyHovered(index, unit);
+        }
         private void OnSelectableEnemyHovered(int index, IUnit unit)
         {
             if (subscribedToEnemy == index)
