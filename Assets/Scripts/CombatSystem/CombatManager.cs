@@ -154,8 +154,7 @@ public class CombatManager : MonoBehaviour
     /// <param name="action_information"></param>
     public void PerformAction(ActionData action_information)
     {
- FindObjectOfType<AttackBannerUI>().ShowBanner(action_information.Action.ToString());
-
+ 
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 
@@ -174,6 +173,10 @@ public class CombatManager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator IE_ResolveAbility(ActionData data)
     {
+        FindObjectOfType<AttackBannerUI>()
+            .ShowBanner(data.Action.GetAbilityData().Name);
+
+
         yield return data.Action.IE_ProcessAbility(data, m_combatModel, m_combatView.Value);
 
         var (team_index, unit_index) = data.UserTeamUnitIndex;
