@@ -1583,7 +1583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 1577903498}
-  displayDuration: 2
+  displayDuration: 10
 --- !u!4 &1586376081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 142724489824509764, guid: 6284b199c981e624587ab4f10c03fa73, type: 3}
