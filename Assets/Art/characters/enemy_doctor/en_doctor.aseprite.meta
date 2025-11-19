@@ -233,15 +233,15 @@ ScriptedImporter:
     uvTransform: {x: 59, y: 68}
   - name: en_doctor_Frame_5
     originalName: 
-    pivot: {x: 0.5263158, y: 0}
+    pivot: {x: 0.49186465, y: 0.083333336}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 63
       y: 134
-      width: 57
-      height: 37
+      width: 54
+      height: 48
     spriteID: 4ad0a2869a966a24893573c78df5f787
     spriteBone: []
     spriteOutline: []
@@ -303,10 +303,10 @@ ScriptedImporter:
     - name: en_doctor_Frame_5
       frameIndex: 5
       cellRect:
-        x: 2
-        y: 0
-        width: 57
-        height: 37
+        x: 5
+        y: 4
+        width: 54
+        height: 48
       spriteId: 4ad0a2869a966a24893573c78df5f787
     linkedCells: []
     parentIndex: -1

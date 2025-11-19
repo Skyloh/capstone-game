@@ -233,15 +233,15 @@ ScriptedImporter:
     uvTransform: {x: 68, y: 70}
   - name: en_zombie_dog_idle_animate-Sheet_Frame_5
     originalName: 
-    pivot: {x: 0.5166667, y: 0}
+    pivot: {x: 0.49090907, y: 0.125}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 138
       y: 70
-      width: 60
-      height: 43
+      width: 55
+      height: 32
     spriteID: e06c171ce9a5f5a4598657c86b393aaf
     spriteBone: []
     spriteOutline: []
@@ -303,10 +303,10 @@ ScriptedImporter:
     - name: en_zombie_dog_idle_animate-Sheet_Frame_5
       frameIndex: 5
       cellRect:
-        x: 1
+        x: 4
         y: 0
-        width: 60
-        height: 43
+        width: 55
+        height: 32
       spriteId: e06c171ce9a5f5a4598657c86b393aaf
     linkedCells: []
     parentIndex: -1
