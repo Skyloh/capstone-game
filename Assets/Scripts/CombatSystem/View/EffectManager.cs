@@ -41,6 +41,7 @@ public class EffectManager : MonoBehaviour
 
         instance.transform.position = ths.m_effectLocuses[index].position;
 
+        // if position is to be randomly displaced, do so.
         if (do_jitter)
         {
             var displace = Random.insideUnitCircle;
@@ -51,6 +52,12 @@ public class EffectManager : MonoBehaviour
 
             instance.transform.position = pos;
         }
+
+        // add a small vertical offset
+        var vertical_displace = instance.transform.position;
+        vertical_displace.y += 0.5f;
+
+        instance.transform.position = vertical_displace;
 
         instance.transform.localScale = Vector3.one * scale;
 

@@ -54,12 +54,14 @@ public class SweepAbility : AAbility
             // Attack VFX
             EffectManager.DoEffectOn(unit_index, team_index, "magic_poof", 1f, 2f);
 
+            yield return new WaitForSeconds(0.3f);
+
             // Break VFX
             int first_index = bar_module.GetFirstNonNoneIndex();
             var elements_broken = bar_module.GetSubrange(first_index, first_index + breaks_array[t_index]);
             foreach (var affinity in elements_broken)
             {
-                EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+                EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
                 yield return new WaitForSeconds(0.1f);
             }
 

@@ -41,9 +41,20 @@ public class BurningHandsAbility : AAbility
             damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 
             // VFX
-            // no break vfx for this and static shower
             EffectManager.DoEffectOn(unit_index, team_index, "hit_fire", 1f, 2f);
 
+            yield return new WaitForSeconds(0.35f);
+
+            // Break VFX
+            int index = bar_module.GetFirstNonNoneIndex();
+            var elements_broken = bar_module.GetSubrange(index, index + breaks);
+            foreach (var affinity in elements_broken)
+            {
+                EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            // data application
             bar_module.BreakLeading(breaks);
             health_module.ChangeHealth(damage);
 

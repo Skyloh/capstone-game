@@ -52,12 +52,14 @@ public class BlindsideAbility : AAbility
         // Attack VFX
         EffectManager.DoEffectOn(unit_index, team_index, "blood", 2f, 4f);
 
+        yield return new WaitForSeconds(0.3f);
+
         // Break VFX
         int index = abar_module.GetFirstNonNoneIndex();
         var elements_broken = abar_module.GetSubrange(index, index + breaks);
         foreach (var affinity in elements_broken)
         {
-            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
             yield return new WaitForSeconds(0.1f);
         }
 

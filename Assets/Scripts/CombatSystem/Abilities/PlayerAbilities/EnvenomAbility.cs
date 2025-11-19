@@ -43,12 +43,14 @@ public class EnvenomAbility : AAbility
         // VFX
         EffectManager.DoEffectOn(unit_index, team_index, "death_skull", 1f, 2f);
 
+        yield return new WaitForSeconds(0.3f);
+
         // Break VFX
         int index = abar_module.GetFirstNonNoneIndex();
         var elements_broken = abar_module.GetSubrange(index, index + breaks);
         foreach (var affinity in elements_broken)
         {
-            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f);
+            EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
             yield return new WaitForSeconds(0.1f);
         }
 

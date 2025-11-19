@@ -633,7 +633,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runtimeCombatData: {fileID: 11400000, guid: 32b5de1fc6f221842adc64349a999b04, type: 2}
   battleSprites: {fileID: 11400000, guid: 244b08f6b59703947861982074a67b07, type: 2}
-  cpuBrain: {fileID: 11400000, guid: 00f71bc3ca079db4695b269bd9905bd7, type: 2}
   affinityTargeter: {fileID: 1363942132}
 --- !u!114 &812212316
 MonoBehaviour:
@@ -704,6 +703,7 @@ MonoBehaviour:
   - {fileID: 1586376081}
   - {fileID: 45862216}
   m_effectParent: {fileID: 1976557112}
+  m_maxTeamSize: 4
 --- !u!114 &899000749 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8621094548127401259, guid: 6284b199c981e624587ab4f10c03fa73, type: 3}

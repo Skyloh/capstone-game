@@ -4843,7 +4843,7 @@ ParticleSystemRenderer:
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 5
-  m_SortingFudge: -1
+  m_SortingFudge: -10
   m_NormalDirection: 1
   m_ShadowBias: 0
   m_RenderAlignment: 0
