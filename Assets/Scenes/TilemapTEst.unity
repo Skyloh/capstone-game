@@ -65954,11 +65954,11 @@ MonoBehaviour:
     m_encounterChance: 0.254
     m_encounterObject: {fileID: 11400000, guid: ac6853a70795e5e4da28cacf95fcd9d6, type: 2}
   - m_priority: 0
-    m_minX: -9
-    m_minY: -2
+    m_minX: 3
+    m_minY: 4
     m_maxX: -7
-    m_maxY: 0
-    m_encounterChance: 0.254
+    m_maxY: -2
+    m_encounterChance: 0.1
     m_encounterObject: {fileID: 11400000, guid: c475ecbda84abfa48ac14caa93804709, type: 2}
   m_debugZoneGradient:
     serializedVersion: 2
