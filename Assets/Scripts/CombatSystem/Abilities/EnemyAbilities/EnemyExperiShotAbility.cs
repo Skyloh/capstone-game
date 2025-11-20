@@ -11,7 +11,7 @@ public class EnemyExperiShotAbility : AAbility
             Name = "Experimental Shot",
             Description = "Enemy-only. Deals random elemented damage to three random enemies.",
             RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (min: 1, max: 3) } }, // targets 3 opposing units
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.NonUnique,
             RequiredMetadata = new List<string>()
         });
     }

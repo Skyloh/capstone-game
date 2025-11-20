@@ -7,7 +7,7 @@ public class System_ShockAbility : AAbility
     {
         SetAbilityData(new()
         {
-            Name = "sys_Shock",
+            Name = "Shocked...",
             Description = "System-only. Performed when failing the Shock status effect.",
             RequiredTargets = null, // ignores selection process
             TargetCriteria = SelectionFlags.None, // ignores selection process

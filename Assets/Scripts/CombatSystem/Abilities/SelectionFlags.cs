@@ -7,5 +7,6 @@ public enum SelectionFlags
     Ally = 1,
     Enemy = 2,
     Actionable = 4,
-    Alive = 8
+    Alive = 8,
+    NonUnique = 16
 }

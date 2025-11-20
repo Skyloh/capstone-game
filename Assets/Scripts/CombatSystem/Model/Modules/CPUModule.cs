@@ -78,7 +78,14 @@ public class CPUModule : AModule
                 //
                 // use Goad to find a surefire target if we're attacking an Enemy team. Do not use Goad if
                 // we're searching our allies for a target, because that is dumb.
-                var unit = FindValidTarget(unit_pool, model, target_criteria, entry.Key != 0);
+                //
+                // allow duplicates if target criteria allows for non-unique selections
+                var unit = FindValidTarget(
+                    unit_pool, 
+                    model, 
+                    target_criteria, 
+                    allow_dupes: target_criteria.HasFlag(SelectionFlags.NonUnique), 
+                    use_rage: entry.Key != 0);
 
                 if (unit != null) // if one exists
                 {
@@ -120,7 +127,7 @@ public class CPUModule : AModule
         }
     }
 
-    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria, bool use_rage = false)
+    private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria, bool allow_dupes = false, bool use_rage = false)
     {
         // pick a random unit from the pool, dropping them if they dont match the criteria
         CombatUnit unit;
@@ -132,7 +139,9 @@ public class CPUModule : AModule
             int index = GetIndexOfPotentialUnit(unit_pool, use_rage);
 
             unit = unit_pool[index];
-            unit_pool.RemoveAt(index);
+
+            // empty the pool of the unit if no duplicate unit selections are allowed
+            if (!allow_dupes) unit_pool.RemoveAt(index);
 
         } while (!MatchesCriteria(unit, model, target_criteria));
 
