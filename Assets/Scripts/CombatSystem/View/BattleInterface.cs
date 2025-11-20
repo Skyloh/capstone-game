@@ -12,6 +12,7 @@ namespace CombatSystem.View
     public class BattleInterface : MonoBehaviour, ICombatView
     {
         [SerializeField] private CombatDataSO runtimeCombatData;
+        [SerializeField] private AttackBannerUI attackBannerReference;
 
         [Space]
 
@@ -262,7 +263,9 @@ namespace CombatSystem.View
         {
             Debug.Log($"Phase change: {phase_turn_number}");
 
-            yield break;
+            attackBannerReference.ShowBanner(phase_turn_number == 1 ? "Player Phase!" : "Enemy Phase...", phase_turn_number == 1 ? Color.green : Color.red);
+
+            yield return new WaitForSecondsRealtime(2f);
         }
 
         public void UpdateView(CombatUnit new_unit, int team_id, int unit_index)

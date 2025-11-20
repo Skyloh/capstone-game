@@ -633,6 +633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runtimeCombatData: {fileID: 11400000, guid: 32b5de1fc6f221842adc64349a999b04, type: 2}
+  attackBannerReference: {fileID: 1577903500}
   battleSprites: {fileID: 11400000, guid: 244b08f6b59703947861982074a67b07, type: 2}
   affinityTargeter: {fileID: 1363942132}
 --- !u!114 &812212316
