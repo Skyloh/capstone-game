@@ -35,6 +35,9 @@ namespace CombatSystem.View
         private VisualElement enemyPortrait;
         private VisualElement enemyInfo;
 
+        StatusUpdater enemyStatusUpdater;
+
+
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
 
@@ -61,6 +64,7 @@ namespace CombatSystem.View
         private void Awake()
         {
             ui = GetComponent<UIDocument>().rootVisualElement;
+            enemyStatusUpdater = GetComponent<StatusUpdater>();
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
             InitializeCombat();
@@ -206,6 +210,15 @@ namespace CombatSystem.View
             }
             if (enemy_unit.TryGetModule<ReferenceModule>(out var refModule)) {
                 enemyPortrait.style.backgroundImage = new StyleBackground(refModule.CombatUnit.portrait);
+            }
+
+            if(enemy_unit.TryGetModule<StatusModule>(out var statusModule))
+            {
+                enemyStatusUpdater.Display(statusModule);
+            }
+            else
+            {
+                enemyStatusUpdater.Display(null);
             }
 
             subscribedToEnemy = index;
