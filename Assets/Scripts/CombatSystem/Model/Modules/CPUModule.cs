@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Random = UnityEngine.Random;
 
 public class CPUModule : AModule
@@ -92,6 +93,8 @@ public class CPUModule : AModule
                     // when we get one, add them to the list and track that we got them
                     building_targets.Add(unit);
                     chosen_so_far++;
+
+                    UnityEngine.Debug.Log("Adding unit: " + unit.GetName() + ". Current count: " + chosen_so_far);
                 }
                 else // if we have no more to get, make sure we got enough to move on
                 {
@@ -113,6 +116,12 @@ public class CPUModule : AModule
         var target_ids = new (int team_id, int unit_id)[building_targets.Count];
         for (int i = 0; i < building_targets.Count; ++i)
         {
+            // DEBUG
+            if (building_targets[i] == null)
+            {
+                UnityEngine.Debug.Break();
+            }
+
             target_ids[i] = building_targets[i].GetIndices();
         }
 

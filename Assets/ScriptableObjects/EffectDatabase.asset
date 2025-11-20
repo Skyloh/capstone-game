@@ -57,3 +57,5 @@ MonoBehaviour:
     value: {fileID: 5824670795371433373, guid: 7b479cec281f1eb49aa9e556df1ecb38, type: 3}
   - key: smile
     value: {fileID: 100000, guid: 1bc4a709f24528b40984e62f32e398a0, type: 3}
+  - key: hit_misc
+    value: {fileID: 100000, guid: 27150693a691ab64e9cc24f5b85a4ba6, type: 3}

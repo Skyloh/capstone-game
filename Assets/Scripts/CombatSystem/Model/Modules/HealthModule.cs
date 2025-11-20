@@ -20,6 +20,8 @@ public class HealthModule : AModule
         m_currentHealth = Mathf.Max(Mathf.Min(health, m_maxHealth), 0); // bounds-clamping health
 
         OnHealthChanged?.Invoke(m_maxHealth, m_currentHealth);
+
+        Debug.Log("ChangeHealth invoked.");
     }
     
     public void ChangeHealth(int decrease_amount) => SetHealth(m_currentHealth - decrease_amount);

@@ -259,11 +259,13 @@ namespace CombatSystem.View
             TriggerState(BattleStates.UnitSelection);
         }
 
-        public IEnumerator NextPhase(int phase_turn_number)
+        public IEnumerator NextPhase(int to_phase_number)
         {
-            Debug.Log($"Phase change: {phase_turn_number}");
+            Debug.Log($"Phase change: {to_phase_number}");
 
-            attackBannerReference.ShowBanner(phase_turn_number == 1 ? "Player Phase!" : "Enemy Phase...", phase_turn_number == 1 ? Color.green : Color.red);
+            yield return new WaitForSecondsRealtime(1f);
+
+            attackBannerReference.ShowBanner(to_phase_number == 0 ? "Player Phase!" : "Enemy Phase...", to_phase_number == 0 ? Color.green : Color.red);
 
             yield return new WaitForSecondsRealtime(2f);
         }

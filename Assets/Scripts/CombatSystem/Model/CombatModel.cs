@@ -54,6 +54,6 @@ public class CombatModel : ICombatModel
 
         if (did_wrap) m_turnCount++;
 
-        return m_turnCount;
+        return m_currentActiveTeam;
     }
 }

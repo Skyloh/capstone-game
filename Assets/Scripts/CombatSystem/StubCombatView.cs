@@ -86,9 +86,9 @@ public class StubCombatView : MonoBehaviour, ICombatView
         // DESIGN NOTE: Handling "back" inputs between signal states? E.g. going back after selecting a unit.
     }
 
-    public IEnumerator NextPhase(int phase_turn_number)
+    public IEnumerator NextPhase(int phase_number)
     {
-        Debug.Log($"Next Phase stub. Turn count is {phase_turn_number}.");
+        Debug.Log($"Next Phase stub. Phase number is {phase_number}.");
 
         yield return null;
     }

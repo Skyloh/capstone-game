@@ -154,13 +154,16 @@ public class CombatManager : MonoBehaviour
     /// <param name="action_information"></param>
     public void PerformAction(ActionData action_information)
     {
- 
+        // highlight them with an animation to show that they are acting.
+        var (team_index, unit_index) = action_information.UserTeamUnitIndex;
+        EffectManager.DoEffectOn(unit_index, team_index, "hit_misc", 2f, 4f);
+
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
 
         StartCoroutine(
             IE_ResolveAbility(
-                TestForShockStatus(action_information)));
+                TestForStunStatus(TestForShockStatus(action_information))));
 
         // CheckStateThenNext is called upon ability completion
     }
@@ -343,16 +346,54 @@ public class CombatManager : MonoBehaviour
         return on_action;
     }
 
+    private ActionData TestForStunStatus(ActionData on_action)
+    {
+        var (team_index, unit_index) = on_action.UserTeamUnitIndex;
+        if (m_combatModel.GetUnitByIndex(team_index, unit_index).TryGetModule<StatusModule>(out var s_module)
+            && s_module.HasStatus(Status.Stun))
+        {
+            return new ActionData()
+            {
+                Action = new System_StunAbility(),
+                UserTeamUnitIndex = on_action.UserTeamUnitIndex
+            };
+        }
+
+        return on_action;
+    }
+
+    private void Player_TestForStunStatus(Team team)
+    {
+        foreach (var unit in team.GetUnits())
+        {
+            if (unit.TryGetModule<StatusModule>(out var status_module)
+                && status_module.HasStatus(Status.Stun))
+            {
+                Debug.Log("Stunned!");
+                team.ConsumeTurnOfUnit(unit);
+            }
+        }
+    }
+
     private IEnumerator IE_BeginNextTeamPhase()
     {
         yield return m_combatView.Value.NextPhase(m_combatModel.IncActiveTeamIndex());
 
         var next_team = m_combatModel.GetTeam(m_combatModel.CurrentActiveTeamIndex());
         next_team.ResetActionability();
-        TestForStunStatus(next_team); // consumes any Stunned unit actions
+
+        // Tests for stun status are performed during action selection
+        // TestForStunStatus(next_team); // consumes any Stunned unit actions
 
         if (m_combatModel.CurrentActiveTeamIndex() == m_playerTeamID)
         {
+            // hacky implementation, but since stun consumes a turn, the player units who are stunned should not be selectable.
+            // this is only possible if their turns are consumed before selection begins, unlike enemies where you cannot tell the
+            // difference between their action being taken and them being "selected".
+            //
+            // Enemies consume Stun when they try to perform an action. This allows the player to see when they lose a turn to stun.
+            // For the player, since any unit can be selected at once, stun immediately takes their turn at phase start.
+            Player_TestForStunStatus(next_team);
             m_combatView.Value.BeginUnitSelection();
         }
         else
@@ -367,19 +408,6 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         SceneTransitionManager.Transition("TilemapTEst");
-    }
-
-    private void TestForStunStatus(Team team)
-    {
-        foreach (var unit in team.GetUnits())
-        {
-            if (unit.TryGetModule<StatusModule>(out var status_module)
-                && status_module.HasStatus(Status.Stun))
-            {
-                Debug.Log("Stunned!");
-                team.ConsumeTurnOfUnit(unit);
-            }
-        }
     }
 }
 
