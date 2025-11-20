@@ -130,7 +130,7 @@ namespace CombatSystem.View
             actionDescription = ui.Q<Label>("ActionDescription");
             confirmButton = ui.Q<Button>("Confirm");
             enemyHealthbar = ui.Q<ProgressBar>("EnemyHealthbar");
-            commandMenu =ui.Q<VisualElement>("CommandMenu");
+            commandMenu = ui.Q<VisualElement>("CommandMenu");
             portrait = ui.Q<VisualElement>("Portrait");
             enemyPortrait = ui.Q<VisualElement>("EnemyPortrait");
             enemyInfo = ui.Q<VisualElement>("EnemyInfo");
@@ -160,7 +160,7 @@ namespace CombatSystem.View
         }
         private void OnEnemyHovered(int index, IUnit unit)
         {
-            if(currentState == BattleStates.TargetSelection || currentState == BattleStates.AffinityTargeting)
+            if (currentState == BattleStates.TargetSelection || currentState == BattleStates.AffinityTargeting)
             {
                 return;
             }
@@ -208,11 +208,12 @@ namespace CombatSystem.View
                 healthModule.OnHealthChanged += UpdateEnemyHealth;
                 UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth());
             }
-            if (enemy_unit.TryGetModule<ReferenceModule>(out var refModule)) {
+            if (enemy_unit.TryGetModule<ReferenceModule>(out var refModule))
+            {
                 enemyPortrait.style.backgroundImage = new StyleBackground(refModule.CombatUnit.portrait);
             }
 
-            if(enemy_unit.TryGetModule<StatusModule>(out var statusModule))
+            if (enemy_unit.TryGetModule<StatusModule>(out var statusModule))
             {
                 enemyStatusUpdater.Display(statusModule);
             }
@@ -474,7 +475,12 @@ namespace CombatSystem.View
         {
             HideActionButtons();
             // ShowConfirmButton();
-            confirmCallback = (ce) => ConfirmTargets();
+            confirmCallback = (ce) =>
+            {
+                ConfirmTargets();
+                confirmCallback = null;
+                HideConfirmButton();
+            };
             selectedTargets.Clear();
             var abilityData = actionData.Action.GetAbilityData();
             actionData.UserTeamUnitIndex.team_index = 0;
@@ -745,6 +751,7 @@ namespace CombatSystem.View
                         HideConfirmButton();
                         affinityTargeter.CancelRequests();
                         confirmCallback = null;
+                        HideConfirmButton();
                         NextMetadata();
                     };
                     IAffinityTargeter.SelectedOne request_callback = (int index) =>

@@ -580,6 +580,7 @@ GameObject:
   - component: {fileID: 812212316}
   - component: {fileID: 812212317}
   - component: {fileID: 812212318}
+  - component: {fileID: 812212319}
   m_Layer: 5
   m_Name: BattleInterface
   m_TagString: Untagged
@@ -704,6 +705,18 @@ MonoBehaviour:
   - {fileID: 45862216}
   m_effectParent: {fileID: 1976557112}
   m_maxTeamSize: 4
+--- !u!114 &812212319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812212312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384c1642300cd8e4e9295cad27de4d16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &899000749 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8621094548127401259, guid: 6284b199c981e624587ab4f10c03fa73, type: 3}
