@@ -32,7 +32,7 @@ public class AttackAbility : AAbility
 
         int breaks = abar_module.CalculateLeadingBreaks(aff_module.GetWeaponAffinity());
 
-        int damage = AbilityUtils.CalculateDamage(50, 70);
+        int damage = AbilityUtils.CalculateDamage(20, 40);
         for (int i = 0; i < breaks; ++i)
         {
             damage += AbilityUtils.CalculateDamage(10, 20);
