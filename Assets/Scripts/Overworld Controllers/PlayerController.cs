@@ -222,9 +222,11 @@ public class PlayerController : MonoBehaviour
     }
 
     // Interact with an NPC in the facing direction
+    // Replace the Interact() method in your PlayerController with this version
+
     private void Interact()
     {
-        // Raycast in facing direction to find NPCs
+        // Raycast in facing direction to find NPCs or Documents
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
             facingDirection,
@@ -232,23 +234,38 @@ public class PlayerController : MonoBehaviour
             LayerMask.GetMask("Default")
         );
 
+        // Check if we hit an NPC
         if (hit.collider != null && hit.collider.CompareTag("NPC"))
         {
             hit.collider.GetComponent<NPCController>()?.Interact();
+            return;
         }
-        else
-        {
-            Vector3 checkPosition = transform.position + facingDirection * interactionDistance;
-            // Number here can be changed to adjust interaction range along with the variable up top
-            Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(checkPosition, 0.3f);
 
-            foreach (Collider2D col in nearbyColliders)
+        // Check if we hit a Document
+        if (hit.collider != null && hit.collider.CompareTag("Document"))
+        {
+            hit.collider.GetComponent<InteractableDocument>()?.Interact();
+            return;
+        }
+
+        // If raycast didn't hit anything, do area check
+        Vector3 checkPosition = transform.position + facingDirection * interactionDistance;
+        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(checkPosition, 0.3f);
+
+        foreach (Collider2D col in nearbyColliders)
+        {
+            // Check for NPCs first
+            if (col.CompareTag("NPC"))
             {
-                if (col.CompareTag("NPC"))
-                {
-                    col.GetComponent<NPCController>()?.Interact();
-                    break;
-                }
+                col.GetComponent<NPCController>()?.Interact();
+                return;
+            }
+
+            // Then check for Documents
+            if (col.CompareTag("Document"))
+            {
+                col.GetComponent<InteractableDocument>()?.Interact();
+                return;
             }
         }
     }
