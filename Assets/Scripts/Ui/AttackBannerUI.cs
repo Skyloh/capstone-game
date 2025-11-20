@@ -16,6 +16,8 @@ public class AttackBannerUI : MonoBehaviour
         var root = uiDocument.rootVisualElement;
         banner = root.Q<VisualElement>("AbilityBanner");
         bannerText = root.Q<Label>("AbilityBannerText");
+        if (banner != null)
+            banner.pickingMode = PickingMode.Ignore;
     }
 
     public void ShowBanner(string text)
