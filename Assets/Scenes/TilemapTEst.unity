@@ -65954,12 +65954,33 @@ MonoBehaviour:
     m_encounterChance: 0.254
     m_encounterObject: {fileID: 11400000, guid: ac6853a70795e5e4da28cacf95fcd9d6, type: 2}
   - m_priority: 0
-    m_minX: 3
-    m_minY: 4
-    m_maxX: -7
-    m_maxY: -2
-    m_encounterChance: 0.1
+    m_minX: -7
+    m_minY: -2
+    m_maxX: 3
+    m_maxY: 4
+    m_encounterChance: 0.05
     m_encounterObject: {fileID: 11400000, guid: c475ecbda84abfa48ac14caa93804709, type: 2}
+  - m_priority: 1
+    m_minX: -7
+    m_minY: -2
+    m_maxX: 3
+    m_maxY: 4
+    m_encounterChance: 0.05
+    m_encounterObject: {fileID: 11400000, guid: 618668c046a7ad644a90e28d1d3b5d91, type: 2}
+  - m_priority: 2
+    m_minX: -7
+    m_minY: -2
+    m_maxX: 3
+    m_maxY: 4
+    m_encounterChance: 0.05
+    m_encounterObject: {fileID: 11400000, guid: b2601fa3536acc64683da16a71f910d0, type: 2}
+  - m_priority: 2
+    m_minX: -7
+    m_minY: -2
+    m_maxX: 3
+    m_maxY: 4
+    m_encounterChance: 0.05
+    m_encounterObject: {fileID: 11400000, guid: 1c3733dac04df4d4d938df90b711a62e, type: 2}
   m_debugZoneGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
@@ -66117,7 +66138,7 @@ MonoBehaviour:
   dialogueText: {fileID: 211291158}
   continueIndicator: {fileID: 0}
   inkJSON: {fileID: 4900000, guid: 4408f31710d564e43a0d9b9c4a21ed7f, type: 3}
-  autoStartOnLoad: 1
+  autoStartOnLoad: 0
   choices:
   - {fileID: 1456812089}
   - {fileID: 1246156890}

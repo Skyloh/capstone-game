@@ -31,7 +31,7 @@ public class BurningHandsAbility : AAbility
 
             int breaks = bar_module.CalculateLeadingBreaks(new HashSet<AffinityType>() { AffinityType.Fire, AffinityType.Physical });
 
-            int damage = AbilityUtils.CalculateDamage(20, 28); // 50 - 70 to 20 - 28 (div by 2.5)
+            int damage = AbilityUtils.CalculateDamage(10, 20);
 
             for (int i = 0; i < breaks; ++i)
             {
