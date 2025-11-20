@@ -53,10 +53,14 @@ public class AttackAbility : AAbility
             yield return new WaitForSeconds(0.1f);
         }
 
+        Debug.Log("Finished Attack VFX.");
+
         // Application of data
         yield return new WaitForSeconds(0.2f);
 
         abar_module.BreakLeading(breaks);
         h_module.ChangeHealth(damage);
+
+        Debug.Log("Finished Attack data application.");
     }
 }

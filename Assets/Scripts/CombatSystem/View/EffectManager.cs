@@ -73,5 +73,7 @@ public class EffectManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         Destroy(g);
+
+        Debug.Log("Destroyed " + g.name + " after duration: " + duration);
     }
 }
