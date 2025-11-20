@@ -52,7 +52,15 @@ public class DelayAbility : AAbility
             // during the metadata fill step in the View implementations.
             foreach (string entry in split_aiti_entries)
             {
-                elements.Add(AbilityUtils.ParseAffinityIndexTargetIndexString(entry));
+                var parsed = AbilityUtils.ParseAffinityIndexTargetIndexString(entry);
+
+                // skip duplicate items
+                if (elements.Contains(parsed))
+                {
+                    continue;
+                }
+
+                elements.Add(parsed);
             }
         }
 
