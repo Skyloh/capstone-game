@@ -47,7 +47,7 @@ public class SweepAbility : AAbility
 
             int base_damage = AbilityUtils.CalculateDamage(10, 20);
 
-            int damage = base_damage + SumAdditionalDamage(break_sum, 5, 10);
+            int damage = base_damage + SumAdditionalDamage(break_sum, 10, 20);
 
             damage = AbilityUtils.ApplyStatusScalars(user, target, damage);
 

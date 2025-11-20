@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerUnits:
   - {fileID: 11400000, guid: 5ced7b4e67739be44b50d723ff475dd9, type: 2}
-  - {fileID: 11400000, guid: 6541643c3d05dfc4eb5bd9d13269384c, type: 2}
-  - {fileID: 11400000, guid: 971d0a4b3cc1c3748853cd1d05b3a976, type: 2}
-  - {fileID: 11400000, guid: 90d0a519911b9304c9779e61a2ce00e9, type: 2}
+  - {fileID: 11400000, guid: aa284b1345ad3c744ad1e2e27c022fb9, type: 2}
+  - {fileID: 11400000, guid: 9a5a7eab6de549e46b86a94c960d3c3b, type: 2}
+  - {fileID: 11400000, guid: e4f90a75edfc83c49913bf62927cd741, type: 2}
   Encounter: {fileID: 11400000, guid: c475ecbda84abfa48ac14caa93804709, type: 2}

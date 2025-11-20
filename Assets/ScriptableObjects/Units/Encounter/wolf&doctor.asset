@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enemyBrainMap:
   - key: {fileID: 11400000, guid: fc1900daf48494d4b8a094329eaf7907, type: 2}
-    value: {fileID: 11400000, guid: 00f71bc3ca079db4695b269bd9905bd7, type: 2}
+    value: {fileID: 11400000, guid: d117811732d13c04f9397f573284e941, type: 2}
   - key: {fileID: 11400000, guid: 4a880f3aa6a4952448c33647baaff1f0, type: 2}
-    value: {fileID: 11400000, guid: 00f71bc3ca079db4695b269bd9905bd7, type: 2}
+    value: {fileID: 11400000, guid: 15c93ace44339364592f5429c0487581, type: 2}

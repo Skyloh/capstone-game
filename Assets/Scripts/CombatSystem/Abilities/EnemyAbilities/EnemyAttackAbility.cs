@@ -8,7 +8,7 @@ public class EnemyAttackAbility : AAbility
     {
         SetAbilityData(new()
         {
-            Name = "en_Attack",
+            Name = "Attack",
             Description = "Enemy-only. Deals red damage.",
             RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (min: 1, max: 1) } }, // targets 1 opposing unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
@@ -42,7 +42,7 @@ public class EnemyAttackAbility : AAbility
                 target, 
                 AbilityUtils.ApplyWeaknessAffinityScalar(
                     target,
-                    AbilityUtils.CalculateDamage(3, 8), 
+                    AbilityUtils.CalculateDamage(5, 10), 
                     AffinityType.Fire));
 
         h_module.ChangeHealth(damage);
