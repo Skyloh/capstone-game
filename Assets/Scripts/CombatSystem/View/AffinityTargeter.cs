@@ -11,7 +11,12 @@ namespace CombatSystem.View
 {
     public class AffinityTargeter : MonoBehaviour, IAffinityTargeter
     {
-        private readonly Queue<(IAffinityTargeter.Selectable predicate, IAffinityTargeter.SelectedOne callback)>
+        private enum RequestType
+        {
+            Single,
+            Pair
+        }
+        private readonly Queue<(RequestType req, IAffinityTargeter.Selectable predicate, IAffinityTargeter.SelectedOne callback)>
             requests = new();
 
 
@@ -81,12 +86,19 @@ namespace CombatSystem.View
                 Hover(0);
             }
 
-            requests.Enqueue((isSelectablePredicate, selectCallback));
+            requests.Enqueue((RequestType.Single, isSelectablePredicate, selectCallback));
         }
 
         public void SelectPair(IAffinityTargeter.SelectedOne selectedCallback,
-            IAffinityTargeter.Selectable pairCallback)
+            IAffinityTargeter.Selectable isSelectablePredicate)
         {
+            if (requests.Count == 0)
+            {
+                left.SetActive(true);
+                right.SetActive(true);
+                HoverPair(0);
+            }
+            requests.Enqueue((RequestType.Pair, isSelectablePredicate, selectedCallback));
         }
 
         public void CancelRequests()
@@ -288,7 +300,14 @@ namespace CombatSystem.View
                         else
                         {
                             hoverIndex = selectableIndex;
-                            Hover(hoverIndex);
+                            if (requests.Peek().req == RequestType.Single)
+                            {
+                                Hover(hoverIndex);
+                            }
+                            else
+                            {
+                                HoverPair(hoverIndex);
+                            }
                         }
 
                         break;
@@ -305,7 +324,14 @@ namespace CombatSystem.View
                         else
                         {
                             hoverIndex = selectableIndex;
-                            Hover(hoverIndex);
+                            if (requests.Peek().req == RequestType.Single)
+                            {
+                                Hover(hoverIndex);
+                            }
+                            else
+                            {
+                                HoverPair(hoverIndex);
+                            }
                         }
 
                         break;

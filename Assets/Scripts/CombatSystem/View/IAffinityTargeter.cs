@@ -12,6 +12,10 @@ namespace CombatSystem.View
         {
             return true;
         }
+        static bool AllWithoutLast(int index, int size, AffinityType affinity)
+        {
+            return index != size - 1;
+        }
         public delegate void SelectedOne(int selectedIndex);
         // public delegate void SelectedAdjacent(int selectedIndex);
         /// <summary>
@@ -31,6 +35,10 @@ namespace CombatSystem.View
         }
 
         void SelectPair(SelectedOne selectedCallback, Selectable pairCallback);
+        void SelectPair(SelectedOne selectedCallback)
+        {
+            SelectPair(selectedCallback, AllWithoutLast);
+        }
 
         void CancelRequests();
         // Task<int[]> SelectAdjacentAsync(Selectable selectableFilter, int amount);

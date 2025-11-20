@@ -274,7 +274,7 @@ namespace CombatSystem.View
                     healthbar.OnHealthChanged += unitSelector.Players[unit_index].UpdateHp;
                     if (new_unit.TryGetModule<ReferenceModule>(out var module))
                     {
-                        Debug.Log(module, module.CombatUnit);
+                        // Debug.Log(module, module.CombatUnit);
                         unitSelector.Players[unit_index].SetUnit(module.CombatUnit);
                     }
                     else
@@ -816,7 +816,22 @@ namespace CombatSystem.View
                 case MetadataConstants.WEAKNESS:
                 case MetadataConstants.WEAPON:
                 case MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX:
-                    Debug.Log($"unsupported attack {meta}");
+                    affinityTargeter.SelectPair((int index) =>
+                    {
+                        switch (actionData.TargetIndices.Length)
+                        {
+                            case 1:
+                                actionData.AddToMetadata(meta,
+                                    AbilityUtils.MakeAffinityIndexTargetIndexString(index,
+                                        (actionData.TargetIndices[0])));
+                                NextMetadata();
+                                break;
+                            default:
+                                TriggerState(BattleStates.UnitSelection);
+                                throw new Exception(
+                                    $"Do not know how to handle PAIR_AFF_INDEX_TARGET_INDEX for {selectedTargets.Count} players returning to unit selection");
+                        }
+                    }, IAffinityTargeter.AllWithoutLast);
                     break;
             }
         }
