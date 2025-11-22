@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +41,7 @@ namespace CombatSystem.View
         private bool isFocused = false;
 
         [SerializeField] private Slider healthSlider;
+        [SerializeField] private TextMeshProUGUI healthNumber;
         public void OnMouseEnter()
         {
             if (character != null)
@@ -80,6 +82,8 @@ namespace CombatSystem.View
 
 
             character = Instantiate(unit.prefab, animationParent);
+
+            healthNumber.text = unit.MaxHealth.ToString();
         }
 
         public ACombatUnitSO GetUnitDefinition()
@@ -170,13 +174,16 @@ namespace CombatSystem.View
             {
                 PlayDead();
                 healthSlider.gameObject.SetActive(false);
+                healthNumber.gameObject.SetActive(false);
             }
             else
             {
                 healthSlider.gameObject.SetActive(true);
+                healthNumber.gameObject.SetActive(true);
             }
             healthSlider.maxValue = max;
             healthSlider.value = current;
+            healthNumber.text = current.ToString();
         }
 
         public void EnableUnselectableFilter()
