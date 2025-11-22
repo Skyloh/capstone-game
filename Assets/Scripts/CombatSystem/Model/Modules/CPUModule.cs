@@ -140,6 +140,7 @@ public class CPUModule : AModule
     {
         // pick a random unit from the pool, dropping them if they dont match the criteria
         CombatUnit unit;
+        bool is_eligible;
         do
         {
             // uh oh, we didnt find one in time.
@@ -149,10 +150,17 @@ public class CPUModule : AModule
 
             unit = unit_pool[index];
 
-            // empty the pool of the unit if no duplicate unit selections are allowed
-            if (!allow_dupes) unit_pool.RemoveAt(index);
+            is_eligible = MatchesCriteria(unit, model, target_criteria);
 
-        } while (!MatchesCriteria(unit, model, target_criteria));
+            // if the unit is not eligible to be chosen, remove them from the pool so we don't
+            // recheck them in future target selections
+            if (!is_eligible) unit_pool.RemoveAt(index);
+
+            // otherwise, empty the pool of the unit if no duplicate unit selections are allowed
+            else if (!allow_dupes) unit_pool.RemoveAt(index);
+
+
+        } while (!is_eligible);
 
         return unit;
     }
@@ -162,12 +170,18 @@ public class CPUModule : AModule
         // if not to use Goad to get a target, pick random
         if (!use_rage) return Random.Range(0, unit_pool.Count);
 
-        // otherwise, find a target with Goad
+        // otherwise, find a LIVING (see below) target with Goad
         for (int i = 0; i < unit_pool.Count; ++i)
         {
             // not great that this is done repeatedly, but it's a fast
-            // lookup (two dictionaries) so it doesn't matter for now.
-            if (unit_pool[i].TryGetModule<StatusModule>(out var module) 
+            // lookup (two dictionaries x2) so it doesn't matter for now.
+            //
+            // a bit of a minor assumption, but only considering goading units that are ALIVE.
+            // this fixes a softlock where a dead goading unit causes an infinite selection loop
+            // with NonUnique as a flag, as they will continue to be tested and fail over and over.
+            if (unit_pool[i].TryGetModule<StatusModule>(out var module)
+                && unit_pool[i].TryGetModule<HealthModule>(out var hp_mod)
+                && hp_mod.IsAlive()
                 && module.HasStatus(Status.Goad))
             {
                 return i;

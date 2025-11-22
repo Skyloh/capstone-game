@@ -28,9 +28,15 @@ namespace CombatSystem.View
         readonly OrderedPool<GameObject> affinityPool = new OrderedPool<GameObject>(22);
         private AffinityType[] referenceBar;
 
+        private int noneIndexOffset;
+
         public void SetAffinityBar(IList<AffinityType> affinityTypes)
         {
             referenceBar = affinityTypes.Where((aff) => aff != AffinityType.None).ToArray();
+
+            // how many none items were dropped? this is needed to correctly offset indices.
+            noneIndexOffset = affinityTypes.Count - referenceBar.Length; 
+
             affinityPool.Clear((obj) => obj.SetActive(false));
 
             for (int i = affinityTypes.Count - 1; i >= 0; i--)
@@ -123,8 +129,9 @@ namespace CombatSystem.View
                 return;
             }
 
-            Debug.Log("Fullfilling " + index);
-            requests.Dequeue().callback(index);
+            // offset the reported index by the amount of None items we removed, since
+            // the model keeps track of them internally
+            requests.Dequeue().callback(index + noneIndexOffset);
             if (requests.Count == 0)
             {
                 left.SetActive(false);

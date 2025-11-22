@@ -36,12 +36,17 @@ public class SwapAbility : AAbility
         var target_1 = model.GetUnitByIndex(t_team_index, t_unit_index);
 
         // fill 2nd target, getting them from the data if there is a different 2nd target.
-        var target_2 = target_1; // assume we're targeting the same unit
+        CombatUnit target_2;
         var (t2_team_index, t2_unit_index, t2_index) = data_2; // unpack data 2 to check if we're targeting the same unit
         if (t2_team_index != t_team_index || t2_unit_index != t_unit_index)
         {
             // change to the correct target if we are targeting someone other than target_1
             target_2 = model.GetUnitByIndex(t2_team_index, t2_unit_index);
+        }
+        else
+        {
+            // target the same unit as before otherwise
+            target_2 = target_1;
         }
 
         // get aff bar modules

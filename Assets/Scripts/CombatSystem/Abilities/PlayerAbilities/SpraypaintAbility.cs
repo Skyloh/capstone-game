@@ -10,7 +10,7 @@ public class SpraypaintAbility : AAbility
             Name = "Spraypaint",
             Description = "Inflict a status on 1 enemy corresponding to their leading 2 elements for 1 turn.\r\n\r\n",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 enemy
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = AbilityUtils.EmptyMetadata()
         });
     }
