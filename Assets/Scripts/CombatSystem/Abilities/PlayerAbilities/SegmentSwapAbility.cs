@@ -11,7 +11,7 @@ public class SegmentSwapAbility : AAbility
             Name = "Segment Swap",
             Description = "Swap the positions of 2 2-slot-long-subsequences of elements on 1 enemy.",
             RequiredTargets = AbilityUtils.SingleEnemy(),
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
             {
                 MetadataConstants.PAIR_AFF_INDEX_TARGET_INDEX,

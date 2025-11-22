@@ -140,7 +140,17 @@ public class CombatManager : MonoBehaviour
             return false;
         }
 
-        selected = selected_team.GetUnit(unit_index);
+        var test_unit = selected_team.GetUnit(unit_index);
+
+        // do you have any affinity bar orbs remaining?
+        if (selection_flags.HasFlag(SelectionFlags.HasAffinityBarRemaining)
+            && test_unit.TryGetModule<AffinityBarModule>(out var module)
+            && module.IsBroken())
+        {
+            return false;
+        }
+
+        selected = test_unit;
 
         return true;
     }

@@ -13,7 +13,7 @@ public class DelayAbility : AAbility
             Name = "Delay",
             Description = "Move up to 3 elements to the back of the element sequence.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 enemy unit
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
             {   // needs [1-3] indices selected from the targeted unit
                 MetadataConstants.AFF_INDEX_TARGET_INDEX,

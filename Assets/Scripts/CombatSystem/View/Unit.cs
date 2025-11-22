@@ -18,6 +18,25 @@ namespace CombatSystem.View
         [SerializeField]
         private SpriteRenderer highlight;
 
+        [SerializeField]
+        private Transform animationParent;
+
+        private SpriteRenderer unitRenderer;
+        private SpriteRenderer UnitRenderer
+        {
+            get
+            {
+                if (unitRenderer == null)
+                {
+                    unitRenderer = animationParent.GetComponentInChildren<SpriteRenderer>();
+                }
+
+                return unitRenderer;
+            }
+
+            set => unitRenderer = value;
+        }
+
         private bool isFocused = false;
 
         [SerializeField] private Slider healthSlider;
@@ -58,7 +77,9 @@ namespace CombatSystem.View
                 return;
             }
             this.gameObject.SetActive(true);
-            character = Instantiate(unit.prefab, this.transform);
+
+
+            character = Instantiate(unit.prefab, animationParent);
         }
 
         public ACombatUnitSO GetUnitDefinition()
@@ -156,6 +177,16 @@ namespace CombatSystem.View
             }
             healthSlider.maxValue = max;
             healthSlider.value = current;
+        }
+
+        public void EnableUnselectableFilter()
+        {
+            UnitRenderer.color = Color.Lerp(Color.white, Color.black, 0.5f);
+        }
+
+        public void DisableUnselectableFilter()
+        {
+            UnitRenderer.color = Color.white;
         }
     }
 }

@@ -12,7 +12,7 @@ public class HueShiftAbility : AAbility
             Name = "Hue Shift",
             Description = "Change the element of up to 3 contiguous same-color elements to your weapon element.",
             RequiredTargets = AbilityUtils.SingleEnemy(),
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
             {
                 MetadataConstants.AFF_INDEX_TARGET_INDEX

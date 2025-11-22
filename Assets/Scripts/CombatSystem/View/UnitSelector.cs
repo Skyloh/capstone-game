@@ -121,6 +121,10 @@ namespace CombatSystem.View
                 // Debug.Log($"Player {index} hovered");
                 SelectablePlayerHovered?.Invoke(index, unit);
             }
+            else
+            {
+                players[index].EnableUnselectableFilter();
+            }
         }
 
         private void OnEnemyHovered(int index, IUnit unit)
@@ -133,12 +137,17 @@ namespace CombatSystem.View
                 // Debug.Log($"Enemy {index} hovered");
                 SelectableEnemyHovered?.Invoke(index, enemies[index]);
             }
+            else
+            {
+                enemies[index].EnableUnselectableFilter();
+            }
         }
 
         private void OnUnitUnhovered(int team, int unit_index, IUnit unit)
         {
             if (requests.Count == 0) return;
             unit.Unhighlight();
+            unit.DisableUnselectableFilter();
             if (team == 0)
             {
                 PlayerUnhovered?.Invoke(unit_index, unit);

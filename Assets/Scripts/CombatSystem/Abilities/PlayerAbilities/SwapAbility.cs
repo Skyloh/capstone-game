@@ -11,7 +11,7 @@ public class SwapAbility : AAbility
             Name = "Swap",
             Description = "Swap the positions of 2 elements between up to 2 enemies.",
             RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (1, 2) } }, // targets 1-2 enemy unit(s)
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
             {   // needs 2 indices selected from the targeted units
                 MetadataConstants.AFF_INDEX_TARGET_INDEX,

@@ -11,7 +11,7 @@ public class AnalyzeAbility : AAbility
             Name = "Analyze",
             Description = "Change your weapon-element OR weakness-element to the leading-element of 1 enemy.",
             RequiredTargets = AbilityUtils.SingleEnemy(),
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>() { MetadataConstants.WEAPON_OR_WEAKNESS }
         });
     }

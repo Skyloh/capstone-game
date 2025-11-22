@@ -20,5 +20,7 @@ namespace CombatSystem.View
         void Unhighlight();
         void Unselect();
         void Focus();
+        void EnableUnselectableFilter();
+        void DisableUnselectableFilter();
     }
 }

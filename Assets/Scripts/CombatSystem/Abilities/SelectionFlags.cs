@@ -8,5 +8,6 @@ public enum SelectionFlags
     Enemy = 2,
     Actionable = 4,
     Alive = 8,
-    NonUnique = 16
+    NonUnique = 16,
+    HasAffinityBarRemaining = 32
 }
