@@ -13,6 +13,7 @@ namespace CombatSystem.View
     {
         [SerializeField] private CombatDataSO runtimeCombatData;
         [SerializeField] private AttackBannerUI attackBannerReference;
+        [SerializeField] private HealthChangeDisplayManager healthChangeDisplayManager;
 
         [Space]
 
@@ -160,7 +161,7 @@ namespace CombatSystem.View
         private int subscribedToEnemy = -1;
         private int subscribedToHoverEnemy = -1;
 
-        private void UpdateEnemyHealth(int max, int current)
+        private void UpdateEnemyHealth(int max, int current, int _)
         {
             enemyHealthbar.lowValue = 0;
             enemyHealthbar.highValue = max;
@@ -214,7 +215,7 @@ namespace CombatSystem.View
             if (enemy_unit.TryGetModule<HealthModule>(out var healthModule))
             {
                 healthModule.OnHealthChanged += UpdateEnemyHealth;
-                UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth());
+                UpdateEnemyHealth(healthModule.GetMaxHealth(), healthModule.CurrentHealth(), 0);
             }
             if (enemy_unit.TryGetModule<ReferenceModule>(out var refModule))
             {
@@ -308,6 +309,8 @@ namespace CombatSystem.View
                         Debug.Log("could not display unit");
                     }
                 }
+
+                healthbar.OnHealthChanged += (int _, int _, int diff) => healthChangeDisplayManager.Popup(unit_index, team_id, diff);
             }
         }
 

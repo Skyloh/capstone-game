@@ -74,7 +74,7 @@ public class CombatTestingScript : MonoBehaviour
         m_affinity.text = $"Weapon: {m_weapon} - Weakness: {m_weakness}";
     }
 
-    private void HealthChanged(int max, int current)
+    private void HealthChanged(int max, int current, int _)
     {
         m_health.text = $"{current}/{max}";
     }

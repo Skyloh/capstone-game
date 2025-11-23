@@ -164,7 +164,7 @@ namespace CombatSystem.View
             highlight.color = Color.clear;
             isFocused = false;
         }
-        public void UpdateHp(int max, int current)
+        public void UpdateHp(int max, int current, int _)
         {
             if (healthSlider == null)
             {
