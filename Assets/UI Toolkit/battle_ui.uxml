@@ -5,7 +5,7 @@
             <ui:VisualElement name="Margin" style="flex-grow: 1; margin-left: 10px; margin-top: 16px; margin-right: 10px;">
                 <ui:VisualElement name="CharacterInfo" style="flex-direction: row;">
                     <ui:VisualElement name="Portrait" style="flex-grow: 1; height: 64px; background-image: url(&quot;project://database/Assets/Art/characters/ambys/ambys_portrait_neutral.png?fileID=21300000&amp;guid=c1fdb316b94f0b04f80e0a87b3a9ad62&amp;type=3#ambys_portrait_neutral&quot;); width: 64px; flex-direction: row; border-top-width: -3px; border-right-width: -3px; border-bottom-width: -3px; border-left-width: -3px; border-top-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-color: rgb(255, 255, 255); display: flex; padding-right: 0; margin-right: 0; max-width: 64px; max-height: 64px;" />
-                    <ui:VisualElement name="Stats" style="justify-content: flex-end; align-self: center; padding-left: 0;">
+                    <ui:VisualElement name="Stats" style="justify-content: flex-end; align-self: center; padding-left: 4px;">
                         <ui:VisualElement name="Health" style="-unity-font-definition: url(&quot;project://database/Assets/UI%20Shenanigans/Fonts/Pixelpurl-0vBPP.ttf?fileID=12800000&amp;guid=ef152549768704337aa3d35d9035611e&amp;type=3#Pixelpurl-0vBPP&quot;); min-width: auto; max-height: none; flex-direction: row;">
                             <ui:VisualElement name="Icon" style="flex-grow: initial; flex-direction: row; background-image: url(&quot;project://database/Assets/Art/battle/battle_icons.png?fileID=-1617008458&amp;guid=8ce8eca604c8c4a438fb383a3f198917&amp;type=3#battle_icons_0&quot;); height: 16px; width: 16px; flex-shrink: initial; min-width: 16px; min-height: 16px; left: auto;" />
                             <ui:Label tabindex="-1" text="100/100" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayerTotalHp" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: flex-start; align-self: center; align-items: auto;" />
@@ -54,4 +54,5 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Button text="Flee" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Flee" class="hide" style="background-image: url(&quot;project://database/Assets/UI%20Shenanigans/enemyboxsmall-export.png?fileID=21300000&amp;guid=7d590802c21f64b9282a1c814d5bdf03&amp;type=3#enemyboxsmall-export&quot;); width: 10%; height: 10%; top: auto; right: 0; left: auto; bottom: 2%; position: absolute;" />
 </ui:UXML>
