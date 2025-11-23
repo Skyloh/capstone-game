@@ -26,6 +26,7 @@ namespace CombatSystem.View
         private readonly Button[] options = new Button[4];
 
         private Button confirmButton;
+        private Button fleeButton;
         private Label playerCharacterName;
         private Label playerTotalHp;
         private Button backToUnits;
@@ -38,6 +39,7 @@ namespace CombatSystem.View
 
         StatusUpdater enemyStatusUpdater;
 
+        private bool isPlayerPhase = true; // assume you start combat on your turn
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
@@ -141,6 +143,11 @@ namespace CombatSystem.View
                 {
                     confirmCallback(ce);
                 }
+            });
+            fleeButton = ui.Q<Button>("Flee");
+            fleeButton.RegisterCallback<ClickEvent>((ce) =>
+            {
+                AttemptFleeCombat();
             });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
             unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
@@ -261,11 +268,11 @@ namespace CombatSystem.View
 
         public IEnumerator NextPhase(int to_phase_number)
         {
-            Debug.Log($"Phase change: {to_phase_number}");
+            isPlayerPhase = to_phase_number == 0;
 
             yield return new WaitForSecondsRealtime(1f);
 
-            attackBannerReference.ShowBanner(to_phase_number == 0 ? "Player Phase!" : "Enemy Phase...", to_phase_number == 0 ? Color.green : Color.red);
+            attackBannerReference.ShowBanner(isPlayerPhase ? "Player Phase!" : "Enemy Phase...", isPlayerPhase ? Color.green : Color.red);
 
             yield return new WaitForSecondsRealtime(2f);
         }
@@ -333,6 +340,7 @@ namespace CombatSystem.View
                     break;
                 case BattleStates.UnitSelection:
                     StartUnitSelection(previous);
+                    ShowFleeButton();
                     break;
                 case BattleStates.TargetSelection:
                     StartTargetSelection(previous);
@@ -342,6 +350,7 @@ namespace CombatSystem.View
                     break;
                 case BattleStates.ActionSelection:
                     StartActionSelection(previous);
+                    ShowFleeButton();
                     break;
                 case BattleStates.EnemyTurn:
                     StartEnemyTurn(previous);
@@ -361,6 +370,7 @@ namespace CombatSystem.View
                     break;
                 case BattleStates.UnitSelection:
                     CleanUpUnitSelection(next);
+                    HideFleeButton();
                     break;
                 case BattleStates.AffinityTargeting:
                     CleanUpAffinitySelection();
@@ -370,6 +380,7 @@ namespace CombatSystem.View
                     break;
                 case BattleStates.ActionSelection:
                     CleanUpActionSelection(next);
+                    HideFleeButton();
                     break;
                 case BattleStates.EnemyTurn:
                     CleanUpEnemyTurn(next);
@@ -907,6 +918,34 @@ namespace CombatSystem.View
         private void ShowConfirmButton()
         {
             confirmButton.style.display = DisplayStyle.Flex;
+        }
+
+        private void HideFleeButton()
+        {
+            fleeButton.style.display = DisplayStyle.None;
+        }
+
+        private void ShowFleeButton()
+        {
+            fleeButton.style.display = DisplayStyle.Flex;
+        }
+
+        private void AttemptFleeCombat()
+        {
+            HideFleeButton();
+
+            // you can only flee on your turn
+            if (!isPlayerPhase) return;
+
+            var flee_data = new ActionData
+            {
+                Action = new System_FleeAbility(),
+                UserTeamUnitIndex = (0, 0), // always assume player team is fleeing
+                TargetIndices = null, // sources targets from user team
+                ActionMetadata = null // no metadata
+            };
+
+            combatManager.PerformAction(flee_data);
         }
     }
 }

@@ -38,4 +38,19 @@ public interface ICombatModel
     /// <param name="unit_index"></param>
     /// <returns></returns>
     CombatUnit GetUnitByIndex(int team_index, int unit_index);
+
+    /// <summary>
+    /// Sets the outcome state of the model. Used for forcing custom 
+    /// end states, such as fleeing.
+    /// </summary>
+    /// <param name="to_outcome"></param>
+    void SetOutcome(CombatOutcome to_outcome);
+
+    /// <summary>
+    /// Checks if there is a non-unresolved outcome in the model,
+    /// returning true if yes, outting the CombatOutcome enumeration.
+    /// </summary>
+    /// <param name="outcome"></param>
+    /// <returns></returns>
+    bool HasOutcome(out CombatOutcome outcome);
 }

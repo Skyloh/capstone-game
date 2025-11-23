@@ -226,10 +226,12 @@ public class CombatManager : MonoBehaviour
     public void CheckStateThenNext()
     {
         // check to see if the battle has ended
-        // must be done after EndTeamPhase in case Burn kills an enemy.=
-        if (CheckBattleEnded(out var state))
+        // must be done after EndTeamPhase in case Burn kills an enemy.
+        //
+        // modified to have support for Fleeing combat (and any other non-teamwipe combat exits)
+        if (m_combatModel.HasOutcome(out CombatOutcome outcome))
         {
-            Debug.LogError("BATTLE RESOLVED WITH STATE: " + state);
+            Debug.LogError("BATTLE RESOLVED WITH OUTCOME: " + outcome);
 
             StartCoroutine(IE_DelayThenExitCombat());
 
@@ -265,36 +267,6 @@ public class CombatManager : MonoBehaviour
             // next phase
             StartCoroutine(IE_BeginNextTeamPhase());
         }
-    }
-
-    /// <summary>
-    /// Checks to see if a team has been fully wiped-out, reporting the proper
-    /// win-loss state in the out variable if true.
-    /// </summary>
-    /// <param name="state"></param>
-    /// <returns></returns>
-    private bool CheckBattleEnded(out string state)
-    {
-        for (int team_index = 0; team_index < m_combatModel.GetTeamCount(); ++team_index)
-        {
-            var team = m_combatModel.GetTeam(team_index);
-
-            for (int unit_index = 0; unit_index < team.Count(); ++unit_index)
-            {
-                if (team.IsUnitAlive(unit_index)) break;
-
-                // if we got here, that means we didn't break, which means no unit is alive on this team
-                if (unit_index == team.Count() - 1)
-                {
-                    // END GAME
-                    state = team_index == 0 ? "LOSS" : "VICTORY";
-                    return true;
-                }
-            }
-        }
-
-        state = string.Empty;
-        return false;
     }
 
     /// <summary>
