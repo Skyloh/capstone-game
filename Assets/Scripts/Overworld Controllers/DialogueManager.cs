@@ -17,15 +17,18 @@ public class DialogueManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI dialogueText;
 
+    [Header("Portrait System")]
     [SerializeField]
-    private GameObject continueIndicator; // Optional: shows when player can continue
+    private PortraitManager portraitManager;
 
+    // Assign Ink JSON here for auto-start
     [Header("Ink JSON")]
     [SerializeField]
-    private TextAsset inkJSON; // Assign your Ink JSON here for auto-start
+    private TextAsset inkJSON; 
 
+    // Set to true to start dialogue automatically
     [SerializeField]
-    private bool autoStartOnLoad = false; // Set to true to start dialogue automatically
+    private bool autoStartOnLoad = false;
 
     [Header("Choices")]
     [SerializeField]
@@ -38,7 +41,7 @@ public class DialogueManager : MonoBehaviour
 
     private int currentChoiceIndex = 0;
     private bool canSelect = false;
-    private bool waitingForContinue = false; // New: tracks if we're waiting for player to continue
+    private bool waitingForContinue = false;
 
     private void Awake()
     {
@@ -60,8 +63,7 @@ public class DialogueManager : MonoBehaviour
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
 
-        if (continueIndicator != null)
-            continueIndicator.SetActive(false);
+
 
         choicesText = new TextMeshProUGUI[choices.Length];
         int index = 0;
@@ -129,8 +131,6 @@ public class DialogueManager : MonoBehaviour
         canSelect = false;
         waitingForContinue = false;
 
-        if (continueIndicator != null)
-            continueIndicator.SetActive(false);
     }
 
     public void ContinueStory()
@@ -138,6 +138,9 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.canContinue)
         {
             dialogueText.text = currentStory.Continue();
+
+            CheckForSpeakerTag();
+
             DisplayChoices();
         }
         else
@@ -152,8 +155,7 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.currentChoices.Count > 0)
         {
             waitingForContinue = false;
-            if (continueIndicator != null)
-                continueIndicator.SetActive(false);
+            
 
             // Clear previous choices
             for (int i = 0; i < choices.Length; i++)
@@ -197,8 +199,7 @@ public class DialogueManager : MonoBehaviour
             canSelect = false;
             waitingForContinue = true;
 
-            if (continueIndicator != null)
-                continueIndicator.SetActive(true);
+            
         }
     }
 
@@ -235,22 +236,8 @@ public class DialogueManager : MonoBehaviour
 
         currentStory.ChooseChoiceIndex(currentChoiceIndex);
 
-        // Skip choice echo
-        if (currentStory.canContinue)
-        {
-            currentStory.Continue();
-        }
-
-        // Display the actual content
-        if (currentStory.canContinue)
-        {
-            dialogueText.text = currentStory.Continue();
-            DisplayChoices();
-        }
-        else
-        {
-            ExitDialogueMode();
-        }
+        // Continue to the next line after choice
+        ContinueStory();
     }
 
     public int GetCurrentChoicesCount()
@@ -258,5 +245,22 @@ public class DialogueManager : MonoBehaviour
         if (currentStory == null)
             return 0;
         return currentStory.currentChoices.Count;
+    }
+
+    private void CheckForSpeakerTag()
+    {
+        List<string> tags = currentStory.currentTags;
+
+        foreach (string tag in tags)
+        {
+            if (tag.StartsWith("speaker:"))
+            {
+                string characterName = tag.Substring(8);
+                if (portraitManager != null)
+                {
+                    portraitManager.ShowPortrait(characterName);
+                }
+            }
+        }
     }
 }

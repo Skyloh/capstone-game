@@ -61,11 +61,6 @@ public class PlayerController : MonoBehaviour
         // If in dialogue, only allow continuing dialogue
         if (DialogueManager.GetInstance().dialogueIsPlaying)
         {
-            if (!inputLocked && Input.GetKeyDown(KeyCode.E) && DialogueManager.GetInstance().GetCurrentChoicesCount() == 0)
-            {
-                StartCoroutine(InputCooldown());
-                DialogueManager.GetInstance().ContinueStory();
-            }
             return;
         }
 
