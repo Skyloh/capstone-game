@@ -9,13 +9,15 @@
     border-right-color: rgba(255, 255, 255, 0);
     border-top-color: rgba(255, 255, 255, 0);
     border-bottom-color: rgba(255, 255, 255, 0);
+    transition-duration: 0.1s;
+    transition-property: scale;
 }
 
 .unity-button:hover {
     -unity-background-image-tint-color: rgb(255, 238, 146);
     translate: 0 0;
-    scale: 1.1 1.1;
-    transition-duration: 0.2s;
+    scale: 1.05 1.05;
+    transition-duration: 0.1s;
     transition-property: scale;
     transition-timing-function: ease-in-sine;
 }
