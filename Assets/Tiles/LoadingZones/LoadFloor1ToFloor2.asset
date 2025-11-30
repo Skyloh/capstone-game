@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b089070db681754bae2e3df0785cadf, type: 3}
-  m_Name: LoadRoomToTestLeft
+  m_Name: LoadFloor1ToFloor2
   m_EditorClassIdentifier: 
-  sceneToLoad: TilemapTest
-  targetSpawnPointID: TestLeft
-  tileSprite: {fileID: 21300000, guid: 23eda8d6a5203424690b4868e43a9762, type: 3}
+  sceneToLoad: HospitalFloor2
+  targetSpawnPointID: FromFloor1
+  tileSprite: {fileID: 21300000, guid: eb3f57f3b5f068048a9f3da95718437d, type: 3}

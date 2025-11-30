@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
             PlayerSpawnManager.nextSpawnPointID = loadingZoneTile.targetSpawnPointID;
 
             UnityEngine.Debug.Log($"Loading scene: {loadingZoneTile.sceneToLoad}");
-            UnityEngine.SceneManagement.SceneManager.LoadScene(loadingZoneTile.sceneToLoad);
+            SceneTransition.GetInstance()?.LoadScene(loadingZoneTile.sceneToLoad);
         }
     }
 
