@@ -21,7 +21,7 @@ public class SceneTransition : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject); // Persist across scenes
+        DontDestroyOnLoad(gameObject);
     }
 
     public static SceneTransition GetInstance()
@@ -50,8 +50,6 @@ public class SceneTransition : MonoBehaviour
 
         // Load the scene
         SceneManager.LoadScene(sceneName);
-
-        // Fade in happens automatically in Start()
     }
 
     private IEnumerator FadeOut()
