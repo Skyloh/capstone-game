@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Ink.Runtime;
-using NUnit.Framework.Constraints;
-using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -21,27 +20,20 @@ public class DialogueManager : MonoBehaviour
     [SerializeField]
     private PortraitManager portraitManager;
 
-    // Assign Ink JSON here for auto-start
     [Header("Ink JSON")]
     [SerializeField]
-    private TextAsset inkJSON; 
+    private TextAsset inkJSON;
 
-    // Set to true to start dialogue automatically
     [SerializeField]
     private bool autoStartOnLoad = false;
 
-    [Header("Choices")]
     [SerializeField]
-    private GameObject[] choices;
-
-    private TextMeshProUGUI[] choicesText;
+    private string dialogueID;
 
     private Story currentStory;
     public bool dialogueIsPlaying = false;
 
-    private int currentChoiceIndex = 0;
-    private bool canSelect = false;
-    private bool waitingForContinue = false;
+    private static HashSet<string> playedDialogues = new HashSet<string>();
 
     private void Awake()
     {
@@ -51,6 +43,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         instance = this;
+        Transform root = transform.root;
     }
 
     public static DialogueManager GetInstance()
@@ -58,25 +51,55 @@ public class DialogueManager : MonoBehaviour
         return instance;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindUIReferences();
+        CheckAutoStartDialogue();
+    }
+
     private void Start()
     {
-        dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
+        FindUIReferences();
+        CheckAutoStartDialogue();
+    }
 
-
-
-        choicesText = new TextMeshProUGUI[choices.Length];
-        int index = 0;
-        foreach (GameObject choice in choices)
+    private void FindUIReferences()
+    {
+        // Find dialogue panel
+        GameObject panel = GameObject.FindGameObjectWithTag("DialoguePanel");
+        if (panel != null)
         {
-            choicesText[index] = choice.GetComponentInChildren<TextMeshProUGUI>();
-            index++;
+            dialoguePanel = panel;
         }
 
-        // Auto-start dialogue if enabled
-        if (autoStartOnLoad && inkJSON != null)
+        // Find dialogue text
+        GameObject textObj = GameObject.FindGameObjectWithTag("DialogueText");
+        if (textObj != null)
         {
-            EnterDialogueMode(inkJSON);
+            dialogueText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+    }
+
+    private void CheckAutoStartDialogue()
+    {
+        dialogueIsPlaying = false;
+
+        if (autoStartOnLoad && inkJSON != null && !playedDialogues.Contains(dialogueID))
+        {
+            EnterDialogueMode(inkJSON, dialogueID);
         }
     }
 
@@ -85,39 +108,22 @@ public class DialogueManager : MonoBehaviour
         if (!dialogueIsPlaying)
             return;
 
-        // Handle continuing dialogue when there are no choices
-        if (waitingForContinue)
+        // Continue dialogue with Space or E
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E))
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
-            {
-                ContinueStory();
-            }
-            return;
-        }
-
-        // Handle choice selection
-        if (canSelect)
-        {
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                ChangeChoice(-1);
-            }
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ChangeChoice(1);
-            }
-            else if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
-            {
-                SelectChoice();
-            }
+            ContinueStory();
         }
     }
 
-    public void EnterDialogueMode(TextAsset inkJSON)
+    public void EnterDialogueMode(TextAsset inkJSON, string dialogueID = "")
     {
         currentStory = new Story(inkJSON.text);
         dialogueIsPlaying = true;
-        dialoguePanel.SetActive(true);
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
+
+        this.dialogueID = dialogueID;
 
         ContinueStory();
     }
@@ -125,126 +131,34 @@ public class DialogueManager : MonoBehaviour
     private void ExitDialogueMode()
     {
         dialogueIsPlaying = false;
-        dialoguePanel.SetActive(false);
-        dialogueText.text = "";
-        currentStory = null;
-        canSelect = false;
-        waitingForContinue = false;
 
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+
+        if (dialogueText != null)
+            dialogueText.text = "";
+
+        currentStory = null;
+
+        if (!string.IsNullOrEmpty(dialogueID))
+        {
+            playedDialogues.Add(dialogueID);
+        }
     }
 
     public void ContinueStory()
     {
         if (currentStory.canContinue)
         {
-            dialogueText.text = currentStory.Continue();
+            if (dialogueText != null)
+                dialogueText.text = currentStory.Continue();
 
             CheckForSpeakerTag();
-
-            DisplayChoices();
         }
         else
         {
             ExitDialogueMode();
         }
-    }
-
-    private void DisplayChoices()
-    {
-        // If there are choices, show them
-        if (currentStory.currentChoices.Count > 0)
-        {
-            waitingForContinue = false;
-            
-
-            // Clear previous choices
-            for (int i = 0; i < choices.Length; i++)
-            {
-                choices[i].SetActive(false);
-                choicesText[i].color = Color.white;
-            }
-
-            List<Choice> currentChoices = currentStory.currentChoices;
-            if (currentChoices.Count > choices.Length)
-            {
-                Debug.LogError("More choices than UI elements!");
-            }
-
-            int index = 0;
-            foreach (Choice choice in currentChoices)
-            {
-                choices[index].SetActive(true);
-                choicesText[index].text = choice.text;
-                index++;
-            }
-
-            for (int i = index; i < choices.Length; i++)
-            {
-                choices[i].SetActive(false);
-            }
-
-            currentChoiceIndex = 0;
-            HighlightChoice(currentChoiceIndex);
-
-            StartCoroutine(EnableSelectionNextFrame());
-        }
-        else
-        {
-            // No choices - hide choice UI and wait for player to continue
-            for (int i = 0; i < choices.Length; i++)
-            {
-                choices[i].SetActive(false);
-            }
-
-            canSelect = false;
-            waitingForContinue = true;
-
-            
-        }
-    }
-
-    private IEnumerator EnableSelectionNextFrame()
-    {
-        yield return null;
-        canSelect = true;
-    }
-
-    private void ChangeChoice(int direction)
-    {
-        UnhighlightChoice(currentChoiceIndex);
-
-        int choicesCount = currentStory.currentChoices.Count;
-        currentChoiceIndex = (currentChoiceIndex + direction + choicesCount) % choicesCount;
-
-        HighlightChoice(currentChoiceIndex);
-    }
-
-    private void HighlightChoice(int index)
-    {
-        EventSystem.current.SetSelectedGameObject(choices[index]);
-        choicesText[index].color = Color.yellow;
-    }
-
-    private void UnhighlightChoice(int index)
-    {
-        choicesText[index].color = Color.white;
-    }
-
-    private void SelectChoice()
-    {
-        canSelect = false;
-
-        currentStory.ChooseChoiceIndex(currentChoiceIndex);
-
-        // Continue to the next line after choice
-        ContinueStory();
-    }
-
-    public int GetCurrentChoicesCount()
-    {
-        if (currentStory == null)
-            return 0;
-        return currentStory.currentChoices.Count;
     }
 
     private void CheckForSpeakerTag()
@@ -262,5 +176,13 @@ public class DialogueManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public static bool HasDialogueBeenPlayed(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return false;
+
+        return playedDialogues.Contains(id);
     }
 }

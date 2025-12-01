@@ -27,6 +27,12 @@ public class InteractableDocument : MonoBehaviour
 
     private bool hasBeenRead = false;
 
+    [SerializeField]
+    private string followUpDialogueID;
+
+    [SerializeField]
+    private bool playFollowUpOnlyOnce = true;
+
     private void Start()
     {
         // Snap to grid like NPCs do
@@ -61,7 +67,16 @@ public class InteractableDocument : MonoBehaviour
             return;
         }
 
-        documentManager.OpenDocument(documentTitle, documentContent, followUpDialogueInk);
+        bool skipFollowUp = playFollowUpOnlyOnce && DialogueManager.HasDialogueBeenPlayed(followUpDialogueID);
+
+        if (skipFollowUp)
+        {
+            documentManager.OpenDocument(documentTitle, documentContent, null);
+        }
+        else
+        {
+            documentManager.OpenDocument(documentTitle, documentContent, followUpDialogueInk, followUpDialogueID);
+        }
 
         if (canOnlyReadOnce)
         {

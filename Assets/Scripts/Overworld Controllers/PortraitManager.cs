@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PortraitManager : MonoBehaviour
 {
+    private static PortraitManager instance;
+
     [System.Serializable]
     public class CharacterPortrait
     {
@@ -22,14 +25,69 @@ public class PortraitManager : MonoBehaviour
     [SerializeField]
     private CharacterPortrait[] characterPortraits;
 
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+    }
+
+    public static PortraitManager GetInstance()
+    {
+        return instance;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindUIReferences();
+    }
+
+    private void Start()
+    {
+        FindUIReferences();
+    }
+
+    private void FindUIReferences()
+    {
+        // Find portrait image
+        GameObject portraitObj = GameObject.FindGameObjectWithTag("PortraitImage");
+        if (portraitObj != null)
+        {
+            portraitImage = portraitObj.GetComponent<Image>();
+        }
+
+        // Find character name text
+        GameObject nameObj = GameObject.FindGameObjectWithTag("CharacterNameText");
+        if (nameObj != null)
+        {
+            characterNameText = nameObj.GetComponent<TextMeshProUGUI>();
+        }
+    }
+
     public void ShowPortrait(string characterName)
     {
         foreach (var portrait in characterPortraits)
         {
             if (portrait.characterName == characterName)
             {
-                portraitImage.sprite = portrait.portraitSprite;
-                portraitImage.gameObject.SetActive(true);
+                if (portraitImage != null)
+                {
+                    portraitImage.sprite = portrait.portraitSprite;
+                    portraitImage.gameObject.SetActive(true);
+                }
 
                 if (characterNameText != null)
                 {
@@ -40,17 +98,15 @@ public class PortraitManager : MonoBehaviour
             }
         }
 
-        // Character not found - hide portrait
         HidePortrait();
     }
 
     public void HidePortrait()
     {
-        portraitImage.gameObject.SetActive(false);
+        if (portraitImage != null)
+            portraitImage.gameObject.SetActive(false);
 
         if (characterNameText != null)
-        {
             characterNameText.gameObject.SetActive(false);
-        }
     }
 }

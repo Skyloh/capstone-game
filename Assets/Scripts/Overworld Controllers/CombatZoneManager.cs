@@ -22,18 +22,45 @@ public class CombatZoneManager : MonoBehaviour
     [SerializeField] private Gradient m_debugZoneGradient;
     [SerializeField, Range(0f, 1f)] private float m_zoneAlpha;
 
+    private void Awake()
+    {
+        FindGridReference();
+    }
+
     private void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         var player_controller = FindFirstObjectByType<PlayerController>(FindObjectsInactive.Include);
         player_controller.OnPlayerMove += CheckForEncounter;
     }
 
     private void OnDisable()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
         var player_controller = FindFirstObjectByType<PlayerController>(FindObjectsInactive.Include);
         if (player_controller == null) return;
 
         player_controller.OnPlayerMove -= CheckForEncounter;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindGridReference();
+    }
+
+    private void FindGridReference()
+    {
+        GameObject gridObject = GameObject.FindGameObjectWithTag("MapGrid");
+        if (gridObject != null)
+        {
+            m_worldGrid = gridObject.GetComponent<Grid>();
+        }
+        else
+        {
+            Debug.LogWarning("CombatZoneManager: No GameObject with tag 'MapGrid' found");
+        }
     }
 
     /// <summary>

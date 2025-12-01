@@ -14,6 +14,12 @@ public class NPCController : MonoBehaviour
     [SerializeField]
     private TextAsset dialogueFile;
 
+    [SerializeField]
+    private string dialogueID;
+
+    [SerializeField]
+    private bool playMultipleTimes = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +39,13 @@ public class NPCController : MonoBehaviour
     // If the player interacts with this NPC, start dialogue
     public void Interact()
     {
+        if (playMultipleTimes && DialogueManager.HasDialogueBeenPlayed(dialogueID))
+        {
+            return; 
+        }
+
         //Debug.Log("I am interacted with");
-        DialogueManager.GetInstance().EnterDialogueMode(dialogueFile);
+        DialogueManager.GetInstance().EnterDialogueMode(dialogueFile, dialogueID);
     }
 
 }

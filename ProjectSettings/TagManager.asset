@@ -8,6 +8,15 @@ TagManager:
   - affinity_orb
   - FxTemporaire
   - Document
+  - MapGrid
+  - DialoguePanel
+  - DialogueText
+  - DocumentPanel
+  - DocumentText
+  - DocumentTitle
+  - PortraitImage
+  - CharacterNameText
+  - TransitionPanel
   layers:
   - Default
   - TransparentFX

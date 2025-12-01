@@ -21,7 +21,6 @@ public class SceneTransition : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public static SceneTransition GetInstance()
@@ -29,12 +28,46 @@ public class SceneTransition : MonoBehaviour
         return instance;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        // Fade in when scene starts
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindUIReferences();
+
         if (fadePanel != null)
         {
             StartCoroutine(FadeIn());
+        }
+    }
+
+    private void Start()
+    {
+        FindUIReferences();
+
+        if (fadePanel != null)
+        {
+            StartCoroutine(FadeIn());
+        }
+    }
+
+    private void FindUIReferences()
+    {
+        GameObject panelObj = GameObject.FindGameObjectWithTag("TransitionPanel");
+        if (panelObj != null)
+        {
+            fadePanel = panelObj.GetComponent<Image>();
+        }
+        else
+        {
+            Debug.LogWarning("TransitionPanel tag not found in scene!");
         }
     }
 
@@ -45,15 +78,25 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator TransitionToScene(string sceneName)
     {
-        // Fade out
-        yield return StartCoroutine(FadeOut());
+        // Make sure we have a reference before fading
+        if (fadePanel == null)
+        {
+            FindUIReferences();
+        }
 
-        // Load the scene
+        yield return StartCoroutine(FadeOut());
         SceneManager.LoadScene(sceneName);
     }
 
     private IEnumerator FadeOut()
     {
+        // Safety check
+        if (fadePanel == null)
+        {
+            Debug.LogWarning("FadePanel is null, skipping fade out");
+            yield break;
+        }
+
         float elapsedTime = 0f;
         Color color = fadePanel.color;
 
@@ -71,9 +114,16 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator FadeIn()
     {
+        // Safety check
+        if (fadePanel == null)
+        {
+            Debug.LogWarning("FadePanel is null, skipping fade in");
+            yield break;
+        }
+
         float elapsedTime = 0f;
         Color color = fadePanel.color;
-        color.a = 1f; // Start fully black
+        color.a = 1f;
         fadePanel.color = color;
 
         while (elapsedTime < fadeDuration)

@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public Tilemap loadingZoneTilemap;
 
     private bool inputLocked = false;
+    private bool isTransitioning = false; // Add this
 
     private Rigidbody2D rb;
     private BoxCollider2D playerCollider;
@@ -38,29 +39,45 @@ public class PlayerController : MonoBehaviour
     {
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Get or add Rigidbody2D for physics-based movement
         rb = GetComponent<Rigidbody2D>();
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody2D>();
         }
-        rb.gravityScale = 0; // No gravity for top-down
-        rb.freezeRotation = true; // Prevent rotation
+        rb.gravityScale = 0;
+        rb.freezeRotation = true;
 
-        // Get or add collider
         playerCollider = GetComponent<BoxCollider2D>();
         if (playerCollider == null)
         {
             playerCollider = gameObject.AddComponent<BoxCollider2D>();
-            playerCollider.size = new Vector2(0.8f, 0.8f); // Adjust size as needed
+            playerCollider.size = new Vector2(0.8f, 0.8f);
         }
+    }
+
+    // Add these methods
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //Debug.Log($"Scene loaded: {scene.name}, resetting transition flag");
+        isTransitioning = false;
     }
 
     void Update()
     {
-        // If in dialogue, only allow continuing dialogue
-        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        // If in dialogue/doc, only allow continuing dialogue
+        if (DialogueManager.GetInstance().dialogueIsPlaying || DocumentManager.GetInstance().documentIsOpen)
         {
+            moveInput = Vector2.zero;
             return;
         }
 
@@ -102,7 +119,7 @@ public class PlayerController : MonoBehaviour
         // Interact with NPCs/Continue dialogue
         if (!inputLocked && Input.GetKeyDown(KeyCode.E))
         {
-            if (!DialogueManager.GetInstance().dialogueIsPlaying)
+            if (!DialogueManager.GetInstance().dialogueIsPlaying && !DocumentManager.GetInstance().documentIsOpen)
             {
                 StartCoroutine(InputCooldown());
                 Interact();
@@ -116,7 +133,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Handle movement in FixedUpdate for physics
-        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        if (!DialogueManager.GetInstance().dialogueIsPlaying && !DocumentManager.GetInstance().documentIsOpen)
         {
             Vector2 movement = moveInput.normalized * moveSpeed;
             Vector2 oldPosition = rb.position;
@@ -176,7 +193,7 @@ public class PlayerController : MonoBehaviour
             // Bottom-right
             position + new Vector2(colliderSize.x / 2, -colliderSize.y / 2), 
             // Bottom-left
-            position + new Vector2(-colliderSize.x / 2, -colliderSize.y / 2) 
+            position + new Vector2(-colliderSize.x / 2, -colliderSize.y / 2)
         };
 
         foreach (Vector2 point in checkPoints)
@@ -201,24 +218,29 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Check if player is on a loading zone tile
+    // Check if player is on a loading zone tile - UPDATED
     private void CheckForLoadingZone()
     {
+        if (isTransitioning)
+        {
+            //Debug.Log("Already transitioning, skipping check");
+            return;
+        }
+
         Vector3Int playerCell = grid.WorldToCell(transform.position);
         TileBase tile = loadingZoneTilemap.GetTile(playerCell);
 
         if (tile is LoadingZoneTile loadingZoneTile && !string.IsNullOrEmpty(loadingZoneTile.sceneToLoad))
         {
+            Debug.Log($"Loading zone detected! Target scene: {loadingZoneTile.sceneToLoad}");
             PlayerSpawnManager.nextSpawnPointID = loadingZoneTile.targetSpawnPointID;
 
-            UnityEngine.Debug.Log($"Loading scene: {loadingZoneTile.sceneToLoad}");
+            isTransitioning = true;
             SceneTransition.GetInstance()?.LoadScene(loadingZoneTile.sceneToLoad);
         }
     }
 
     // Interact with an NPC in the facing direction
-    // Replace the Interact() method in your PlayerController with this version
-
     private void Interact()
     {
         // Raycast in facing direction to find NPCs or Documents

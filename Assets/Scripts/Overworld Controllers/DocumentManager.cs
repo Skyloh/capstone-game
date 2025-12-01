@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DocumentManager : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class DocumentManager : MonoBehaviour
     private TextMeshProUGUI documentTitle;
 
     [SerializeField]
-    private GameObject closePrompt; // Optional: "Press Space to close" text
+    private GameObject closePrompt;
 
-    private bool documentIsOpen = false;
+    public bool documentIsOpen = false;
+
     private TextAsset followUpDialogue = null;
+    private string followUpDialogueID;
+    private bool canAcceptInput = false;
 
     private void Awake()
     {
@@ -37,51 +41,105 @@ public class DocumentManager : MonoBehaviour
         return instance;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindUIReferences();
+    }
+
     private void Start()
     {
+        FindUIReferences();
+    }
+
+    private void FindUIReferences()
+    {
+        // Find document panel
+        GameObject panel = GameObject.FindGameObjectWithTag("DocumentPanel");
+        if (panel != null)
+        {
+            documentPanel = panel;
+        }
+
+        // Find document text
+        GameObject textObj = GameObject.FindGameObjectWithTag("DocumentText");
+        if (textObj != null)
+        {
+            documentText = textObj.GetComponent<TextMeshProUGUI>();
+        }
+
+        // Find document title
+        GameObject titleObj = GameObject.FindGameObjectWithTag("DocumentTitle");
+        if (titleObj != null)
+        {
+            documentTitle = titleObj.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (documentPanel != null)
+            documentPanel.SetActive(false);
+
         documentIsOpen = false;
-        documentPanel.SetActive(false);
     }
 
     private void Update()
     {
-        if (!documentIsOpen)
+        if (!documentIsOpen || !canAcceptInput)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space))
         {
             CloseDocument();
         }
     }
 
-    public void OpenDocument(string title, string content, TextAsset dialogueToFollowUp = null)
+    public void OpenDocument(string title, string content, TextAsset dialogueToFollowUp = null, string followUpDialogueID = "")
     {
         documentIsOpen = true;
-        documentPanel.SetActive(true);
+
+        if (documentPanel != null)
+            documentPanel.SetActive(true);
 
         if (documentTitle != null)
             documentTitle.text = title;
 
-        documentText.text = content;
-        followUpDialogue = dialogueToFollowUp;
+        if (documentText != null)
+            documentText.text = content;
 
-        // Disable player movement here if you have a player controller
-        // PlayerController.instance?.DisableMovement();
+        this.followUpDialogue = dialogueToFollowUp;
+        this.followUpDialogueID = followUpDialogueID;
+
+        StartCoroutine(EnableInputNextFrame());
+    }
+
+    private IEnumerator EnableInputNextFrame()
+    {
+        canAcceptInput = false;
+        yield return null;
+        canAcceptInput = true;
     }
 
     private void CloseDocument()
     {
+        canAcceptInput = false;
         documentIsOpen = false;
-        documentPanel.SetActive(false);
 
-        // Re-enable player movement
-        // PlayerController.instance?.EnableMovement();
+        if (documentPanel != null)
+            documentPanel.SetActive(false);
 
-        // Start follow-up dialogue if provided
         if (followUpDialogue != null)
         {
-            DialogueManager.GetInstance()?.EnterDialogueMode(followUpDialogue);
+            DialogueManager.GetInstance()?.EnterDialogueMode(followUpDialogue, followUpDialogueID);
             followUpDialogue = null;
+            followUpDialogueID = "";
         }
     }
 
