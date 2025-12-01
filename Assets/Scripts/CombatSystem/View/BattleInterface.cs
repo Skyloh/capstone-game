@@ -14,6 +14,8 @@ namespace CombatSystem.View
         [SerializeField] private CombatDataSO runtimeCombatData;
         [SerializeField] private AttackBannerUI attackBannerReference;
         [SerializeField] private HealthChangeDisplayManager healthChangeDisplayManager;
+        
+
 
         [Space]
 
@@ -37,6 +39,10 @@ namespace CombatSystem.View
         private VisualElement portrait;
         private VisualElement enemyPortrait;
         private VisualElement enemyInfo;
+        private Button itemsButton;
+        private ScrollView scrollView;
+        private Label attackLabel; 
+        
 
         StatusUpdater enemyStatusUpdater;
 
@@ -44,6 +50,7 @@ namespace CombatSystem.View
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
+        [SerializeField] private List<AAbility> playerInventory;
 
         private CombatUnit GetPlayerUnit(int player_index)
         {
@@ -155,7 +162,11 @@ namespace CombatSystem.View
             unitSelector.EnemyHovered += OnEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
             // DisplayUnit(GetPlayerUnit(0));
-
+            
+            itemsButton = ui.Q<Button>("Items");                     
+            itemsButton.RegisterCallback<ClickEvent>(OnItemsPressed);
+            scrollView = ui.Q<ScrollView>("scrollView");
+            attackLabel = ui.Q<Label>("AttackLabel");
         }
 
         private int subscribedToEnemy = -1;
@@ -669,7 +680,7 @@ namespace CombatSystem.View
         private void StartActionSelection(BattleStates previous)
         {
             backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
-
+            itemsButton.style.display = DisplayStyle.Flex;
             if (selectedPlayer == -1)
             {
                 throw new Exception("Something went wrong during unit selection");
@@ -705,6 +716,7 @@ namespace CombatSystem.View
         private void CleanUpActionSelection(BattleStates next)
         {
             backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
+            itemsButton.style.display = DisplayStyle.None; 
             for (int i = 0; i < 4; i++)
             {
                 attackCallbacks[i] = null;
@@ -887,6 +899,9 @@ namespace CombatSystem.View
             {
                 action.style.display = DisplayStyle.None;
             }
+            
+            if (itemsButton != null)
+                itemsButton.style.display = DisplayStyle.None;
         }
 
         private void ShowActionButtons()
@@ -895,6 +910,9 @@ namespace CombatSystem.View
             {
                 action.style.display = DisplayStyle.Flex;
             }
+            
+            if (itemsButton != null)
+                itemsButton.style.display = DisplayStyle.Flex;
         }
 
         private void HideOptionButtons()
@@ -932,6 +950,90 @@ namespace CombatSystem.View
         {
             fleeButton.style.display = DisplayStyle.Flex;
         }
+        
+        
+       private void OnItemsPressed(ClickEvent evt)
+{
+    // Hide the normal action UI
+    HideActionButtons();
+    itemsButton.style.display = DisplayStyle.None;
+    HideFleeButton();
+
+    // Change header from "Attacks" → "Items"
+    if (attackLabel != null)
+        attackLabel.text = "Items";
+
+    // Text under the header
+    actionDescription.text = "Choose an item";
+
+    // Prepare the scroll view as a full-page panel
+    scrollView.Clear();
+    scrollView.style.display = DisplayStyle.Flex;
+    scrollView.style.flexGrow = 1;
+    scrollView.style.position = Position.Relative;  // assumes it's already laid out in the command panel
+
+    // If there are no items, show a message
+    if (playerInventory == null || playerInventory.Count == 0)
+    {
+        var noneLabel = new Label("No items available.");
+        scrollView.Add(noneLabel);
+    }
+    else
+    {
+        // Generate one button per item
+        foreach (var item in playerInventory)
+        {
+            var button = new Button();
+            button.text = item.GetAbilityData().Name;
+            button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.clicked += () => OnItemPicked(item);
+            scrollView.Add(button);
+        }
+    }
+
+    // Make the Back button return from the items page instead of to unit selection
+    backToUnits.text = "Back";
+    backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
+    backToUnits.RegisterCallback<ClickEvent>(BackFromItemsMenu);
+}
+
+private void BackFromItemsMenu(ClickEvent evt)
+{
+    // Hide the items scroll page
+    scrollView.style.display = DisplayStyle.None;
+    scrollView.Clear();
+
+    // Restore header and description
+    if (attackLabel != null)
+        attackLabel.text = "Attacks";
+    actionDescription.text = "";
+
+    // Show normal actions again
+    DisplayUnit(GetPlayerUnit(selectedPlayer));
+
+    // Restore back button behavior
+    backToUnits.text = "Back";
+    backToUnits.UnregisterCallback<ClickEvent>(BackFromItemsMenu);
+    backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
+}
+
+private void OnItemPicked(AAbility item)
+{
+    // Leave the items page
+    scrollView.style.display = DisplayStyle.None;
+    scrollView.Clear();
+
+    // Set up action data like a normal ability
+    actionData = new ActionData();
+    actionData.Action = item;
+    actionData.UserTeamUnitIndex.team_index = 0;
+    actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
+
+    // Go to target selection for the item
+    TriggerState(BattleStates.TargetSelection);
+}
+
+
 
         private void AttemptFleeCombat()
         {
