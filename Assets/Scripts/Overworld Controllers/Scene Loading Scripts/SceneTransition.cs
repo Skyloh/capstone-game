@@ -67,7 +67,7 @@ public class SceneTransition : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("TransitionPanel tag not found in scene!");
+            //Debug.LogWarning("TransitionPanel tag not found in scene!");
         }
     }
 
@@ -78,7 +78,6 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator TransitionToScene(string sceneName)
     {
-        // Make sure we have a reference before fading
         if (fadePanel == null)
         {
             FindUIReferences();
@@ -90,10 +89,8 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        // Safety check
         if (fadePanel == null)
         {
-            Debug.LogWarning("FadePanel is null, skipping fade out");
             yield break;
         }
 
@@ -102,39 +99,61 @@ public class SceneTransition : MonoBehaviour
 
         while (elapsedTime < fadeDuration)
         {
+            if (fadePanel == null)
+            {
+                yield break;
+            }
+
             elapsedTime += Time.deltaTime;
             color.a = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             fadePanel.color = color;
             yield return null;
         }
 
-        color.a = 1f;
-        fadePanel.color = color;
+        if (fadePanel != null)
+        {
+            color.a = 1f;
+            fadePanel.color = color;
+        }
     }
 
     private IEnumerator FadeIn()
     {
-        // Safety check
         if (fadePanel == null)
         {
-            Debug.LogWarning("FadePanel is null, skipping fade in");
             yield break;
         }
 
         float elapsedTime = 0f;
         Color color = fadePanel.color;
         color.a = 1f;
-        fadePanel.color = color;
+
+        if (fadePanel != null)
+        {
+            fadePanel.color = color;
+        }
+        else
+        {
+            yield break;
+        }
 
         while (elapsedTime < fadeDuration)
         {
+            if (fadePanel == null)
+            {
+                yield break;
+            }
+
             elapsedTime += Time.deltaTime;
             color.a = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
             fadePanel.color = color;
             yield return null;
         }
 
-        color.a = 0f;
-        fadePanel.color = color;
+        if (fadePanel != null)
+        {
+            color.a = 0f;
+            fadePanel.color = color;
+        }
     }
 }

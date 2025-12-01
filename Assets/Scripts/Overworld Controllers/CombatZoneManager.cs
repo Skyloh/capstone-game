@@ -69,6 +69,14 @@ public class CombatZoneManager : MonoBehaviour
     /// <param name="encounter"></param>
     private void StartCombat(EncounterSO encounter)
     {
+        // grabbing player's position before scene swap to set return point
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            PlayerSpawnManager.SetCombatReturnPoint(player.transform.position, currentScene);
+        }
+
         // set runtime combat data to the encounter data
         m_runtimeCombatData.Encounter = encounter;
 

@@ -389,7 +389,16 @@ public class CombatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        SceneTransitionManager.Transition("TilemapTEst");
+        PlayerSpawnManager.ReturnFromCombat();
+
+        string returnScene = PlayerSpawnManager.GetCombatReturnScene();
+
+        if (string.IsNullOrEmpty(returnScene))
+        {
+            returnScene = "TilemapTEst";
+        }
+
+        SceneTransitionManager.Transition(returnScene);
     }
 }
 
