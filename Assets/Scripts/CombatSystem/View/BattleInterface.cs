@@ -21,6 +21,7 @@ namespace CombatSystem.View
 
         // Start is called befomre the first frame update
         public ViewSprites battleSprites;
+        private List<IAbility> playerInventory;
         private VisualElement ui;
         private VisualElement commandMenu;
         private VisualElement playerWeaknessIcon;
@@ -42,7 +43,7 @@ namespace CombatSystem.View
         private Button itemsButton;
         private ScrollView scrollView;
         private Label attackLabel; 
-        
+        private bool itemsPageOpen = false;
 
         StatusUpdater enemyStatusUpdater;
 
@@ -50,8 +51,7 @@ namespace CombatSystem.View
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
-        [SerializeField] private List<AAbility> playerInventory;
-
+     
         private CombatUnit GetPlayerUnit(int player_index)
         {
             if (!combatManager.TrySelectUnit(0, 0, player_index, SelectionFlags.Ally, out var unit))
@@ -79,6 +79,7 @@ namespace CombatSystem.View
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
             InitializeCombat();
+        
 
         }
         public void InitializeCombat(/*probably take some values here at some point*/)
@@ -165,8 +166,21 @@ namespace CombatSystem.View
             
             itemsButton = ui.Q<Button>("Items");                     
             itemsButton.RegisterCallback<ClickEvent>(OnItemsPressed);
-            scrollView = ui.Q<ScrollView>("scrollView");
+            scrollView = ui.Q<ScrollView>("ItemList");
             attackLabel = ui.Q<Label>("AttackLabel");
+            // Safely initialize inventory
+            if (InventorySingleton.Instance != null)
+            {
+                playerInventory = new List<IAbility>(InventorySingleton.Instance.ViewItems());
+                Debug.Log($"[BattleInterface] OnEnable: Inventory ready with {playerInventory.Count} items.");
+            }
+            else
+            {
+                Debug.LogWarning("[BattleInterface] OnEnable: InventorySingleton.Instance is null. Disabling Items button for now.");
+                playerInventory = new List<IAbility>();
+                if (itemsButton != null)
+                    itemsButton.SetEnabled(false);
+            }
         }
 
         private int subscribedToEnemy = -1;
@@ -335,6 +349,7 @@ namespace CombatSystem.View
             AffinityTargeting,
             TargetSelection,
             ActionSelection,
+            ItemsMenu,
             EnemyTurn,
         }
 
@@ -366,6 +381,8 @@ namespace CombatSystem.View
                     StartActionSelection(previous);
                     ShowFleeButton();
                     break;
+                case BattleStates.ItemsMenu:  
+                    break;
                 case BattleStates.EnemyTurn:
                     StartEnemyTurn(previous);
                     break;
@@ -396,6 +413,10 @@ namespace CombatSystem.View
                     CleanUpActionSelection(next);
                     HideFleeButton();
                     break;
+                case BattleStates.ItemsMenu:  
+                    scrollView.style.display = DisplayStyle.None;
+                    break;
+
                 case BattleStates.EnemyTurn:
                     CleanUpEnemyTurn(next);
                     break;
@@ -681,6 +702,10 @@ namespace CombatSystem.View
         {
             backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
             itemsButton.style.display = DisplayStyle.Flex;
+            itemsButton.SetEnabled(true);
+
+           
+
             if (selectedPlayer == -1)
             {
                 throw new Exception("Something went wrong during unit selection");
@@ -952,88 +977,93 @@ namespace CombatSystem.View
         }
         
         
-       private void OnItemsPressed(ClickEvent evt)
-{
-    // Hide the normal action UI
-    HideActionButtons();
-    itemsButton.style.display = DisplayStyle.None;
-    HideFleeButton();
-
-    // Change header from "Attacks" → "Items"
-    if (attackLabel != null)
-        attackLabel.text = "Items";
-
-    // Text under the header
-    actionDescription.text = "Choose an item";
-
-    // Prepare the scroll view as a full-page panel
-    scrollView.Clear();
-    scrollView.style.display = DisplayStyle.Flex;
-    scrollView.style.flexGrow = 1;
-    scrollView.style.position = Position.Relative;  // assumes it's already laid out in the command panel
-
-    // If there are no items, show a message
-    if (playerInventory == null || playerInventory.Count == 0)
-    {
-        var noneLabel = new Label("No items available.");
-        scrollView.Add(noneLabel);
-    }
-    else
-    {
-        // Generate one button per item
-        foreach (var item in playerInventory)
+        private void OnItemsPressed(ClickEvent evt)
         {
-            var button = new Button();
-            button.text = item.GetAbilityData().Name;
-            button.style.unityTextAlign = TextAnchor.MiddleLeft;
-            button.clicked += () => OnItemPicked(item);
-            scrollView.Add(button);
+            TriggerState(BattleStates.ItemsMenu);
+            Debug.Log("[Test] itemsButton: " + (itemsButton != null));
+            Debug.Log("[Test] scrollView: " + (scrollView != null));
+            Debug.Log("[Test] InventorySingleton.Instance: " + (InventorySingleton.Instance != null));
+            Debug.Log("[Test] ViewItems(): " + (InventorySingleton.Instance?.ViewItems() != null));
+            Debug.Log("[Test] playerInventory: " + (playerInventory != null));
+            Debug.Log("[Test] actionDescription: " + (actionDescription != null));
+
+            Debug.Log($"[BattleInterface] Items button pressed. Inventory count = {InventorySingleton.Instance.ViewItems().Count}");
+
+            itemsPageOpen = true;
+            HideActionButtons();
+            itemsButton.style.display = DisplayStyle.None;
+            HideFleeButton();
+
+            if (attackLabel != null)
+                attackLabel.text = "Items";
+
+            actionDescription.text = "Choose an item";
+
+            scrollView.Clear();
+            scrollView.style.display = DisplayStyle.Flex;
+
+            for (int i = 0; i < playerInventory.Count; i++)
+            {
+                int capture = i;
+                var ability = playerInventory[i];
+                Debug.Log($"[BattleInterface] Listing item button {i}: {ability.GetAbilityData().Name}");
+
+                var b = new Button();
+                b.text = ability.GetAbilityData().Name;
+                b.clicked += () => OnItemPicked(capture);
+                scrollView.Add(b);
+            }
+
+            backToUnits.text = "Back";
+            backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
+            backToUnits.RegisterCallback<ClickEvent>(BackFromItemsMenu);
         }
-    }
-
-    // Make the Back button return from the items page instead of to unit selection
-    backToUnits.text = "Back";
-    backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
-    backToUnits.RegisterCallback<ClickEvent>(BackFromItemsMenu);
-}
-
-private void BackFromItemsMenu(ClickEvent evt)
-{
-    // Hide the items scroll page
-    scrollView.style.display = DisplayStyle.None;
-    scrollView.Clear();
-
-    // Restore header and description
-    if (attackLabel != null)
-        attackLabel.text = "Attacks";
-    actionDescription.text = "";
-
-    // Show normal actions again
-    DisplayUnit(GetPlayerUnit(selectedPlayer));
-
-    // Restore back button behavior
-    backToUnits.text = "Back";
-    backToUnits.UnregisterCallback<ClickEvent>(BackFromItemsMenu);
-    backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
-}
-
-private void OnItemPicked(AAbility item)
-{
-    // Leave the items page
-    scrollView.style.display = DisplayStyle.None;
-    scrollView.Clear();
-
-    // Set up action data like a normal ability
-    actionData = new ActionData();
-    actionData.Action = item;
-    actionData.UserTeamUnitIndex.team_index = 0;
-    actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
-
-    // Go to target selection for the item
-    TriggerState(BattleStates.TargetSelection);
-}
 
 
+        private void BackFromItemsMenu(ClickEvent evt)
+        {
+            Debug.Log("[BattleInterface] Leaving Items menu → returning to Attacks page.");
+
+            itemsPageOpen = false;
+
+            scrollView.style.display = DisplayStyle.None;
+            scrollView.Clear();
+
+            if (attackLabel != null)
+                attackLabel.text = "Attacks";
+
+            actionDescription.text = "";
+            DisplayUnit(GetPlayerUnit(selectedPlayer));
+
+            backToUnits.text = "Back";
+            backToUnits.UnregisterCallback<ClickEvent>(BackFromItemsMenu);
+            backToUnits.RegisterCallback<ClickEvent>(TriggerUnitSelection);
+        }
+
+        private void OnItemPicked(int index)
+        {
+            Debug.Log($"[BattleInterface] Item clicked → index {index}");
+
+            var before = InventorySingleton.Instance.ViewItems().Count;
+            var chosen = InventorySingleton.Instance.ConsumeItemAtIndex(index);
+            var after = InventorySingleton.Instance.ViewItems().Count;
+
+            Debug.Log($"[BattleInterface] Consumed item: {chosen.GetAbilityData().Name} | Inventory {before} → {after}");
+
+            playerInventory = new List<IAbility>(InventorySingleton.Instance.ViewItems());
+
+            scrollView.style.display = DisplayStyle.None;
+            scrollView.Clear();
+
+            actionData = new ActionData();
+            actionData.Action = chosen;
+            actionData.UserTeamUnitIndex.team_index = 0;
+            actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
+
+            Debug.Log($"[BattleInterface] Starting Target Selection for item: {chosen.GetAbilityData().Name}");
+
+            TriggerState(BattleStates.TargetSelection);
+        }
 
         private void AttemptFleeCombat()
         {

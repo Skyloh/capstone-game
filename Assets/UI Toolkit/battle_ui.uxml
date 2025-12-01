@@ -34,7 +34,7 @@
                 <ui:Button text="Back" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackToUnits" class="hide" style="background-image: url(&quot;project://database/Assets/UI%20Shenanigans/enemyboxsmall-export.png?fileID=21300000&amp;guid=7d590802c21f64b9282a1c814d5bdf03&amp;type=3#enemyboxsmall-export&quot;);" />
                 <ui:Label tabindex="-1" text="Power: XX&#10;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ActionDescription" style="-unity-text-align: upper-left; white-space: normal; text-overflow: clip; align-items: flex-start; justify-content: center; align-self: auto; font-size: 10px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Shenanigans/Fonts/Pixelpurl-0vBPP.ttf?fileID=12800000&amp;guid=ef152549768704337aa3d35d9035611e&amp;type=3#Pixelpurl-0vBPP&quot;); left: 0; flex-wrap: wrap; width: 97px;" />
                 <ui:Button text="Items" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Items" class="hide" style="background-image: url(&quot;project://database/Assets/UI%20Shenanigans/enemyboxsmall-export%201.png?fileID=21300000&amp;guid=8997ba203d2944e80a98b07a459a4eaa&amp;type=3#enemyboxsmall-export 1&quot;);" />
-                <ui:ScrollView />
+                <ui:ScrollView name="ItemList" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row-reverse; background-image: none;">
