@@ -60,7 +60,7 @@ public class BurningHandsAbility : AAbility
 
             Debug.Log($"Damaging {target.GetName()} for {damage}.");
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }

@@ -69,7 +69,7 @@ public class SweepAbility : AAbility
             bar_module.BreakLeading(breaks_array[t_index++]);
             health_module.ChangeHealth(damage);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
