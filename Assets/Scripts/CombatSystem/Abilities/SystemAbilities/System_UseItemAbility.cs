@@ -13,7 +13,7 @@ public class System_UseItemAbility : AAbility
 
         SetAbilityData(new()
         {
-            Name = "System_UseItem:" + data.Name,
+            Name = "Use " + data.Name,
             Description = "Uses item with effect: " + data.Description,
             RequiredTargets = data.RequiredTargets,
             TargetCriteria = data.TargetCriteria,

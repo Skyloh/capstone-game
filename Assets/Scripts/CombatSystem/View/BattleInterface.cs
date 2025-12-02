@@ -1082,14 +1082,22 @@ namespace CombatSystem.View
             scrollView.style.display = DisplayStyle.None;
             scrollView.Clear();
 
-            actionData = new ActionData();
-            actionData.Action = chosen;
-            actionData.UserTeamUnitIndex.team_index = 0;
-            actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
+            var item_use_ability = new System_UseItemAbility(chosen);
 
-            Debug.Log($"[BattleInterface] Starting Target Selection for item: {chosen.GetAbilityData().Name}");
+            Debug.Log($"[BattleInterface] Starting Target Selection for item: {item_use_ability.GetAbilityData().Name}");
+
+            if (currentState == BattleStates.ItemsMenu)
+            {
+                currentState = BattleStates.UnitSelection;
+                unitSelector.ManualSelect(0, selectedPlayer);
+                currentState = BattleStates.ItemsMenu;
+            }
 
             TriggerState(BattleStates.TargetSelection);
+            actionData = new ActionData();
+            actionData.Action = item_use_ability;
+            actionData.UserTeamUnitIndex.team_index = 0;
+            actionData.UserTeamUnitIndex.unit_index = selectedPlayer;
         }
 
         private void AttemptFleeCombat()
