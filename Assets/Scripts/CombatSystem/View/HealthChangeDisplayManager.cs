@@ -55,7 +55,7 @@ public class HealthChangeDisplayManager : MonoBehaviour
     public void Popup(int unit_index, int team_index, int amount)
     {
         var text = GetNextNonactive();
-        text.text = amount.ToString();
+        text.text = Mathf.Abs(amount).ToString();
 
         // if the decrease amount is negative itself, then it's a heal. Otherwise, it's damage.
         text.color = amount < 0 ? Color.green : Color.magenta;

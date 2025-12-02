@@ -48,7 +48,7 @@ public class EnemyExperiShotAbility : AAbility
             // data application
             health_module.ChangeHealth(damage);
 
-            yield return new WaitForSeconds(0.75f);
+            yield return new WaitForSeconds(0.35f);
         }
 
         yield return new WaitForSeconds(1f);

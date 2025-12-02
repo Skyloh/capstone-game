@@ -231,7 +231,7 @@ public class CombatManager : MonoBehaviour
         // modified to have support for Fleeing combat (and any other non-teamwipe combat exits)
         if (m_combatModel.HasOutcome(out CombatOutcome outcome))
         {
-            Debug.LogError("BATTLE RESOLVED WITH OUTCOME: " + outcome);
+            Debug.LogWarning("BATTLE RESOLVED WITH OUTCOME: " + outcome);
 
             StartCoroutine(IE_DelayThenExitCombat());
 
@@ -398,7 +398,7 @@ public class CombatManager : MonoBehaviour
             returnScene = "TilemapTEst";
         }
 
-        SceneTransitionManager.Transition(returnScene);
+        SceneTransitionManager.Transition(returnScene, TransitionType.Fade);
     }
 }
 

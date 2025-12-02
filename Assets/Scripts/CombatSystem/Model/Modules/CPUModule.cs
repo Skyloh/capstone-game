@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Random = UnityEngine.Random;
 
 public class CPUModule : AModule
@@ -22,29 +21,93 @@ public class CPUModule : AModule
         // if no abilities, they can't take a turn in combat.
         if (!has_abilities) return default;
 
-        IAbility chosen;
-        if (m_cpuBrain.HasAbilityMatch(model, out var ability_name))
+        // start with the pass turn action in case they can't do anything
+        ActionData action_data = MakePassTurnAction(owner);
+        bool found_action = false;
+
+        // first, try all possible Precondition Matches.
+        var matches = m_cpuBrain.GetPreconditionMatches(model);
+        foreach (var match in matches)
         {
-            chosen = MatchAbility(module, ability_name);
-        }
-        else
-        {
-            chosen = MatchAbility(module, m_cpuBrain.GetRandomFallbackAbility());
+            // attempt to make an action out of a precondition match. If it succeeds, say we have an action ready.
+            if (TryMakeAction(module, owner, model, match, out action_data))
+            {
+                found_action = true;
+                break;
+            }
         }
 
-        var data = new ActionData()
+        // next, if a valid action wasn't found in the previous step, go through all the
+        // random fallback options.
+        if (!found_action)
         {
-            Action = chosen,
-            UserTeamUnitIndex = owner.GetIndices(),
-            TargetIndices = FindTargets(chosen, model),
-            ActionMetadata = ResolveMetadata(owner, model, chosen.GetAbilityData().RequiredMetadata)
+            var fallbacks = m_cpuBrain.GetFallbackAbilityNames();
+
+            // while we still have nothing to use as an action AND have things to search...
+            while (!found_action && fallbacks.Count > 0)
+            {
+                // choose a random fallback
+                int index = Random.Range(0, fallbacks.Count);
+                string pick = fallbacks[index];
+
+                // attempt it, and if successful, say we have an action to use.
+                if (TryMakeAction(module, owner, model, pick, out action_data))
+                {
+                    found_action = true;
+                }
+                // if unsuccessful, remove that pick.
+                else
+                {
+                    fallbacks.RemoveAt(index);
+                }
+            }
+        }
+
+        // if we somehow got nothing, we fall back on the pass turn action
+        // created for action_data when declared.
+
+        return action_data;
+    }
+
+    private ActionData MakePassTurnAction(CombatUnit unit)
+    {
+        return new ActionData()
+        {
+            Action = new System_PassTurnAbility(),
+            UserTeamUnitIndex = unit.GetIndices(),
+            TargetIndices = null,
+            ActionMetadata = null
         };
+    }
 
-        return data;
+    private bool TryMakeAction(AbilityModule module, CombatUnit module_owner, ICombatModel model, string ability_name, out ActionData action)
+    {
+        try
+        {
+            var chosen_ability = MatchAbility(module, ability_name);
+            var targets = FindTargets(chosen_ability, model);
+            var metadata = ResolveMetadata(module_owner, model, chosen_ability.GetAbilityData().RequiredMetadata);
+
+            action = new ActionData()
+            {
+                Action = chosen_ability,
+                UserTeamUnitIndex = module_owner.GetIndices(),
+                TargetIndices = targets,
+                ActionMetadata = metadata
+            };
+            return true;
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.Log($"This is not an error. Failed to make action {ability_name} with reason: {e.Message}");
+
+            action = default;
+            return false;
+        }
     }
 
     // TODO
-    // stub, but shouldn't be much of an issue for now
+    // stub, but shouldn't be much of an issue for now since enemies dont have metadata rn
     // will need a factory-pattern-like thing to resolve all the different metadatas, but look into it later.
     private Dictionary<string, string> ResolveMetadata(CombatUnit _, ICombatModel _1, IReadOnlyList<string> _2)
     {
@@ -63,11 +126,20 @@ public class CPUModule : AModule
         {
             var unit_pool = new List<CombatUnit>(model.GetTeam(ConvertPerspective(entry.Key)).GetUnits());
 
-            // if we're to target a whole team, simply fill with a whole team of units.
+            // if we're to target a whole team, simply fill with all the units on the team that fit the criteria
             var (min, max) = entry.Value;
             if (min == max && min == -1)
             {
-                FillUnits(unit_pool, building_targets, model, data.TargetCriteria);
+                int add_count = SweepFillUnits(unit_pool, building_targets, model, data.TargetCriteria);
+
+                // if no units were added, ERROR.
+                // this is because a sweep unit additional counts as a (0-Inf) team selector,
+                // meaning you need at >0 units.
+                if (add_count == 0)
+                {
+                    throw new Exception("No targets found for sweep fill.");
+                }
+
                 break;
             }
             // otherwise, perform regular target selection
@@ -99,10 +171,9 @@ public class CPUModule : AModule
                 else // if we have no more to get, make sure we got enough to move on
                 {
                     // if we didnt manage to choose enough targets, error.
-                    // this in theory shouldnt happen, but just in case.
                     if (chosen_so_far < min)
                     {
-                        throw new Exception("Not enough targets!");
+                        throw new Exception($"Not enough targets found for criteria {min} to {max}.");
                     }
 
                     // otherwise, exit loop for this team's draft and go to the next
@@ -128,12 +199,33 @@ public class CPUModule : AModule
         return target_ids;
     }
 
-    private void FillUnits(List<CombatUnit> pool, List<CombatUnit> targets, ICombatModel model, SelectionFlags criteria)
+    /// <summary>
+    /// Fills the targets list supplied with all the units in the pool that match the criteria. Does not allow duplicate units and
+    /// does not use Goad/Rage to limit target selection. Returns the number of units added to the targets list.
+    /// </summary>
+    /// <param name="pool"></param>
+    /// <param name="targets"></param>
+    /// <param name="model"></param>
+    /// <param name="criteria"></param>
+    /// <returns></returns>
+    private int SweepFillUnits(List<CombatUnit> pool, List<CombatUnit> targets, ICombatModel model, SelectionFlags criteria)
     {
+        int units_added = 0;
         while (pool.Count > 0)
         {
-            targets.Add(FindValidTarget(pool, model, criteria));
+            var unit = FindValidTarget(pool, model, criteria);
+
+            // if this occurs, that means the pool of testable units has no remaining units that fit the criteria.
+            // in that case, we have to exit because there's nothing we can do.
+            if (unit == null) break;
+
+            targets.Add(unit);
+            units_added++;
         }
+
+        return units_added;
+
+        // TODO add handling for the case where a move cannot get enough targets. What then? pick a new move? fail?
     }
 
     private CombatUnit FindValidTarget(List<CombatUnit> unit_pool, ICombatModel model, SelectionFlags target_criteria, bool allow_dupes = false, bool use_rage = false)
@@ -153,7 +245,7 @@ public class CPUModule : AModule
             is_eligible = MatchesCriteria(unit, model, target_criteria);
 
             // if the unit is not eligible to be chosen, remove them from the pool so we don't
-            // recheck them in future target selections
+            // waste checks on them in future target selections for this team.
             if (!is_eligible) unit_pool.RemoveAt(index);
 
             // otherwise, empty the pool of the unit if no duplicate unit selections are allowed
@@ -198,7 +290,9 @@ public class CPUModule : AModule
         var team = model.GetTeam(team_id);
 
         // unforch dupe code...
-        if (flags.HasFlag(SelectionFlags.Actionable) && team.HasUnitTakenTurn(unit_id)
+        // 1. if we require them to be actionable, but they have already taken their turn, they fail the criteria
+        // 2. if we require them to be alive, but they're already dead, they fail the criteria
+        if ((flags.HasFlag(SelectionFlags.Actionable) && team.HasUnitTakenTurn(unit_id))
             || (flags.HasFlag(SelectionFlags.Alive) && !team.IsUnitAlive(unit_id)))
         {
             return false;

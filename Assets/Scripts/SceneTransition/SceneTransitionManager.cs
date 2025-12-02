@@ -18,9 +18,9 @@ public class SceneTransitionManager : MonoBehaviour
         Instance = this;
     }
 
-    public static void Transition(string to_scene, string transition_scene = "BlankScene")
+    public static void Transition(string to_scene, TransitionType type)
     {
-        Instance.StartCoroutine(Instance.IE_Transition(to_scene, transition_scene));
+        Instance.StartCoroutine(Instance.IE_Transition(to_scene, Instance.MatchTransitionType(type)));
     }
 
     private IEnumerator IE_Transition(string to_scene_name, string transition_scene)
@@ -72,5 +72,15 @@ public class SceneTransitionManager : MonoBehaviour
 
         // unfreeze time and start
         Time.timeScale = 1f; // START
+    }
+
+    private string MatchTransitionType(TransitionType transition_type)
+    {
+        return transition_type switch
+        {
+            TransitionType.Wipe => "WipeBattleTransitionScene",
+            TransitionType.Fade => "FadeTransitionScene",
+            _ => throw new System.ArgumentException("Unsupported type: " + transition_type),
+        };
     }
 }

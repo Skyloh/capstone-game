@@ -10,6 +10,11 @@ public class AnimatedTransition : AMonoSceneTransition
     [SerializeField] private AnimationClip m_beginClip;
     [SerializeField] private AnimationClip m_finishClip;
 
+    private void Awake()
+    {
+        m_animator.SetFloat("mult", GetMultiplier());
+    }
+
     public override void Begin()
     {
         m_animator.Play("Begin");
@@ -20,12 +25,12 @@ public class AnimatedTransition : AMonoSceneTransition
         m_animator.Play("Finish");
     }
 
-    public override float GetBeginDuration()
+    protected override float GetRawBeginDuration()
     {
         return m_beginClip.length;
     }
 
-    public override float GetFinishDuration()
+    protected override float GetRawFinishDuration()
     {
         return m_finishClip.length;
     }

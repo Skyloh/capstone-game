@@ -187,7 +187,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 4
 --- !u!222 &464718178
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -208,6 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e73f0e04864ef04a8fd7150022c7480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_multSpeed: 0.1
   m_animator: {fileID: 464718180}
   m_beginClip: {fileID: 7400000, guid: f7e80cd0633fabb4d98be160ed0de360, type: 2}
   m_finishClip: {fileID: 7400000, guid: a2f683802c180ce4da65b08ebb5edebe, type: 2}

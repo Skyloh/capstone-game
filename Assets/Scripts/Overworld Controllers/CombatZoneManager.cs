@@ -83,7 +83,7 @@ public class CombatZoneManager : MonoBehaviour
         // swap into combat scene
         // the CombatManager will be initialized with data sourced from the runtime combat data SO
         //SceneManager.LoadScene("BattleScene");
-        SceneTransitionManager.Transition("BattleScene");
+        SceneTransitionManager.Transition("BattleScene", TransitionType.Wipe);
     }
 
     /// <summary>

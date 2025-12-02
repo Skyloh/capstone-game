@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour
             PlayerSpawnManager.nextSpawnPointID = loadingZoneTile.targetSpawnPointID;
 
             isTransitioning = true;
-            SceneTransition.GetInstance()?.LoadScene(loadingZoneTile.sceneToLoad);
+            SceneTransitionManager.Transition(loadingZoneTile.sceneToLoad, TransitionType.Fade);
         }
     }
 
