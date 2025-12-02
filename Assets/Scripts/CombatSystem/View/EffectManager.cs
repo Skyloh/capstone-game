@@ -29,7 +29,7 @@ public class EffectManager : MonoBehaviour
         m_database.Init();
     }
 
-    public static void DoEffectOn(int unit_index, int team_index, string effect_name, float duration, float scale, bool do_jitter = false)
+    public static void DoEffectOn(int unit_index, int team_index, string effect_name, float duration, float scale, bool do_jitter = false, bool at_pedestal = false)
     {
         var ths = Instance;
 
@@ -53,11 +53,15 @@ public class EffectManager : MonoBehaviour
             instance.transform.position = pos;
         }
 
-        // add a small vertical offset
-        var vertical_displace = instance.transform.position;
-        vertical_displace.y += 0.5f;
+        // if not at the pedestal height...
+        if (!at_pedestal)
+        {
+            // add a small vertical offset
+            var vertical_displace = instance.transform.position;
+            vertical_displace.y += 0.5f;
 
-        instance.transform.position = vertical_displace;
+            instance.transform.position = vertical_displace;
+        }
 
         instance.transform.localScale = Vector3.one * scale;
 

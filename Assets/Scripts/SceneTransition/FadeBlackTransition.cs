@@ -41,6 +41,16 @@ public class FadeBlackTransition : AMonoSceneTransition
 
         float elapsedTime = 0f;
         Color color = fadePanel.color;
+        color.a = 0f;
+
+        if (fadePanel != null)
+        {
+            fadePanel.color = color;
+        }
+        else
+        {
+            yield break;
+        }
 
         while (elapsedTime < fadeDuration)
         {

@@ -24,6 +24,8 @@ public class ConfettiGunItem : AAbility
         var status_module = GetModuleOrError<StatusModule>(target);
         status_module.AddStatus((Status)Random.Range(1, 6), 99);
 
+        EffectManager.DoEffectOn(unit_index_2, team_index_2, "magic_poof", 2f, 3f);
+
         yield return new WaitForSeconds(0.5f);
     }
 }

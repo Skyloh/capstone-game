@@ -35,6 +35,7 @@ namespace CombatSystem.View
         private Label playerTotalHp;
         private Button backToUnits;
         private Label actionDescription;
+        private string cacheActionDescriptionText;
         private ProgressBar enemyHealthbar;
         private VisualElement playerWeaponIcon;
         private VisualElement portrait;
@@ -159,6 +160,12 @@ namespace CombatSystem.View
                 AttemptFleeCombat();
             });
             backToUnits.RegisterCallback<ClickEvent>(OnBackToUnits);
+            backToUnits.RegisterCallback<MouseOverEvent>(
+                (moe) =>
+                UpdateActionDescriptionRaw(moe, "Deselect, return from, or cancel whatever you're doing."));
+            backToUnits.RegisterCallback<MouseOutEvent>(
+                (moe) => RestoreActionDescriptionTextFromCache(moe));
+
             unitSelector.SelectableEnemyHovered += OnSelectableEnemyHovered;
             unitSelector.EnemyHovered += OnEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
@@ -166,6 +173,10 @@ namespace CombatSystem.View
             
             itemsButton = ui.Q<Button>("Items");                     
             itemsButton.RegisterCallback<ClickEvent>(OnItemsPressed);
+            itemsButton.RegisterCallback<MouseOverEvent>(
+                (moe) =>
+                UpdateActionDescriptionRaw(moe, "Use an item."));
+
             scrollView = ui.Q<ScrollView>("ItemList");
             attackLabel = ui.Q<Label>("AttackLabel");
             // Safely initialize inventory
@@ -282,7 +293,19 @@ namespace CombatSystem.View
         private void UpdateAttackDescription(MouseOverEvent e, int index)
         {
             // Debug.Log(index + "  " + abilityCache.GetAbilities().Count);
+            cacheActionDescriptionText = actionDescription.text;
             actionDescription.text = abilityCache.GetAbilities()[index].GetAbilityData().Description;
+        }
+
+        private void UpdateActionDescriptionRaw(MouseOverEvent _, string text)
+        {
+            cacheActionDescriptionText = actionDescription.text;
+            actionDescription.text = text;
+        }
+
+        private void RestoreActionDescriptionTextFromCache(MouseOutEvent _)
+        {
+            actionDescription.text = cacheActionDescriptionText;
         }
 
         private AbilityModule abilityCache;
@@ -1012,6 +1035,10 @@ namespace CombatSystem.View
                 b.text = ability.GetAbilityData().Name;
                 b.clicked += () => OnItemPicked(capture);
                 scrollView.Add(b);
+
+                b.RegisterCallback<MouseOverEvent>(
+                    (moe) => 
+                    UpdateActionDescriptionRaw(moe, "Choose an item:\n\n" + ability.GetAbilityData().Description));
             }
 
             backToUnits.text = "Back";

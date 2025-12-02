@@ -59,3 +59,5 @@ MonoBehaviour:
     value: {fileID: 100000, guid: 1bc4a709f24528b40984e62f32e398a0, type: 3}
   - key: hit_misc
     value: {fileID: 100000, guid: 27150693a691ab64e9cc24f5b85a4ba6, type: 3}
+  - key: ripples
+    value: {fileID: 3049273859446776712, guid: 65d95fa9e84447c45a9be9ce85a152d6, type: 3}

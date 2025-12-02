@@ -166,7 +166,7 @@ public class CombatManager : MonoBehaviour
     {
         // highlight them with an animation to show that they are acting.
         var (team_index, unit_index) = action_information.UserTeamUnitIndex;
-        EffectManager.DoEffectOn(unit_index, team_index, "hit_misc", 2f, 4f);
+        EffectManager.DoEffectOn(unit_index, team_index, "ripples", 1f, 1.5f, false, true);
 
         // now that user has gone, consume their turn.
         m_combatModel.GetTeam(action_information.UserTeamUnitIndex.team_index).ConsumeTurnOfUnit(action_information.UserTeamUnitIndex.unit_index);
@@ -189,6 +189,7 @@ public class CombatManager : MonoBehaviour
         FindObjectOfType<AttackBannerUI>()
             .ShowBanner(data.Action.GetAbilityData().Name);
 
+        yield return new WaitForSecondsRealtime(0.5f); // brief delay before activation
 
         yield return data.Action.IE_ProcessAbility(data, m_combatModel, m_combatView.Value);
 
@@ -398,7 +399,7 @@ public class CombatManager : MonoBehaviour
             returnScene = "TilemapTEst";
         }
 
-        SceneTransitionManager.Transition(returnScene, TransitionType.Fade);
+        SceneTransitionManager.Transition(returnScene, TransitionType.Wipe);
     }
 }
 
