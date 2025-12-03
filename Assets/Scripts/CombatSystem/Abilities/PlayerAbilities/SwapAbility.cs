@@ -56,6 +56,7 @@ public class SwapAbility : AAbility
         // VFX
         EffectManager.DoEffectOn(t_unit_index, t_team_index, "hit_light", 1f, 2f);
         EffectManager.DoEffectOn(t2_unit_index, t2_team_index, "hit_light", 1f, 2f);
+        AudioManager.PlaySFX("aff_swap");
 
         // perform swap
         AffinityType t1_cache = t1_affbar.GetAtIndex(t1_index);

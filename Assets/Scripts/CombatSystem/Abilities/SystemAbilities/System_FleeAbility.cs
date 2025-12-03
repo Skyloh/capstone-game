@@ -33,7 +33,9 @@ public class System_FleeAbility : AAbility
 
             team.ConsumeTurnOfUnit(unit);
         }
-        
+
+        AudioManager.PlaySFX(success ? "heal" : "escape_fail");
+
         // attempt to flee combat
         if (success)
         {

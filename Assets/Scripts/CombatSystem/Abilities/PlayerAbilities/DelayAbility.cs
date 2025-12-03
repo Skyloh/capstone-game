@@ -83,6 +83,7 @@ public class DelayAbility : AAbility
         bar_module.ConsumeBookmark();
 
         EffectManager.DoEffectOn(elements[0].u_i, elements[0].t_i, "hit_light", 2f, 2f);
+        AudioManager.PlaySFX("aff_swap");
 
         yield return new WaitForSeconds(0.5f);
     }

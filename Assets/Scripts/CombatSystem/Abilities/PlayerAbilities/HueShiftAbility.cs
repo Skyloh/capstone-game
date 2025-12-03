@@ -50,6 +50,7 @@ public class HueShiftAbility : AAbility
 
             Debug.Log("Swapped!");
             EffectManager.DoEffectOn(t_unit_index, t_team_index, "aura", 2f, 2f);
+            AudioManager.PlaySFX("aff_swap");
         }
         else
         {

@@ -40,6 +40,7 @@ public class EnemyMultiAttackAbility : AAbility
             // VFX
             EffectManager.DoEffectOn(unit_index, team_index, "hit_pow", 2f, 3f, true);
             EffectManager.DoEffectOn(unit_index, team_index, "blood", 2f, 2f);
+            AudioManager.PlaySFX("slice");
 
             yield return new WaitForSeconds(0.1f);
 

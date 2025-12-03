@@ -60,6 +60,7 @@ public class BlindsideAbility : AAbility
 
         // Attack VFX
         EffectManager.DoEffectOn(unit_index, team_index, "blood", 2f, 4f);
+        AudioManager.PlaySFX("slice");
 
         yield return new WaitForSeconds(0.3f);
 

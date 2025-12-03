@@ -29,6 +29,7 @@ public class DefendAbility : AAbility
         Debug.Log($"Your weakness is now read as {DEBUG.GetWeaknessAffinity()}!");
 
         EffectManager.DoEffectOn(unit_index, team_index, "diamond_nooutline", 1f, 2f);
+        AudioManager.PlaySFX("protect");
 
         yield return new WaitForSeconds(1f);
     }

@@ -44,7 +44,24 @@ public class AudioManager : MonoBehaviour
 
     public static void PlaySFX(string name)
     {
-        Instance.m_sfxSource.PlayOneShot(Instance.m_database.GetItem(name));
+        AudioClip clip;
+        try
+        {
+            clip = Instance.m_database.GetItem(name);
+        }
+        catch (KeyNotFoundException)
+        {
+            Debug.LogWarning($"Audio DB does not have an entry for sound {name}. Terminating...");
+            return;
+        }
+
+        if (clip == null)
+        {
+            Debug.LogWarning($"Clip for sfx of name {name} is null. Did you forget to set it in the DB?");
+            return;
+        }
+
+        Instance.m_sfxSource.PlayOneShot(clip);
     }
 
     public static void PlayBGM(string clip, bool bookmark_timestamp = false)

@@ -42,6 +42,7 @@ public class EnemyExperiShotAbility : AAbility
             // VFX
             EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 2f, 2f);
             EffectManager.DoEffectOn(unit_index, team_index, "death_skull", 2f, 1f);
+            AudioManager.PlaySFX("stab");
 
             yield return new WaitForSeconds(0.15f);
 

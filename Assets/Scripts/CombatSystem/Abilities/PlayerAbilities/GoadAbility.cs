@@ -27,6 +27,7 @@ public class GoadAbility : AAbility
 
         // enemy vfx
         EffectManager.DoEffectOn(unit_index, team_index, "fire_swirl", 3f, 2f);
+        AudioManager.PlaySFX("fire_crackle");
 
         // player vfx
         var (user_t_index, user_index) = data.UserTeamUnitIndex;

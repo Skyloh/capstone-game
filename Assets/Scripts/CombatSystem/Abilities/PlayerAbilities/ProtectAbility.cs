@@ -29,6 +29,7 @@ public class ProtectAbility : AAbility
         // VFX
         EffectManager.DoEffectOn(u_unit_index, u_team_index, "diamond", 2f, 2f);
         EffectManager.DoEffectOn(t_unit_index, t_team_index, "diamond", 2f, 2f);
+        AudioManager.PlaySFX("protect");
 
         // swapping RAW weaknesses
         AffinityType user_weakness_aff = aff_module.GetRawWeaknessAffinity();

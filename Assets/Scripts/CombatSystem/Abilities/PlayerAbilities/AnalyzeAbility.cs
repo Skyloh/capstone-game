@@ -50,6 +50,7 @@ public class AnalyzeAbility : AAbility
         }
 
         EffectManager.DoEffectOn(unit_index_2, team_index_2, "force", 2f, 2f);
+        AudioManager.PlaySFX("aff_swap");
         yield return new WaitForSeconds(2f);
     }
 }

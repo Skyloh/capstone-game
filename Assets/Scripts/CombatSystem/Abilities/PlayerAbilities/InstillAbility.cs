@@ -33,6 +33,7 @@ public class InstillAbility : AAbility
         }
 
         EffectManager.DoEffectOn(target_index.unit_index, target_index.team_index, "vortex", 2f, 2f);
+        AudioManager.PlaySFX("aff_swap");
         EffectManager.DoEffectOn(unit_index, team_index, "hit_light", 1f, 2f);
 
         Debug.Log("Affinity bar changed.");

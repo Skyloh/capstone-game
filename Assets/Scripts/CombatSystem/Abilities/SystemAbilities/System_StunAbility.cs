@@ -19,6 +19,8 @@ public class System_StunAbility : AAbility
     {
         Debug.Log("Wasting turn due to Stun.");
 
+        AudioManager.PlaySFX("ailment");
+
         // Graphical effects here on user...
 
         yield return new WaitForSecondsRealtime(1f);

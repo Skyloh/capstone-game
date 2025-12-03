@@ -42,6 +42,7 @@ public class BurningHandsAbility : AAbility
 
             // VFX
             EffectManager.DoEffectOn(unit_index, team_index, "hit_fire", 1f, 2f);
+            AudioManager.PlaySFX("fire_impact");
 
             yield return new WaitForSeconds(0.35f);
 
@@ -51,6 +52,7 @@ public class BurningHandsAbility : AAbility
             foreach (var affinity in elements_broken)
             {
                 EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
+                AudioManager.PlaySFX("break");
                 yield return new WaitForSeconds(0.1f);
             }
 

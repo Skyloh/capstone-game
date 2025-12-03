@@ -33,6 +33,7 @@ public class InfuseAbility : AAbility
         }
 
         EffectManager.DoEffectOn(u_unit_index, u_team_index, "bubble_glows", 3f, 2f);
+        AudioManager.PlaySFX("aff_swap");
 
         aff_module.ChangeWeaponAffinity(AbilityUtils.StringToAffinity(element));
 

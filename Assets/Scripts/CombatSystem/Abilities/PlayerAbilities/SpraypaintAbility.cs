@@ -34,6 +34,7 @@ public class SpraypaintAbility : AAbility
 
             Debug.Log("Inflicting " + aff_status);
             EffectManager.DoEffectOn(unit_index, team_index, "magic_poof", 2f, 2f);
+            AudioManager.PlaySFX("magic_poof");
         }
 
         yield return new WaitForSeconds(0.5f);

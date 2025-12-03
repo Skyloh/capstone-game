@@ -50,6 +50,7 @@ public class SegmentSwapAbility : AAbility
 
         Debug.Log("Swapped!");
         EffectManager.DoEffectOn(t_unit_index, t_team_index, "hit_light", 2f, 2f);
+        AudioManager.PlaySFX("aff_swap");
 
         yield return new WaitForSeconds(2f);
     }

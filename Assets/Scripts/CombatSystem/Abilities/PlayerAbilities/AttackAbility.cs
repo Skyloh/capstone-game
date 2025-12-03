@@ -41,6 +41,7 @@ public class AttackAbility : AAbility
 
         // Attack VFX
         EffectManager.DoEffectOn(unit_index, team_index, "hit_pow", 1f, 2f);
+        AudioManager.PlaySFX("attack");
 
         yield return new WaitForSeconds(0.3f);
 
@@ -50,6 +51,7 @@ public class AttackAbility : AAbility
         foreach (var affinity in elements_broken)
         {
             EffectManager.DoEffectOn(unit_index, team_index, "break_" + AbilityUtils.AffinityToEffectSuffix(affinity), 1f, 2f, true);
+            AudioManager.PlaySFX("break");
             yield return new WaitForSeconds(0.1f);
         }
 

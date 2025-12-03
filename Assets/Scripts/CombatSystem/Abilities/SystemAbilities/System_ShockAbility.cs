@@ -19,6 +19,8 @@ public class System_ShockAbility : AAbility
     {
         Debug.Log("Wasting turn due to Shock.");
 
+        AudioManager.PlaySFX("storm_impact");
+
         // Graphical effects here on user...
 
         yield return new WaitForSecondsRealtime(1f);

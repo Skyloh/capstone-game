@@ -30,6 +30,7 @@ public class MonochromeAbility : AAbility
             Debug.Log($"{StatusUtils.AffinityToMorph(weapon_aff)} granted to {target}!");
 
             EffectManager.DoEffectOn(target.unit_index, target.team_index, "aura", 2f, 2f);
+            AudioManager.PlaySFX("aff_swap");
 
             yield return new WaitForSeconds(0.5f);
         }

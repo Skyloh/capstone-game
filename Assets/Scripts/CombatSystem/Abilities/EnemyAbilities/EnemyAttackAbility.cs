@@ -51,6 +51,7 @@ public class EnemyAttackAbility : AAbility
         for (int i = 0; i < 4; ++i)
         {
             EffectManager.DoEffectOn(unit_index, team_index, "magic_hit", 1f, 1f, true);
+            AudioManager.PlaySFX("attack");
             yield return new WaitForSeconds(0.2f);
         }
 
