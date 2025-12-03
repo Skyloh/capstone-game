@@ -10,7 +10,7 @@ public class InstillAbility : AAbility
             Name = "Instill",
             Description = "Convert the leading 2 elements of 1 enemy to your weapon-element.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 enemy
-            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive,
+            TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = AbilityUtils.EmptyMetadata()
         });
     }
