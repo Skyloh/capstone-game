@@ -148,8 +148,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 60
-      y: 4
+      x: 4
+      y: 67
       width: 43
       height: 55
     spriteID: d6d23b8f3016a3044bb0a80d3b4cf365
@@ -160,7 +160,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 60, y: 4}
+    uvTransform: {x: 4, y: 67}
   - name: mc_Frame_2
     originalName: 
     pivot: {x: 0.5609756, y: 0}
@@ -169,7 +169,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 4
-      y: 67
+      y: 193
       width: 41
       height: 55
     spriteID: bc447e9a9e4e2404daa38c16b83588a1
@@ -180,18 +180,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 67}
+    uvTransform: {x: 4, y: 193}
   - name: mc_Frame_3
     originalName: 
-    pivot: {x: 0.49122807, y: 0}
+    pivot: {x: 0.5813953, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 53
-      y: 67
-      width: 57
-      height: 28
+      x: 4
+      y: 130
+      width: 43
+      height: 55
     spriteID: c54bd140a41113c4eab45c66dede925e
     spriteBone: []
     spriteOutline: []
@@ -200,7 +200,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 53, y: 67}
+    uvTransform: {x: 4, y: 130}
+  - name: mc_Frame_4
+    originalName: 
+    pivot: {x: 0.49122807, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 60
+      y: 4
+      width: 57
+      height: 28
+    spriteID: 7384fe62f8d45ad4296d0758e8d1a99a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 60, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -237,11 +257,19 @@ ScriptedImporter:
     - name: mc_Frame_3
       frameIndex: 3
       cellRect:
+        x: 7
+        y: 0
+        width: 43
+        height: 55
+      spriteId: c54bd140a41113c4eab45c66dede925e
+    - name: mc_Frame_4
+      frameIndex: 4
+      cellRect:
         x: 4
         y: 0
         width: 57
         height: 28
-      spriteId: c54bd140a41113c4eab45c66dede925e
+      spriteId: 7384fe62f8d45ad4296d0758e8d1a99a
     linkedCells: []
     parentIndex: -1
   platformSettings:
