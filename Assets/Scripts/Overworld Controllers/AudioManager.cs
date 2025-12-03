@@ -9,6 +9,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource m_bgmSource1;
     [SerializeField] private AudioSource m_bgmSource2;
 
+    [Space]
+
+    [SerializeField] private AudioSource m_sfxSource;
+    [SerializeField] private AudioDatabaseSO m_database;
+
     [Header("Clips")]
 
     [SerializeField] private SerializableKVPair<string, AudioClip>[] m_bgms;
@@ -35,6 +40,11 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         m_timeStamps = new Dictionary<AudioClip, float>();
         // No DDL needed bc it gos on the Persistent Manager object
+    }
+
+    public static void PlaySFX(string name)
+    {
+        Instance.m_sfxSource.PlayOneShot(Instance.m_database.GetItem(name));
     }
 
     public static void PlayBGM(string clip, bool bookmark_timestamp = false)

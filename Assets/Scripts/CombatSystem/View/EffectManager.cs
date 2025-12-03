@@ -37,7 +37,7 @@ public class EffectManager : MonoBehaviour
         // if both unit and team index are -1, then put in center
         int index = unit_index >= 0 && team_index >= 0 ? unit_index + team_index * ths.m_maxTeamSize : ths.m_effectLocuses.Count - 1;
 
-        var instance = GameObject.Instantiate(ths.m_database.GetSystem(effect_name), ths.m_effectParent);
+        var instance = GameObject.Instantiate(ths.m_database.GetItem(effect_name), ths.m_effectParent);
 
         instance.transform.position = ths.m_effectLocuses[index].position;
 
