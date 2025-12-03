@@ -40,6 +40,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        //if (playerSpriteRenderer != null)
+        //{
+        //    playerSpriteRenderer.transform.localPosition = new Vector3(0, -0.5f, 0);
+        //}
+
         animator = GetComponent<Animator>();
 
         rb = GetComponent<Rigidbody2D>();
@@ -139,18 +144,21 @@ public class PlayerController : MonoBehaviour
 
             Vector2 animDirection = facingDirection;
 
+            // Handle horizontal flipping
             if (facingDirection.x < 0)
             {
-                // Facing left - flip sprite and use right animation
                 playerSpriteRenderer.flipX = true;
-                animDirection.x = 1; // Use right animation
+                animDirection.x = 1;
             }
             else if (facingDirection.x > 0)
             {
-                // Facing right - normal
                 playerSpriteRenderer.flipX = false;
+                animDirection.x = 1;
             }
-            // If moving vertically, keep previous flipX state
+            else
+            {
+                animDirection.x = 0;
+            }
 
             animator.SetFloat("MoveX", animDirection.x);
             animator.SetFloat("MoveY", animDirection.y);
