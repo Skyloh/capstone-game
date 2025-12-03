@@ -334,7 +334,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 10
+  m_PixelsPerUnitMultiplier: 25
 --- !u!1 &7963542910600903577
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282795737
-  m_fontColor: {r: 0.8490566, g: 0.2739409, b: 0.2739409, a: 1}
+    rgba: 4290045869
+  m_fontColor: {r: 0.6792453, g: 0.9056604, b: 0.70516944, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6132076, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.43787825, g: 0.754717, b: 0.50247645, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 10
+  m_PixelsPerUnitMultiplier: 25
 --- !u!1 &9026336235239826176
 GameObject:
   m_ObjectHideFlags: 0
