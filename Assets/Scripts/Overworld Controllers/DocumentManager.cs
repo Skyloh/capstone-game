@@ -22,6 +22,10 @@ public class DocumentManager : MonoBehaviour
 
     public bool documentIsOpen = false;
 
+    // true if document was ended this frame. intended to prevent situations where
+    // pressing e to finish a document reopens it again
+    private bool exitedThisFrame = false;
+
     private TextAsset followUpDialogue = null;
     private string followUpDialogueID;
     private bool canAcceptInput = false;
@@ -92,12 +96,15 @@ public class DocumentManager : MonoBehaviour
 
     private void Update()
     {
+        if (exitedThisFrame) exitedThisFrame = false;
+
         if (!documentIsOpen || !canAcceptInput)
             return;
 
         if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space))
         {
             CloseDocument();
+            exitedThisFrame = true;
         }
     }
 
@@ -146,5 +153,10 @@ public class DocumentManager : MonoBehaviour
     public bool IsDocumentOpen()
     {
         return documentIsOpen;
+    }
+
+    public bool DidExitThisFrame()
+    {
+        return exitedThisFrame;
     }
 }

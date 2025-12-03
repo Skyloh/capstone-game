@@ -35,6 +35,10 @@ public class DialogueManager : MonoBehaviour
 
     private static HashSet<string> playedDialogues = new HashSet<string>();
 
+    // true if dialogue was ended this frame. intended to prevent situations where
+    // pressing e to finish a dialogue reopens it again
+    private bool exitedThisFrame = false;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -105,6 +109,8 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
+        if (exitedThisFrame) exitedThisFrame = false;
+
         if (!dialogueIsPlaying)
             return;
 
@@ -144,6 +150,8 @@ public class DialogueManager : MonoBehaviour
         {
             playedDialogues.Add(dialogueID);
         }
+
+        exitedThisFrame = true;
     }
 
     public void ContinueStory()
@@ -185,4 +193,6 @@ public class DialogueManager : MonoBehaviour
 
         return playedDialogues.Contains(id);
     }
+
+    public bool DidExitThisFrame() => exitedThisFrame;
 }

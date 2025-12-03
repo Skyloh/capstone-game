@@ -141,8 +141,13 @@ public class PlayerController : MonoBehaviour
 
         if (!inputLocked && Input.GetKeyDown(KeyCode.E))
         {
-            if (!DialogueManager.GetInstance().dialogueIsPlaying && !DocumentManager.GetInstance().documentIsOpen)
+            if (!DialogueManager.GetInstance().dialogueIsPlaying 
+                && !DocumentManager.GetInstance().documentIsOpen
+                && !DialogueManager.GetInstance().DidExitThisFrame()
+                && !DocumentManager.GetInstance().DidExitThisFrame())
             {
+                //Debug.Log(DialogueManager.GetInstance().dialogueIsPlaying + " " + DocumentManager.GetInstance().documentIsOpen + " " + DialogueManager.GetInstance().DidExitThisFrame());
+                
                 StartCoroutine(InputCooldown());
                 Interact();
             }
