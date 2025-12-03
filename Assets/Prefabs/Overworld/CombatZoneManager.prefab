@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8803773035021838387}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_worldGrid: {fileID: 0}
   m_combatZones:
   - m_priority: 0
-    m_minX: 3
-    m_minY: -2
-    m_maxX: 5
-    m_maxY: 0
+    m_minX: -4
+    m_minY: 18
+    m_maxX: 0
+    m_maxY: 20
     m_encounterChance: 0.254
     m_encounterObject: {fileID: 11400000, guid: ac6853a70795e5e4da28cacf95fcd9d6, type: 2}
   - m_priority: 0
@@ -82,6 +82,8 @@ MonoBehaviour:
     m_maxY: 4
     m_encounterChance: 0.05
     m_encounterObject: {fileID: 11400000, guid: 1c3733dac04df4d4d938df90b711a62e, type: 2}
+  m_scalerCount: 4
+  m_chanceScalar: 0.25
   m_debugZoneGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
@@ -112,4 +114,4 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 7
     m_NumAlphaKeys: 2
-  m_zoneAlpha: 0.609
+  m_zoneAlpha: 0.333

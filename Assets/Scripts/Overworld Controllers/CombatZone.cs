@@ -39,10 +39,18 @@ public class CombatZone
     public int GetPriority() => m_priority;
 
     /// <summary>
-    /// Randomly rolls for encounter chance, returning true if successful.
+    /// Randomly rolls for encounter chance, returning true if successful. Modifies the value rolled 
+    /// with the given scalar.
     /// </summary>
     /// <returns></returns>
-    public bool Roll() => Random.Range(0f, 1f) < m_encounterChance;
+    public bool Roll(float scalar_modifier)
+    {
+        float value = Random.Range(0f, 1f);
+
+        Debug.Log("Rolled " + value + ", modified by " + scalar_modifier + " to " + value / scalar_modifier);
+
+        return value / scalar_modifier < m_encounterChance;
+    }
 
     public EncounterSO GetEncounter() => m_encounterObject;
 }

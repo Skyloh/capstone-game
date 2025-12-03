@@ -184,6 +184,15 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // if input is locked, dont even process movement.
+        // added to fix the bug where players moved during transitions, triggering the event
+        // to scan combat zones for a combat, leading to a transition with a player pos bookmark
+        // set within a transition scene.
+        if (inputLocked) return;
+
+        // if no movement, dont do anything
+        if (moveInput == Vector2.zero) return;
+
         if (!DialogueManager.GetInstance().dialogueIsPlaying && !DocumentManager.GetInstance().documentIsOpen)
         {
             Vector2 movement = moveInput.normalized * moveSpeed;

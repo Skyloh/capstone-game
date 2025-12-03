@@ -28,10 +28,19 @@ public class BlindsideAbility : AAbility
         var aff_module = GetModuleOrError<AffinityModule>(user);
 
         int damage = 0;
-
+        int p_index = abar_module.GetFirstNonNoneIndex();
         // PRE-BREAK
         for (int i = 0; i < 2; ++i)
         {
+            if (p_index + i == -1) // if we have no elements to break...
+            {
+                break; // ...we cant break anything, so exit this loop
+            }
+            else if (p_index + i >= abar_module.BarLength()) // if we go OoB..
+            {
+                break; // ...we cant break anymore, so exit this loop.
+            }
+
             damage += AbilityUtils.CalculateDamage(10, 20);
         }
 

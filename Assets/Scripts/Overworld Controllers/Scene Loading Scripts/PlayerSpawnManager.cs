@@ -41,6 +41,9 @@ public class PlayerSpawnManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // if the scene is a transition scene, then we don't need to perform the player spawn functionality
+        if (scene.name.ToLower().Contains("transition")) return;
+
         SpawnPlayer();
     }
 

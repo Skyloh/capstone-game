@@ -17,8 +17,12 @@ public class CombatZoneManager : MonoBehaviour
     [SerializeField] private Grid m_worldGrid;
     [SerializeField] private List<CombatZone> m_combatZones; // TODO make into a quadtree?
 
-    [Space]
+    [Header("Combat Chance Scalars")]
+    [SerializeField] private int m_scalerCount = 4;
+    [SerializeField] private float m_chanceScalar = 0.25f;
+    private static int s_scalerCountRemaining;
 
+    [Header("Debug")]
     [SerializeField] private Gradient m_debugZoneGradient;
     [SerializeField, Range(0f, 1f)] private float m_zoneAlpha;
 
@@ -73,7 +77,7 @@ public class CombatZoneManager : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-            string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            string currentScene = SceneManager.GetActiveScene().name;
             PlayerSpawnManager.SetCombatReturnPoint(player.transform.position, currentScene);
         }
 
@@ -114,8 +118,22 @@ public class CombatZoneManager : MonoBehaviour
         // now try every zone and roll for an encounter
         foreach (var zone in list)
         {
-            if (zone.Roll())
+            // include a reductive scalar if we were just in an combat
+            float scalar;
+            if (s_scalerCountRemaining > 0)
             {
+                scalar = m_chanceScalar;
+                s_scalerCountRemaining--; // tick down the counter
+            }
+            else
+            {
+                scalar = 1f;
+            }
+
+            // test and roll
+            if (zone.Roll(scalar))
+            {
+                s_scalerCountRemaining = m_scalerCount;
                 StartCombat(zone.GetEncounter());
                 break;
             }

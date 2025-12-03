@@ -31939,7 +31939,6 @@ GameObject:
   m_Component:
   - component: {fileID: 582901962}
   - component: {fileID: 582901961}
-  - component: {fileID: 582901960}
   - component: {fileID: 582901963}
   m_Layer: 0
   m_Name: Main Camera
@@ -31948,14 +31947,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &582901960
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582901959}
-  m_Enabled: 1
 --- !u!20 &582901961
 Camera:
   m_ObjectHideFlags: 0
@@ -64754,6 +64745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_song: World
+  m_bookmarkInterrupted: 0
 --- !u!4 &1900983385
 Transform:
   m_ObjectHideFlags: 0
@@ -64849,13 +64841,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_worldGrid
+      value: 
+      objectReference: {fileID: 1032576368}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_maxX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_maxY
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_minX
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_minY
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[4].m_maxX
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8803773035021838387, guid: da22521f9a970474492d590f5e1fb717, type: 3}
       propertyPath: m_Name
       value: CombatZoneManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 8803773035021838387, guid: da22521f9a970474492d590f5e1fb717, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -64927,14 +64939,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1442646512984042420, guid: 708d88f61c92f474cbf3ff5e6de1e4a5, type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1867915446564172861, guid: 708d88f61c92f474cbf3ff5e6de1e4a5, type: 3}
-      propertyPath: autoStartOnLoad
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2964929824286363689, guid: 708d88f61c92f474cbf3ff5e6de1e4a5, type: 3}
       propertyPath: m_Name
       value: PersistentManagers
