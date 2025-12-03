@@ -60616,6 +60616,52 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &1607820876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1607820878}
+  - component: {fileID: 1607820877}
+  m_Layer: 0
+  m_Name: BGMOnStart_Obj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1607820877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607820876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdf50f4da8e58e240b4f53e2cde3d692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_song: World
+  m_bookmarkInterrupted: 0
+--- !u!4 &1607820878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607820876}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 128.5, y: -71.703125, z: 3.4899998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703007142
 GameObject:
   m_ObjectHideFlags: 0
@@ -60693,6 +60739,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2002635477}
+  - component: {fileID: 2002635478}
   m_Layer: 0
   m_Name: SpawnPoints
   m_TagString: Untagged
@@ -60716,6 +60763,20 @@ Transform:
   - {fileID: 697573682}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2002635478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002635476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e232b9f88c674c439754401ec60e6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoints:
+  - {fileID: 697573683}
 --- !u!1001 &2878337073047228095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60919,6 +60980,7 @@ SceneRoots:
   - {fileID: 454699390}
   - {fileID: 1570554998}
   - {fileID: 1703007145}
+  - {fileID: 1607820878}
   - {fileID: 2002635477}
   - {fileID: 1229359767}
   - {fileID: 5065153288516229184}

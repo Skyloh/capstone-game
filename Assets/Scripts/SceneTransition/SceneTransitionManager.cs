@@ -40,7 +40,6 @@ public class SceneTransitionManager : MonoBehaviour
         string from_scene_name = SceneManager.GetActiveScene().name;
 
         // no longer freezes time; instead just attempts to deactivate a player if they exist
-        // Time.timeScale = 0f; // STOP
         if (PlayerController.StaticSetPlayerActionability(false))
         {
             Debug.Log("No player instance found to deactivate. Progressing with scene load...");
@@ -57,27 +56,23 @@ public class SceneTransitionManager : MonoBehaviour
         var animation = GameObject.FindFirstObjectByType<AMonoSceneTransition>();
         animation.Begin();
 
-        // begin loading in background, not allowing completion
-        var task = SceneManager.LoadSceneAsync(to_scene_name, LoadSceneMode.Additive);
-        task.allowSceneActivation = false;
-
         // wait for the animation's first half (the beginning) to elapse
         yield return new WaitForSecondsRealtime(animation.GetBeginDuration());
 
-        // allow completion so that progression can go beyond 90%
-        task.allowSceneActivation = true;
+        // begin to clean up the old scene we can't see anymore
+        var from_scn_cleanup = SceneManager.UnloadSceneAsync(from_scene_name);
 
-        // wait till it finishes up
-        yield return new WaitUntil(() => task.progress >= 0.90f);
+        // wait until cleanup is done
+        yield return from_scn_cleanup;
 
+        // begin loading in background
+        var task = SceneManager.LoadSceneAsync(to_scene_name, LoadSceneMode.Additive);
+
+        // wait until it finishes up
         yield return new WaitUntil(() => task.isDone);
 
         // set the main scene to be the newly loaded one
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(to_scene_name));
-
-        // clean up the old scene we can't see anymore
-        var from_scn_cleanup = SceneManager.UnloadSceneAsync(from_scene_name);
-        yield return from_scn_cleanup;
 
         // tell animation to finish up now that scene is ready
         animation.Finish();
@@ -88,9 +83,6 @@ public class SceneTransitionManager : MonoBehaviour
         // clean up transition scene
         var blank_scn_cleanup = SceneManager.UnloadSceneAsync(transition_scene);
         yield return blank_scn_cleanup;
-
-        // unfreeze time and start
-        Time.timeScale = 1f; // START
 
         m_isInTransition = false;
     }

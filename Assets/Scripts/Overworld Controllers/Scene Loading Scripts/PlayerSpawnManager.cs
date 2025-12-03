@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSpawnManager : MonoBehaviour
 {
-    private static PlayerSpawnManager instance;
+    // private static PlayerSpawnManager instance;
 
     public static string nextSpawnPointID;
 
@@ -14,42 +14,33 @@ public class PlayerSpawnManager : MonoBehaviour
     [SerializeField]
     private SpawnPoint[] spawnPoints;
 
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-    }
-
-    private void Start()
-    {
-        SpawnPlayer();
-    }
-
+    // because of how we separate scene loading and scene activating, this has a chance 
+    // to get subscribed before scene activation.
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
     }
-
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnActiveSceneChanged(Scene scene, Scene to_scene)
     {
         // if the scene is a transition scene, then we don't need to perform the player spawn functionality
-        if (scene.name.ToLower().Contains("transition")) return;
+        if (to_scene.name.ToLower().Contains("transition"))
+        {
+            Debug.Log("Scene change triggered on transition. Ignoring...");
+        }
 
         SpawnPlayer();
     }
+    
 
     private void SpawnPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
         if (player == null)
         {
             Debug.LogWarning("No player found");
@@ -77,6 +68,7 @@ public class PlayerSpawnManager : MonoBehaviour
             if (sp.spawnPointID == nextSpawnPointID)
             {
                 player.transform.position = sp.transform.position;
+
                 Debug.Log($"Spawning player at spawn point: {nextSpawnPointID}");
                 nextSpawnPointID = null;
                 return;
