@@ -234,7 +234,7 @@ public class CombatManager : MonoBehaviour
         {
             Debug.LogWarning("BATTLE RESOLVED WITH OUTCOME: " + outcome);
 
-            StartCoroutine(IE_DelayThenExitCombat());
+            StartCoroutine(IE_DelayThenExitCombat(outcome));
 
             return;
         }
@@ -386,7 +386,7 @@ public class CombatManager : MonoBehaviour
     }
 
     // Replace with end state screen
-    private IEnumerator IE_DelayThenExitCombat()
+    private IEnumerator IE_DelayThenExitCombat(CombatOutcome outcome)
     {
         yield return new WaitForSeconds(2f);
 
@@ -396,10 +396,10 @@ public class CombatManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(returnScene))
         {
-            returnScene = "TilemapTEst";
+            returnScene = "HospitalFloor1";
         }
 
-        SceneTransitionManager.Transition(returnScene, TransitionType.Wipe);
+        SceneTransitionManager.Transition(returnScene, outcome == CombatOutcome.PlayerWin ? TransitionType.Wipe : TransitionType.Fade);
     }
 }
 

@@ -63,6 +63,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// A convenience method to quickly set the input state of the first player
+    /// in the scene. Returns true if successfully accessed and modified, and false otherwise.
+    /// </summary>
+    /// <param name="can_input"></param>
+    /// <returns></returns>
+    public static bool StaticSetPlayerActionability(bool can_input)
+    {
+        var player = GameObject.FindFirstObjectByType<PlayerController>();
+
+        if (player == null) return false;
+
+        player.inputLocked = !can_input;
+
+        return true;
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -107,7 +124,7 @@ public class PlayerController : MonoBehaviour
             moveInput.x += 1;
         }
 
-        if (moveInput != Vector2.zero)
+        if (!inputLocked && moveInput != Vector2.zero)
         {
             if (Mathf.Abs(moveInput.x) >= Mathf.Abs(moveInput.y))
             {

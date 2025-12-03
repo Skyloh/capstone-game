@@ -40,6 +40,7 @@ public class FadeBlackTransition : AMonoSceneTransition
         }
 
         float elapsedTime = 0f;
+        float startTime = Time.time;
         Color color = fadePanel.color;
         color.a = 0f;
 
@@ -59,7 +60,7 @@ public class FadeBlackTransition : AMonoSceneTransition
                 yield break;
             }
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime = Time.time - startTime;
             color.a = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             fadePanel.color = color;
             yield return null;
@@ -80,6 +81,7 @@ public class FadeBlackTransition : AMonoSceneTransition
         }
 
         float elapsedTime = 0f;
+        float startTime = Time.time;
         Color color = fadePanel.color;
         color.a = 1f;
 
@@ -99,7 +101,7 @@ public class FadeBlackTransition : AMonoSceneTransition
                 yield break;
             }
 
-            elapsedTime += Time.deltaTime;
+            elapsedTime = Time.time - startTime;
             color.a = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
             fadePanel.color = color;
             yield return null;

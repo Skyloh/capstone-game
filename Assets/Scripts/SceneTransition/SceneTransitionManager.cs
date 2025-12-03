@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class SceneTransitionManager : MonoBehaviour
 {
     public static SceneTransitionManager Instance;
+    private bool m_isInTransition;
 
     private void Awake()
     {
@@ -16,18 +17,34 @@ public class SceneTransitionManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         Instance = this;
+
+        m_isInTransition = false;
     }
 
+    /// <summary>
+    /// Change to the given scene name, using the transition mode given. Does not transition if one is in progress.
+    /// </summary>
+    /// <param name="to_scene"></param>
+    /// <param name="type"></param>
     public static void Transition(string to_scene, TransitionType type)
     {
+        if (Instance.m_isInTransition) return;
+
         Instance.StartCoroutine(Instance.IE_Transition(to_scene, Instance.MatchTransitionType(type)));
     }
 
     private IEnumerator IE_Transition(string to_scene_name, string transition_scene)
     {
+        m_isInTransition = true;
+
         string from_scene_name = SceneManager.GetActiveScene().name;
 
-        Time.timeScale = 0f; // STOP
+        // no longer freezes time; instead just attempts to deactivate a player if they exist
+        // Time.timeScale = 0f; // STOP
+        if (PlayerController.StaticSetPlayerActionability(false))
+        {
+            Debug.Log("No player instance found to deactivate. Progressing with scene load...");
+        }
 
         // smoothly load in the blank loading scene and wait till that finishes to begin transitioning
         var l_task = SceneManager.LoadSceneAsync(transition_scene, LoadSceneMode.Additive);
@@ -53,6 +70,8 @@ public class SceneTransitionManager : MonoBehaviour
         // wait till it finishes up
         yield return new WaitUntil(() => task.progress >= 0.90f);
 
+        yield return new WaitUntil(() => task.isDone);
+
         // set the main scene to be the newly loaded one
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(to_scene_name));
 
@@ -72,6 +91,8 @@ public class SceneTransitionManager : MonoBehaviour
 
         // unfreeze time and start
         Time.timeScale = 1f; // START
+
+        m_isInTransition = false;
     }
 
     private string MatchTransitionType(TransitionType transition_type)
