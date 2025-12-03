@@ -37971,6 +37971,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_worldGrid
+      value: 
+      objectReference: {fileID: 1032576368}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_maxY
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 7996408109810855187, guid: da22521f9a970474492d590f5e1fb717, type: 3}
+      propertyPath: m_combatZones.Array.data[0].m_minY
+      value: 26
+      objectReference: {fileID: 0}
     - target: {fileID: 8803773035021838387, guid: da22521f9a970474492d590f5e1fb717, type: 3}
       propertyPath: m_Name
       value: CombatZoneManager

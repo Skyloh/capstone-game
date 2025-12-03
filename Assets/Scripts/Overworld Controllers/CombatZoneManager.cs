@@ -28,12 +28,12 @@ public class CombatZoneManager : MonoBehaviour
 
     private void Awake()
     {
-        FindGridReference();
+        // FindGridReference();
     }
 
     private void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        // SceneManager.sceneLoaded += OnSceneLoaded;
 
         var player_controller = FindFirstObjectByType<PlayerController>(FindObjectsInactive.Include);
         player_controller.OnPlayerMove += CheckForEncounter;
@@ -41,7 +41,7 @@ public class CombatZoneManager : MonoBehaviour
 
     private void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        // SceneManager.sceneLoaded -= OnSceneLoaded;
 
         var player_controller = FindFirstObjectByType<PlayerController>(FindObjectsInactive.Include);
         if (player_controller == null) return;
@@ -49,6 +49,7 @@ public class CombatZoneManager : MonoBehaviour
         player_controller.OnPlayerMove -= CheckForEncounter;
     }
 
+    /*
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         FindGridReference();
@@ -66,6 +67,7 @@ public class CombatZoneManager : MonoBehaviour
             Debug.LogWarning("CombatZoneManager: No GameObject with tag 'MapGrid' found");
         }
     }
+    */
 
     /// <summary>
     /// Given an encounter data object, loads the data into the runtime combat SO and changes to the combat scene.
