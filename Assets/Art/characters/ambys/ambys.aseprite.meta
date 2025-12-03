@@ -128,7 +128,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 78
+      x: 41
       y: 4
       width: 28
       height: 31
@@ -140,7 +140,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 78, y: 4}
+    uvTransform: {x: 41, y: 4}
   - name: ambys_Frame_1
     originalName: 
     pivot: {x: 0.51724136, y: 0}
@@ -168,8 +168,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 41
-      y: 4
+      x: 4
+      y: 84
       width: 29
       height: 31
     spriteID: 2d3734f1eb5c68649992a19692b64b8e
@@ -180,18 +180,18 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 41, y: 4}
+    uvTransform: {x: 4, y: 84}
   - name: ambys_Frame_3
     originalName: 
-    pivot: {x: 0.6052632, y: 0}
+    pivot: {x: 0.51724136, y: 0}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 78
-      y: 43
-      width: 38
-      height: 12
+      x: 4
+      y: 44
+      width: 29
+      height: 32
     spriteID: ab89a5269c3e7a24a8b12a8927627980
     spriteBone: []
     spriteOutline: []
@@ -200,7 +200,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 78, y: 43}
+    uvTransform: {x: 4, y: 44}
+  - name: ambys_Frame_4
+    originalName: 
+    pivot: {x: 0.6052632, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 77
+      y: 4
+      width: 38
+      height: 12
+    spriteID: 6efe9aa7d03e8704f83d945bb5fcca46
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 77, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -237,11 +257,19 @@ ScriptedImporter:
     - name: ambys_Frame_3
       frameIndex: 3
       cellRect:
+        x: 17
+        y: 0
+        width: 29
+        height: 32
+      spriteId: ab89a5269c3e7a24a8b12a8927627980
+    - name: ambys_Frame_4
+      frameIndex: 4
+      cellRect:
         x: 9
         y: 0
         width: 38
         height: 12
-      spriteId: ab89a5269c3e7a24a8b12a8927627980
+      spriteId: 6efe9aa7d03e8704f83d945bb5fcca46
     linkedCells: []
     parentIndex: -1
   platformSettings:
