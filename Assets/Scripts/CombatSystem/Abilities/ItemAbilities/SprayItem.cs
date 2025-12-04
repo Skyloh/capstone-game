@@ -8,7 +8,7 @@ public class ReviveItem : AAbility
     {
         SetAbilityData(new()
         {
-            Name = "Anti-Death Spray",
+            Name = "Revive Spray",
             Description = "Revives all downed allies and heals some health.",
             RequiredTargets = AbilityUtils.AllAllies(),
             TargetCriteria = SelectionFlags.Ally,
