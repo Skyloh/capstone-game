@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 463e90de87692492d811254dd6dd2f5c
-  - enabled: 0
-    path: Assets/Scenes/NewRoomTest.unity
-    guid: 85eac668f4920dd4f9107d57bedc68db
   - enabled: 1
     path: Assets/Scenes/HospitalFloor1.unity
     guid: 7bcb05447cc262840ae46ab58ffac392
