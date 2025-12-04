@@ -26,9 +26,9 @@ MonoBehaviour:
   - key: protect
     value: {fileID: 8300000, guid: a698a41b67c8c99459711889431db552, type: 3}
   - key: fire_crackle
-    value: {fileID: 8300000, guid: 1b62c3582aaf0a04baf1e35faa123193, type: 3}
+    value: {fileID: 8300000, guid: 9b5551f7a74a9c1459857442d6c88c11, type: 3}
   - key: aff_swap
-    value: {fileID: 8300000, guid: 0736ac8b0c34b894ebead405a36abbd8, type: 3}
+    value: {fileID: 8300000, guid: f9a6af63ccdccd440a81c3a2d82b6d18, type: 3}
   - key: fire_impact
     value: {fileID: 8300000, guid: e18e29319b447ad459ad5e9e8f9c5fda, type: 3}
   - key: storm_impact
