@@ -516,6 +516,7 @@ GameObject:
   - component: {fileID: 812212317}
   - component: {fileID: 812212318}
   - component: {fileID: 812212319}
+  - component: {fileID: 812212320}
   m_Layer: 5
   m_Name: BattleInterface
   m_TagString: Untagged
@@ -571,6 +572,8 @@ MonoBehaviour:
   attackBannerReference: {fileID: 1577903500}
   healthChangeDisplayManager: {fileID: 965980562}
   battleSprites: {fileID: 11400000, guid: 244b08f6b59703947861982074a67b07, type: 2}
+  enemyStatusUpdater: {fileID: 812212319}
+  playerStatusUpdater: {fileID: 812212320}
   affinityTargeter: {fileID: 1363942132}
 --- !u!114 &812212316
 MonoBehaviour:
@@ -654,6 +657,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384c1642300cd8e4e9295cad27de4d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_prefix: 
+--- !u!114 &812212320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812212312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384c1642300cd8e4e9295cad27de4d16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_prefix: P_
 --- !u!1 &825060405
 GameObject:
   m_ObjectHideFlags: 0

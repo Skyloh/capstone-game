@@ -117,7 +117,7 @@ public class AudioManager : MonoBehaviour
         fading_in.volume = 1f;
 
         // if we need to, bookmark where we left
-        if (bookmark_timestamp) m_timeStamps[fading_out.clip] = fading_out.time;
+        if (bookmark_timestamp && fading_out.clip != null) m_timeStamps[fading_out.clip] = fading_out.time;
 
         // stop the fade-out system
         fading_out.Stop();

@@ -46,7 +46,8 @@ namespace CombatSystem.View
         private Label attackLabel; 
         private bool itemsPageOpen = false;
 
-        StatusUpdater enemyStatusUpdater;
+        [SerializeField] private StatusUpdater enemyStatusUpdater;
+        [SerializeField] private StatusUpdater playerStatusUpdater;
 
         private bool isPlayerPhase = true; // assume you start combat on your turn
 
@@ -76,7 +77,6 @@ namespace CombatSystem.View
         private void Awake()
         {
             ui = GetComponent<UIDocument>().rootVisualElement;
-            enemyStatusUpdater = GetComponent<StatusUpdater>();
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
             InitializeCombat();
@@ -108,6 +108,16 @@ namespace CombatSystem.View
             commandMenu.RemoveFromClassList("off-screen");
             selectedPlayer = index;
             DisplayUnit(GetPlayerUnit(index));
+
+
+            if (GetPlayerUnit(index).TryGetModule<StatusModule>(out var statusModule))
+            {
+                playerStatusUpdater.Display(statusModule);
+            }
+            else
+            {
+                playerStatusUpdater.Display(null);
+            }
         }
 
         private void OnEnable()

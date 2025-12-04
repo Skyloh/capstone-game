@@ -5,7 +5,8 @@ using UnityEngine.UIElements;
 
 public class StatusUpdater : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // used to differentiate enemy and player status updaters
+    [SerializeField] private string m_prefix = "";
 
     private VisualElement ui;
     private VisualElement burnGroup;
@@ -27,11 +28,11 @@ public class StatusUpdater : MonoBehaviour
     }
     void OnEnable()
     {
-        burnGroup = ui.Q<VisualElement>("BurnGroup");
-        freezeGroup = ui.Q<VisualElement>("FreezeGroup");
-        bruiseGroup = ui.Q<VisualElement>("BruiseGroup");
-        shockGroup = ui.Q<VisualElement>("ShockGroup");
-        stunOverlay = ui.Q<VisualElement>("StunOverlay");
+        burnGroup = ui.Q<VisualElement>(m_prefix + "BurnGroup");
+        freezeGroup = ui.Q<VisualElement>(m_prefix + "FreezeGroup");
+        bruiseGroup = ui.Q<VisualElement>(m_prefix + "BruiseGroup");
+        shockGroup = ui.Q<VisualElement>(m_prefix + "ShockGroup");
+        stunOverlay = ui.Q<VisualElement>(m_prefix + "StunOverlay");
 
         burnGroup.style.display = DisplayStyle.None;
         freezeGroup.style.display = DisplayStyle.None;
@@ -39,11 +40,11 @@ public class StatusUpdater : MonoBehaviour
         shockGroup.style.display = DisplayStyle.None;
         stunOverlay.style.display = DisplayStyle.None;
 
-        burnCount = ui.Q<Label>("BurnCount");
-        freezeCount = ui.Q<Label>("FreezeCount");
-        bruiseCount = ui.Q<Label>("BruiseCount");
-        shockCount = ui.Q<Label>("ShockCount");
-        stunCount = ui.Q<Label>("StunCount");
+        burnCount = ui.Q<Label>(m_prefix + "BurnCount");
+        freezeCount = ui.Q<Label>(m_prefix + "FreezeCount");
+        bruiseCount = ui.Q<Label>(m_prefix + "BruiseCount");
+        shockCount = ui.Q<Label>(m_prefix + "ShockCount");
+        stunCount = ui.Q<Label>(m_prefix + "StunCount");
     }
     public void Display(StatusModule module)
     {
