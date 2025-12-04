@@ -91,9 +91,10 @@ public class PortraitManager : MonoBehaviour
 
                 if (characterNameText != null)
                 {
-                    characterNameText.text = characterName;
+                    characterNameText.text = characterName != "sys" ? characterName : "";
                     characterNameText.gameObject.SetActive(true);
                 }
+
                 return;
             }
         }

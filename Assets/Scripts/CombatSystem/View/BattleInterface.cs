@@ -526,7 +526,9 @@ namespace CombatSystem.View
         {
             if (currentState != BattleStates.UnitSelection)
             {
-                throw new Exception("Tried calling SelectUnit outside of UnitSelection state");
+                //throw new Exception("Tried calling SelectUnit outside of UnitSelection state");
+                Debug.LogWarning("Tried calling SelectUnit outside of UnitSelection state, downgraded to silent fail.");
+                return;
             }
 
             if (combatManager.TrySelectUnit(0, team, unit,

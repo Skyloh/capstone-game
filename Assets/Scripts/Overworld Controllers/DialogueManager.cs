@@ -4,10 +4,13 @@ using UnityEngine;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.SceneManagement;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
     private static DialogueManager instance;
+
+    public static Action OnDialogueComplete;
 
     [Header("Dialogue UI")]
     [SerializeField]
@@ -152,6 +155,12 @@ public class DialogueManager : MonoBehaviour
         }
 
         exitedThisFrame = true;
+
+        if (OnDialogueComplete != null)
+        {
+            OnDialogueComplete();
+            OnDialogueComplete = null;
+        }
     }
 
     public void ContinueStory()

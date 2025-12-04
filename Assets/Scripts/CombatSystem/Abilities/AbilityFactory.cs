@@ -28,6 +28,11 @@ public class AbilityFactory
         return list;
     }
 
+    public static IAbility MakeAbility(string namespace_qualified_typename)
+    {
+        return (IAbility)GetConstructor(typeof(AttackAbility).Assembly, namespace_qualified_typename).Invoke(null);
+    }
+
     public static bool AssertValid(string namespace_qualified_typename)
     {
         try

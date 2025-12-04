@@ -71,9 +71,11 @@ public class CombatZoneManager : MonoBehaviour
 
     /// <summary>
     /// Given an encounter data object, loads the data into the runtime combat SO and changes to the combat scene.
+    /// Made public so that other scripts could access this launcher method w/o needing to refactor into a 
+    /// singleton or something. 4 hours to showcase...
     /// </summary>
     /// <param name="encounter"></param>
-    private void StartCombat(EncounterSO encounter)
+    public void StartCombat(EncounterSO encounter)
     {
         // grabbing player's position before scene swap to set return point
         GameObject player = GameObject.FindGameObjectWithTag("Player");

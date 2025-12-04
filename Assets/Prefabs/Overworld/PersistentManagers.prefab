@@ -650,8 +650,12 @@ MonoBehaviour:
   - characterName: Ambyss
     portraitSprite: {fileID: 21300000, guid: c1fdb316b94f0b04f80e0a87b3a9ad62, type: 3}
   - characterName: Flux
-    portraitSprite: {fileID: 21300000, guid: 57b34f7d1b894cb4499075772cd84f16, type: 3}
+    portraitSprite: {fileID: 21300000, guid: 621f1bc3e2c3007418871d7bc65a3b9d, type: 3}
   - characterName: Sunder
     portraitSprite: {fileID: 21300000, guid: 362267edb25ced3409484c01c6dbbdb8, type: 3}
   - characterName: Nevaeh
     portraitSprite: {fileID: 21300000, guid: 6ed0c95cd69b35f4aaeeb69c92bb483f, type: 3}
+  - characterName: 
+    portraitSprite: {fileID: 21300000, guid: 65847e5349b18f247bae9e92d794aca4, type: 3}
+  - characterName: sys
+    portraitSprite: {fileID: 21300000, guid: ae81e6213e20c5443a5414651d145c04, type: 3}

@@ -86,7 +86,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.049
+    value: 0.115
   fastMode:
     overrideState: 0
     value: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.423
+    value: 0.417
   smoothness:
     overrideState: 0
     value: 0.2
