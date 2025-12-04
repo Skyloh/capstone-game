@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70bf660a9a636244f941ae0c2124787b, type: 3}
   m_Name: WolfEnemy_C_g
   m_EditorClassIdentifier: 
-  m_name: Zombie Wolf
+  m_name: Zombie Wolf_CHALLENGE_g
   m_maxHealth: 450
   m_abilities:
   - EnemyGashAbility
