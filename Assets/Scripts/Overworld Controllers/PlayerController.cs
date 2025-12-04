@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsPositionBlocked(Vector2 position)
     {
-        Vector2 colliderSize = playerCollider.size * 0.9f;
+        Vector2 colliderSize = playerCollider.size * 0.7f;
 
         Vector2[] checkPoints = new Vector2[]
         {
