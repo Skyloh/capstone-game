@@ -123,8 +123,8 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: player_overworld_Frame_0
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -143,8 +143,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 4}
   - name: player_overworld_Frame_1
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -163,8 +163,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 53}
   - name: player_overworld_Frame_2
     originalName: 
-    pivot: {x: 0.4666667, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -183,8 +183,8 @@ ScriptedImporter:
     uvTransform: {x: 70, y: 4}
   - name: player_overworld_Frame_3
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -203,8 +203,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 102}
   - name: player_overworld_Frame_4
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -223,8 +223,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 151}
   - name: player_overworld_Frame_5
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -243,8 +243,8 @@ ScriptedImporter:
     uvTransform: {x: 4, y: 200}
   - name: player_overworld_Frame_6
     originalName: 
-    pivot: {x: 0.6363636, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -263,8 +263,8 @@ ScriptedImporter:
     uvTransform: {x: 37, y: 151}
   - name: player_overworld_Frame_7
     originalName: 
-    pivot: {x: 0.4666667, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -283,8 +283,8 @@ ScriptedImporter:
     uvTransform: {x: 70, y: 53}
   - name: player_overworld_Frame_8
     originalName: 
-    pivot: {x: 0.5882353, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -303,8 +303,8 @@ ScriptedImporter:
     uvTransform: {x: 37, y: 200}
   - name: player_overworld_Frame_9
     originalName: 
-    pivot: {x: 0.4666667, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -323,8 +323,8 @@ ScriptedImporter:
     uvTransform: {x: 70, y: 102}
   - name: player_overworld_Frame_10
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -343,8 +343,8 @@ ScriptedImporter:
     uvTransform: {x: 37, y: 4}
   - name: player_overworld_Frame_11
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
@@ -363,8 +363,8 @@ ScriptedImporter:
     uvTransform: {x: 37, y: 53}
   - name: player_overworld_Frame_12
     originalName: 
-    pivot: {x: 0.52, y: -0.024390243}
-    alignment: 9
+    pivot: {x: 0.5, y: 0}
+    alignment: 7
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2

@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     private bool isTransitioning = false;
 
     private Rigidbody2D rb;
+
+    // I'm pretty sure the collider isn't relevant at all
     private BoxCollider2D playerCollider;
 
     public float interactionDistance = 1f;
@@ -40,10 +42,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        //if (playerSpriteRenderer != null)
-        //{
-        //    playerSpriteRenderer.transform.localPosition = new Vector3(0, -0.5f, 0);
-        //}
 
         animator = GetComponent<Animator>();
 
@@ -232,13 +230,19 @@ public class PlayerController : MonoBehaviour
     private bool IsPositionBlocked(Vector2 position)
     {
         Vector2 colliderSize = playerCollider.size * 0.9f;
+
         Vector2[] checkPoints = new Vector2[]
         {
-            position,
-            position + new Vector2(colliderSize.x / 2, colliderSize.y / 2),
-            position + new Vector2(-colliderSize.x / 2, colliderSize.y / 2),
-            position + new Vector2(colliderSize.x / 2, -colliderSize.y / 2),
-            position + new Vector2(-colliderSize.x / 2, -colliderSize.y / 2)
+        // Center of collider (half height up from feet)
+        position + new Vector2(0, colliderSize.y / 2),
+        // Top-right
+        position + new Vector2(colliderSize.x / 2, colliderSize.y),
+        // Top-left
+        position + new Vector2(-colliderSize.x / 2, colliderSize.y),
+        // Bottom-right (at feet level)
+        position + new Vector2(colliderSize.x / 2, 0),
+        // Bottom-left (at feet level)
+        position + new Vector2(-colliderSize.x / 2, 0)
         };
 
         foreach (Vector2 point in checkPoints)
@@ -250,7 +254,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(position, playerCollider.size * 0.9f, 0f);
+        // Adjust overlap check
+        Vector2 overlapCenter = position + new Vector2(0, colliderSize.y / 2);
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(overlapCenter, playerCollider.size * 0.9f, 0f);
         foreach (Collider2D col in colliders)
         {
             if (col != playerCollider && col.CompareTag("NPC"))
