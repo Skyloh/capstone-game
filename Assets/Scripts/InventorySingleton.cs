@@ -26,6 +26,9 @@ public class InventorySingleton : MonoBehaviour
     {
         Debug.Log("[InventorySingleton] Adding default debug inventory...");
         m_inventory.Add(new ConfettiGunItem());
+        m_inventory.Add(new ConfettiGunItem());
+        m_inventory.Add(new ConfettiGunItem());
+        m_inventory.Add(new ConfettiGunItem());
         m_inventory.Add(new PotionItem());
         m_inventory.Add(new PotionItem());
         m_inventory.Add(new PotionItem());

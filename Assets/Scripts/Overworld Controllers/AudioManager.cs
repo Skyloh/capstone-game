@@ -39,6 +39,7 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
         m_timeStamps = new Dictionary<AudioClip, float>();
+        m_database.Init();
         // No DDL needed bc it gos on the Persistent Manager object
     }
 

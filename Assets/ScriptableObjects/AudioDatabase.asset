@@ -15,13 +15,27 @@ MonoBehaviour:
   m_itemEntries:
   - key: attack
     value: {fileID: 0}
+  - key: slice
+    value: {fileID: 0}
+  - key: stab
+    value: {fileID: 0}
   - key: break
     value: {fileID: 0}
-  - key: fire_crackle
+  - key: ailment
     value: {fileID: 0}
   - key: protect
+    value: {fileID: 0}
+  - key: fire_crackle
     value: {fileID: 0}
   - key: aff_swap
     value: {fileID: 0}
   - key: fire_impact
+    value: {fileID: 0}
+  - key: storm_impact
+    value: {fileID: 0}
+  - key: magic_poof
+    value: {fileID: 0}
+  - key: heal
+    value: {fileID: 0}
+  - key: escape_fail
     value: {fileID: 0}

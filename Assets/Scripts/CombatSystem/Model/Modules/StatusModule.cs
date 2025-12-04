@@ -69,6 +69,11 @@ public class StatusModule : AModule
         return m_statusDurationMap.ContainsKey(status);
     }
 
+    public int GetCount(Status status)
+    {
+        return m_statusDurationMap[status];
+    }
+
     public Status GetContainedMorphStatus()
     {
         if (m_statusDurationMap.ContainsKey(Status.MorphBlue)) return Status.MorphBlue;

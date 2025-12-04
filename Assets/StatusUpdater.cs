@@ -8,12 +8,18 @@ public class StatusUpdater : MonoBehaviour
     // Start is called before the first frame update
 
     private VisualElement ui;
-    private VisualElement burnIcon;
-    private VisualElement freezeIcon;
-    private VisualElement bruiseIcon;
-    private VisualElement shockIcon;
+    private VisualElement burnGroup;
+    private VisualElement freezeGroup;
+    private VisualElement bruiseGroup;
+    private VisualElement shockGroup;
     private VisualElement stunOverlay;
-    
+
+    private Label burnCount;
+    private Label freezeCount;
+    private Label bruiseCount;
+    private Label shockCount;
+    private Label stunCount;
+
     StatusModule current;
     void Awake()
     {
@@ -21,49 +27,67 @@ public class StatusUpdater : MonoBehaviour
     }
     void OnEnable()
     {
-        burnIcon = ui.Q<VisualElement>("BurnIcon");
-        freezeIcon = ui.Q<VisualElement>("FreezeIcon");
-        bruiseIcon = ui.Q<VisualElement>("BruiseIcon");
-        shockIcon = ui.Q<VisualElement>("ShockIcon");
+        burnGroup = ui.Q<VisualElement>("BurnGroup");
+        freezeGroup = ui.Q<VisualElement>("FreezeGroup");
+        bruiseGroup = ui.Q<VisualElement>("BruiseGroup");
+        shockGroup = ui.Q<VisualElement>("ShockGroup");
         stunOverlay = ui.Q<VisualElement>("StunOverlay");
+
+        burnGroup.style.display = DisplayStyle.None;
+        freezeGroup.style.display = DisplayStyle.None;
+        bruiseGroup.style.display = DisplayStyle.None;
+        shockGroup.style.display = DisplayStyle.None;
+        stunOverlay.style.display = DisplayStyle.None;
+
+        burnCount = ui.Q<Label>("BurnCount");
+        freezeCount = ui.Q<Label>("FreezeCount");
+        bruiseCount = ui.Q<Label>("BruiseCount");
+        shockCount = ui.Q<Label>("ShockCount");
+        stunCount = ui.Q<Label>("StunCount");
     }
     public void Display(StatusModule module)
     {
-        if(current != null)
+        if (current != null)
         {
             current.OnEffectChanged -= HandleChangeEffect;
         }
         stunOverlay.style.display = DisplayStyle.None;
-        burnIcon.style.display = DisplayStyle.None;
-        freezeIcon.style.display = DisplayStyle.None;
-        bruiseIcon.style.display = DisplayStyle.None;
-        shockIcon.style.display = DisplayStyle.None;
+        burnGroup.style.display = DisplayStyle.None;
+        freezeGroup.style.display = DisplayStyle.None;
+        bruiseGroup.style.display = DisplayStyle.None;
+        shockGroup.style.display = DisplayStyle.None;
         current = module;
-        if(module == null)
+        if (module == null)
         {
             return;
         }
         module.OnEffectChanged += HandleChangeEffect;
 
-        foreach(var status in module.GetStatuses())
+        foreach (var status in module.GetStatuses())
         {
+            int count = module.GetCount(status);
             switch (status)
             {
                 case Status.Stun:
-                stunOverlay.style.display = DisplayStyle.Flex;
-                break;
+                    stunOverlay.style.display = DisplayStyle.Flex;
+                    stunCount.text = count.ToString();
+                    break;
                 case Status.Burn:
-                burnIcon.style.display = DisplayStyle.Flex;
-                break;
+                    burnGroup.style.display = DisplayStyle.Flex;
+                    burnCount.text = count.ToString();
+                    break;
                 case Status.Shock:
-                shockIcon.style.display = DisplayStyle.Flex;
-                break;
+                    shockGroup.style.display = DisplayStyle.Flex;
+                    shockCount.text = count.ToString();
+                    break;
                 case Status.Bruise:
-                bruiseIcon.style.display = DisplayStyle.Flex;
-                break;
+                    bruiseGroup.style.display = DisplayStyle.Flex;
+                    bruiseCount.text = count.ToString();
+                    break;
                 case Status.Chill:
-                freezeIcon.style.display = DisplayStyle.Flex;
-                break;
+                    freezeGroup.style.display = DisplayStyle.Flex;
+                    freezeCount.text = count.ToString();
+                    break;
                 case Status.MorphRed:
                 case Status.MorphBlue:
                 case Status.MorphYellow:
