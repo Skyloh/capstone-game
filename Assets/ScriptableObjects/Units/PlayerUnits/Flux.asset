@@ -19,8 +19,8 @@ MonoBehaviour:
   - StaticShowerAbility
   - AnalyzeAbility
   - EnvenomAbility
-  portrait: {fileID: 4463141428013348026, guid: 86ceb09238cfd784f82e6485c4e5d054, type: 3}
+  portrait: {fileID: 21300000, guid: 621f1bc3e2c3007418871d7bc65a3b9d, type: 3}
   characterDescription: 
-  prefab: {fileID: -2253911629886400664, guid: 86ceb09238cfd784f82e6485c4e5d054, type: 3}
+  prefab: {fileID: -2253911629886400664, guid: 0e7815bfcc2935749a7c45218305e208, type: 3}
   m_weaponAffinity: 1
   m_weaknessAffinity: 4
