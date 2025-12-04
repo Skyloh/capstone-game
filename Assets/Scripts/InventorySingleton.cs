@@ -19,26 +19,23 @@ public class InventorySingleton : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        DEBUG_AddDefaultContents();
+        AddDefaultContents();
     }
 
-    private void DEBUG_AddDefaultContents()
+    private void AddDefaultContents()
     {
-        Debug.Log("[InventorySingleton] Adding default debug inventory...");
-        m_inventory.Add(new ConfettiGunItem());
-        m_inventory.Add(new ConfettiGunItem());
-        m_inventory.Add(new ConfettiGunItem());
-        m_inventory.Add(new ConfettiGunItem());
+        Debug.Log("[InventorySingleton] Adding default inventory...");
+        m_inventory.Add(new SyringeItem());
+        m_inventory.Add(new ReviveItem());
         m_inventory.Add(new PotionItem());
-        m_inventory.Add(new PotionItem());
-        m_inventory.Add(new PotionItem());
-        
+        m_inventory.Add(new ReviveItem());
+
         for (int i = 0; i < m_inventory.Count; i++)
         {
             Debug.Log($"[InventorySingleton] Slot {i}: {m_inventory[i].GetAbilityData().Name}");
         }
 
-        Debug.Log($"[InventorySingleton] Debug inventory complete. Total items: {m_inventory.Count}");
+        Debug.Log($"[InventorySingleton] Inventory complete. Total items: {m_inventory.Count}");
     }
 
     public void AddItem(IAbility item) => m_inventory.Add(item);

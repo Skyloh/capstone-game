@@ -15,6 +15,7 @@ namespace CombatSystem.View
         void PlayAttack();
         void PlayStatus(Status status);
         void PlayDead();
+        void PlayIdle();
         void UpdateHp(int max, int current, int difference);
         void Highlight();
         void Unhighlight();
