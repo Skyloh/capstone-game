@@ -9,7 +9,7 @@ public class PotionItem : AAbility
         SetAbilityData(new()
         {
             Name = "Potion",
-            Description = "Restores health to 1 ally.",
+            Description = "Restores health to 1 ally, removing statuses.",
             RequiredTargets = AbilityUtils.SingleAlly(),
             TargetCriteria = SelectionFlags.Ally | SelectionFlags.Alive,
             RequiredMetadata = AbilityUtils.EmptyMetadata()
@@ -23,6 +23,9 @@ public class PotionItem : AAbility
 
         var health_module = GetModuleOrError<HealthModule>(target);
         health_module.ChangeHealth(-AbilityUtils.CalculateDamage(30, 50)); // - is because changehealth takes a DECREASE value. Flipping it makes it heal.
+
+        var stat_mod = GetModuleOrError<StatusModule>(target);
+        stat_mod.RemoveAllStatuses();
 
         EffectManager.DoEffectOn(unit_index_2, team_index_2, "heart", 1f, 2f);
         AudioManager.PlaySFX("heal");

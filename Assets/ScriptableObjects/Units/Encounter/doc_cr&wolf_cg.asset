@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51384c89f900bb741ae89f683dfbfed9, type: 3}
-  m_Name: doc_cr&docx2
+  m_Name: doc_cr&wolf_cg
   m_EditorClassIdentifier: 
   m_enemyBrainMap:
   - key: {fileID: 11400000, guid: 29ee9cd6081e58b4b9a365031d8f7817, type: 2}
     value: {fileID: 11400000, guid: b1b50303500281a4288499d72f9125bb, type: 2}
-  - key: {fileID: 11400000, guid: fc1900daf48494d4b8a094329eaf7907, type: 2}
-    value: {fileID: 11400000, guid: d117811732d13c04f9397f573284e941, type: 2}
-  - key: {fileID: 11400000, guid: fc1900daf48494d4b8a094329eaf7907, type: 2}
-    value: {fileID: 11400000, guid: d117811732d13c04f9397f573284e941, type: 2}
+  - key: {fileID: 11400000, guid: 0c919808621aecd4cb8cb165e5d219d0, type: 2}
+    value: {fileID: 11400000, guid: 0a2155a5cc0d83142b4bf44bb390048f, type: 2}

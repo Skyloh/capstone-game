@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 70bf660a9a636244f941ae0c2124787b, type: 3}
-  m_Name: DoctorEnemy_C_r
+  m_Name: WolfEnemy_C_g
   m_EditorClassIdentifier: 
-  m_name: Doctor_CHALLENGE_r
-  m_maxHealth: 350
+  m_name: Zombie Wolf
+  m_maxHealth: 450
   m_abilities:
-  - EnemyMalpracticeAbility
-  - EnemyExperiShotAbility
-  - EnemyDefibAbility
-  portrait: {fileID: 21300000, guid: 57b34f7d1b894cb4499075772cd84f16, type: 3}
+  - EnemyGashAbility
+  - EnemyMultiAttackAbility
+  - EnemyMiasmaBreathAbility
+  portrait: {fileID: 21300000, guid: 51e04913b848fef48b584232cdc85a5d, type: 3}
   characterDescription: 
-  prefab: {fileID: 4084129220788662971, guid: 9f829e1fa3d25e1469cf217b9ed4048b, type: 3}
-  m_affinityBarSlotCount: 9
+  prefab: {fileID: 7652953241665996659, guid: a25d292470d191940a110d3a47825445, type: 3}
+  m_affinityBarSlotCount: 7

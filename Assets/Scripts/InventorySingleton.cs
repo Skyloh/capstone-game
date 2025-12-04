@@ -28,7 +28,7 @@ public class InventorySingleton : MonoBehaviour
         m_inventory.Add(new SyringeItem());
         m_inventory.Add(new ReviveItem());
         m_inventory.Add(new PotionItem());
-        m_inventory.Add(new ReviveItem());
+        m_inventory.Add(new PotionItem());
 
         for (int i = 0; i < m_inventory.Count; i++)
         {

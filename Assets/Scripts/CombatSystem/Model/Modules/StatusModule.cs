@@ -50,6 +50,16 @@ public class StatusModule : AModule
         }
     }
 
+    public void RemoveAllStatuses()
+    {
+        var list = new List<Status>(m_statusDurationMap.Keys);
+
+        foreach (Status status in list)
+        {
+            RemoveStatus(status);
+        }
+    }
+
     private void RemoveStatus(Status status, int decrement_amount = 0)
     {
         int duration_remaining = m_statusDurationMap[status];

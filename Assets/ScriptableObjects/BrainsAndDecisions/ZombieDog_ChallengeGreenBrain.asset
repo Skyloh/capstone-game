@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7207177d18ab99e45aeaafc0be244632, type: 3}
-  m_Name: Doctor_ChallengeRedBrain
+  m_Name: ZombieDog_ChallengeGreenBrain
   m_EditorClassIdentifier: 
   m_branches:
-  - key: {fileID: 11400000, guid: 83200ac80329f984d877088f7ca73ef8, type: 2}
-    value: EnemyMalpracticeAbility
+  - key: {fileID: 11400000, guid: 431b0d67ae16b704fa4e18851cc928a2, type: 2}
+    value: EnemyMiasmaBreathAbility
   - key: {fileID: 11400000, guid: f279a4fcf095ce345aade887b8cbf7c0, type: 2}
-    value: EnemyExperiShotAbility
+    value: EnemyGashAbility
   m_randomFallbackAbilities:
-  - EnemyDefibAbility
+  - EnemyMultiAttackAbility
