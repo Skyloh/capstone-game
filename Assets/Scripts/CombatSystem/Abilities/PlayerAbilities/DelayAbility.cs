@@ -11,7 +11,9 @@ public class DelayAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Delay",
-            Description = "Move up to 3 elements to the back of the element sequence.",
+            Description =
+                "Move up to 3 elements to the back of the sequence.\n" +
+                "Use ← → to navigate affinities, press Enter to select, then click Confirm.",
             RequiredTargets = AbilityUtils.SingleEnemy(), // targets 1 enemy unit
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
