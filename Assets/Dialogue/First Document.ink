@@ -1,11 +1,17 @@
 READING DOCUMENT
 # speaker:Flux
-Flux: What … they were trying to create some elite level soldiers at this facility. Sunder at your time with the organization did you ever hear about elite new-system soldiers.
+Flux: They… were trying to manufacture elites here? Sunder, do you know anything about this?
+
 # speaker:Sunder
-Sunder: Hmm … not that I recall all of them were old-systems, in fact the reason I was rejected is because I was new-system so I have no idea what they mean by making new-system users into elite fighting soldiers.
+Sunder:  … that's not right, new-systems are forbidden from becoming elites, what’s going on here?
+
 # speaker:Flux
-Flux: Well it seems that regardless of what their goal was it was a failure given that you have never heard of a new-system elite soldier.
+Flux: Must have failed. Never heard of a new-system elite.
+
 # speaker:Nevaeh
-Nevaeh : Thank the gods that they failed. “Help the new-system sapients be helpful in society’s eyes” . Why would they even write that in a scientific paper that's disgusting implying that we are only a hindrance or stain in society is awful.
+Nevaeh : Thank the gods that they failed. “Help the new-system folk be helpful in society’s eyes”.
+
+Tsk. Are we just dead-weight mules to them? How awful..
+
 # speaker:Ambyss
-Ambyss: You sapients are so weird.
+Ambyss: You folk are so weird.

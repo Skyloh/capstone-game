@@ -1,9 +1,14 @@
 Read Document
 
-Nevaeh: Wow, that's awful. I hope they were able to fix the lack of autonomy because I don't think it's worth using a serum like that if it means you lose all semblance of yourself.
+# speaker:Nevaeh
+That's horrific. What's the point of the serum if you lose yourself completely?
 
-Sunder: Yeah I mean it's definitely a double edge sword because although to some extent the organization generals would like the soldiers to do exactly as they say. A lot of the time soldiers need to be able to make very difficult calls and if one isn't able to do that then they could be more of a hindrance.
+# speaker:Sunder
+I’m with you, even the organization would see the problem. Can't have soldiers that can't think for themselves when things go sideways.
 
-Ambyss: That's the same subject we saw earlier. I wonder if this was written before or after the diary?
+# speaker:Ambyss
+Wait, isn't that the same subject from the diary? When was this written?
 
-Flux: Realistically they were probably written around the same time but you do bring up a good point on how these pages ended up spread everywhere.
+# speaker:Flux
+Probably around the same time. Strange how these documents ended up scattered everywhere though.
+

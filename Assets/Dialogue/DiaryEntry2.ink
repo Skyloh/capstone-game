@@ -1,23 +1,34 @@
 Read Document
 
-Ambyss: This one seems to be different then the others we have seen. I wonder why it was written onto a smaller piece of paper and it's written by someone other than Doctor Ashburn.
+# speaker:Ambyss
+This one's different - smaller paper, different handwriting. Why wouldn't Dr. Ashburn write it?
 
-Nevaeh: What I think is most interesting is that if we are to believe this paper that they have made it so this serum affects both new-system and old-system users which likely means that there isn't a large difference between us genealogically.
+# speaker:Nevaeh
+WAIT
 
-Flux: While I do like your optimism I don't think this necessarily proves anything yet though it is a start because people could very easily argue that it's just not the gene that makes “you guys closer to monsters”.
+Did you catch that? It works on *both* systems. If the same serum affects us all, maybe we're not so different after all.
 
-Nevaeh: Yeah that's true but it's good to know that at the very least if all of this research were to get out it wouldn't exclusively impact new-system users.
+# speaker:Flux
+Maybe. But folk will just say it's some other gene that makes new-system users "closer to monsters." This likely won't prove much yet.
 
-Sunder: Yeah it's true it won't impact new-system users exclusively at least hopefully who knows what the organization would tell the people. Regardless I don't think this should be the way that we solve the war if we can at all help it. Simply giving too much power to a person would make anyone go mad.
+# speaker:Nevaeh
+True... at least if this gets out, it won't just be our problem anymore.
 
-(Play a loud Monster growl)
+# speaker:Sunder
+If the organization wanted to, they'd spin it however they pleased. 
+But that ain't even the real issue - givin' anyone this kinda power is dangerous. Makes 'em lose their damn minds.
 
-…
+(A deafening roar echoes through the chamber)
 
-Ambyss: Woah that stunned me for a second!
+# speaker:Ambyss
+W-what was that?!
 
-Sunder: I think we should probably head out.
+# speaker:Sunder
+Time to go.
 
-Flux: I think at this point we are too far in and clearly the dungeon boss knows we are here and it's probably best if we get the jump on them instead of the other way around.
+# speaker:Flux
+No. We're too deep in. Whatever's down here knows we're coming - better we control when we meet it.
 
-Sunder: FLUX LOOK OUT!!!!
+# speaker:Sunder
+FLUX, LOOK OUT!
+(Boss encounter: Vercheur begins)

@@ -1,21 +1,40 @@
 Read Doc
 
-Ambyss: Wow Malignants I’ve never heard that one before. This Ashburn guy seems to have a lot of hate in his heart. First you guys now me.
+# speaker:Ambyss
+ Wow Malignants; I’ve never heard that one before.
+ 
+ Ugh.. What a petulant man.
+ 
+  What did I do?
 
 (The party looks at each other)
 
-Sunder: Yeah I mean we love you Ambyss but it feels like that's actually very justified. I mean you “malignants” are what we have been fighting this whole time. 
+# speaker:Sunder
+No offense, but we’ve been fighting against "malignants" this entire time Ambyss. 
 
-Ambyss: About that all of the monsters we have been fighting throughout the dungeon have felt really odd to me but I can't quite seem to place my finger on why. 
+Fact is we doin' dat now.
 
-Flux: Sunder are you sure you haven't heard of something about OBD because it seems according to this guys diary that they did have a breakthrough and succeeded.
+# speaker:Ambyss
+Hmm, these monsters don’t really seem familiar to me. I can’t put my finger on it, but something’s off about them 
 
-Sunder: They might have succeeded but the fact that this place is currently run over with monsters and there are shredded documents all over this hospital I don't think their success made it out of this hospital.
+# speaker:Flux
+According to this, it seems like they might have figured something out. 
 
-Nevaeh: We should probably destroy all of his research if it hasn't been destroyed already or we risk all of the new-system users being forced to become soldiers.
+Sunder, are you certain that you haven’t heard about OBD?
 
-Sunder: I mean that is one way that we could gain respect though if all new system users are elite soldiers then we can no longer be seen as a potential burden to society.
+# speaker:Sunder
+I don’t reckon, but judging from all these monsters breathing down my neck, I don’t think it ever saw the light of day.
 
-Nevaeh: No. I don't want to live in a world where all new-system users are required to be  soldiers or be shunned. We shouldn't be judged for how we were born.
+# speaker:Nevaeh
+ Well, let’s make sure it stays that way. Flux, let's make sure we’re the last ones that know of this.
 
-Sunder: Yeah I guess you're right.
+# speaker:Sunder
+ Perhaps if we became new-system elites, we could gain the respect we deserve to stop being viewed as burdens.
+
+# speaker:Nevaeh
+ No. I don't want to live in a world where all new-system users are required to be  tools.
+ 
+ We shouldn't be judged for how we were born.
+
+# speaker:Sunder
+Tsk
