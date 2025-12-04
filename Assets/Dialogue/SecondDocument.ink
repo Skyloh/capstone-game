@@ -1,21 +1,28 @@
 Read Doc
 
 # speaker:Ambyss
- Wow Malignants; I’ve never heard that one before.
+ Wow, Malignants; I’ve never heard that one before.
  
- Ugh.. What a petulant man.
+ Ugh.. What a petulant man...
  
-  What did I do?
-
-(The party looks at each other)
+  What did I ever do?
 
 # speaker:Sunder
-No offense, but we’ve been fighting against "malignants" this entire time Ambyss. 
+...
+
+# speaker:Flux
+...
+
+# speaker:Nevaeh
+...
+
+# speaker:Sunder
+No offense, but we been fightin' against "malignants" this entire time Ambyss. 
 
 Fact is we doin' dat now.
 
 # speaker:Ambyss
-Hmm, these monsters don’t really seem familiar to me. I can’t put my finger on it, but something’s off about them 
+Hmm... these monsters don’t really seem familiar to me. I can’t put my finger on it, but something’s off about them.
 
 # speaker:Flux
 According to this, it seems like they might have figured something out. 
@@ -37,4 +44,4 @@ I don’t reckon, but judging from all these monsters breathing down my neck, I 
  We shouldn't be judged for how we were born.
 
 # speaker:Sunder
-Tsk
+Tsk.

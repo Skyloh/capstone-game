@@ -1,9 +1,0 @@
-I am suffering.
-
-    * Yeah...
-        Help.
-    * Alrighty then.
-        Oh alright...
-
-- Bye...
-    -> END
