@@ -26,7 +26,7 @@ public class HueShiftAbility : AAbility
         var (team_index, unit_index) = data.UserTeamUnitIndex;
         var user = model.GetUnitByIndex(team_index, unit_index);
 
-        AffinityType weapon_element = GetModuleOrError<AffinityModule>(user).GetRawWeaponAffinity();
+        AffinityType weapon_element = GetModuleOrError<AffinityModule>(user).GetWeaponAffinity();
 
         string aiti_entry = data.ActionMetadata[MetadataConstants.AFF_INDEX_TARGET_INDEX];
         var parsed_data = AbilityUtils.ParseAffinityIndexTargetIndexString(aiti_entry);

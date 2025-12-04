@@ -35,7 +35,7 @@ public class MainMenuController : MonoBehaviour
     private void Play()
     {
         Debug.Log("Play pressed");
-        SceneManager.LoadScene("NewRoomTest");
+        SceneManager.LoadScene("HospitalFloor1");
     }
 
     private void Settings()

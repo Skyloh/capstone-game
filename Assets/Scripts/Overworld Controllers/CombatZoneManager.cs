@@ -122,20 +122,14 @@ public class CombatZoneManager : MonoBehaviour
         // now try every zone and roll for an encounter
         foreach (var zone in list)
         {
-            // include a reductive scalar if we were just in an combat
-            float scalar;
             if (s_scalerCountRemaining > 0)
             {
-                scalar = m_chanceScalar;
                 s_scalerCountRemaining--; // tick down the counter
-            }
-            else
-            {
-                scalar = 1f;
+                continue;
             }
 
             // test and roll
-            if (zone.Roll(scalar))
+            if (zone.Roll())
             {
                 s_scalerCountRemaining = m_scalerCount;
                 StartCombat(zone.GetEncounter());

@@ -43,13 +43,10 @@ public class CombatZone
     /// with the given scalar.
     /// </summary>
     /// <returns></returns>
-    public bool Roll(float scalar_modifier)
+    public bool Roll()
     {
         float value = Random.Range(0f, 1f);
-
-        Debug.Log("Rolled " + value + ", modified by " + scalar_modifier + " to " + value / scalar_modifier);
-
-        return value / scalar_modifier < m_encounterChance;
+        return value < m_encounterChance;
     }
 
     public EncounterSO GetEncounter() => m_encounterObject;
