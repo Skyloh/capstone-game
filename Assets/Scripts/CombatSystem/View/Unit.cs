@@ -22,6 +22,8 @@ namespace CombatSystem.View
         [SerializeField]
         private Transform animationParent;
 
+        private Color originalTint;
+
         private SpriteRenderer unitRenderer;
         private SpriteRenderer UnitRenderer
         {
@@ -83,7 +85,41 @@ namespace CombatSystem.View
 
             character = Instantiate(unit.prefab, animationParent);
 
+            originalTint = Color.white;
+            CheckDoChallengeTint(unit.Name, character);
+
             healthNumber.text = unit.MaxHealth.ToString();
+        }
+
+        private void CheckDoChallengeTint(string name, GameObject unit)
+        {
+            if (!name.Contains("CHALLENGE")) return;
+
+            char last = name[^1];
+            var renderer = unit.GetComponent<SpriteRenderer>();
+
+            Color tint;
+            switch (last)
+            {
+                case 'r':
+                    tint = Color.red;
+                    break;
+                case 'g':
+                    tint = Color.green;
+                    break;
+                case 'y':
+                    tint = Color.yellow;
+                    break;
+                case 'b':
+                    tint = Color.blue;
+                    break;
+                default:
+                    tint = Color.white;
+                    break;
+            }
+
+            originalTint = tint;
+            renderer.color = tint;
         }
 
         public ACombatUnitSO GetUnitDefinition()
@@ -194,12 +230,12 @@ namespace CombatSystem.View
 
         public void EnableUnselectableFilter()
         {
-            UnitRenderer.color = Color.Lerp(Color.white, Color.black, 0.5f);
+            UnitRenderer.color = Color.Lerp(originalTint, Color.black, 0.5f);
         }
 
         public void DisableUnselectableFilter()
         {
-            UnitRenderer.color = Color.white;
+            UnitRenderer.color = originalTint;
         }
     }
 }
