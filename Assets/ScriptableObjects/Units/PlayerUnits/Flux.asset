@@ -17,7 +17,7 @@ MonoBehaviour:
   m_abilities:
   - PaintBucketAbility
   - StaticShowerAbility
-  - AnalyzeAbility
+  - HueShiftAbility
   - EnvenomAbility
   portrait: {fileID: 21300000, guid: 621f1bc3e2c3007418871d7bc65a3b9d, type: 3}
   characterDescription: 

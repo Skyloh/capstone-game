@@ -15,9 +15,9 @@ MonoBehaviour:
   m_name: Navaeh
   m_maxHealth: 40
   m_abilities:
+  - AttackAbility
   - MonochromeAbility
-  - ProtectAbility
-  - TradeWeaponAbility
+  - AnalyzeAbility
   - GoadAbility
   portrait: {fileID: 21300000, guid: 6ed0c95cd69b35f4aaeeb69c92bb483f, type: 3}
   characterDescription: 

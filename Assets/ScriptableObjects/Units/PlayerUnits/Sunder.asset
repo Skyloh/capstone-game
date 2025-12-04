@@ -17,7 +17,7 @@ MonoBehaviour:
   m_abilities:
   - BlindsideAbility
   - BurningHandsAbility
-  - SweepAbility
+  - InfuseAbility
   - SpraypaintAbility
   portrait: {fileID: 21300000, guid: 362267edb25ced3409484c01c6dbbdb8, type: 3}
   characterDescription: 

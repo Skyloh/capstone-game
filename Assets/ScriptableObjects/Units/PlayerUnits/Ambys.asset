@@ -15,7 +15,7 @@ MonoBehaviour:
   m_name: Ambys
   m_maxHealth: 30
   m_abilities:
-  - DebugSpamAbility
+  - SweepAbility
   - SwapAbility
   - InstillAbility
   - DelayAbility
