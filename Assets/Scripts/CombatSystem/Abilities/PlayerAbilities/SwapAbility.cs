@@ -9,7 +9,10 @@ public class SwapAbility : AAbility
         SetAbilityData(new()
         {
             Name = "Swap",
-            Description = "Swap the positions of 2 elements between up to 2 enemies.",
+            Description =
+                "Swap the positions of 2 elements between up to 2 enemies.\n" +
+                "Click Confirm, choose the first element with ← → and press Enter.\n" +
+                "Then choose the second element with ← → and press Enter again.",
             RequiredTargets = new Dictionary<int, (int min, int max)> { { 1, (1, 2) } }, // targets 1-2 enemy unit(s)
             TargetCriteria = SelectionFlags.Enemy | SelectionFlags.Alive | SelectionFlags.HasAffinityBarRemaining,
             RequiredMetadata = new List<string>()
