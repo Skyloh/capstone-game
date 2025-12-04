@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -131,6 +132,8 @@ namespace CombatSystem.View
 
             // offset the reported index by the amount of None items we removed, since
             // the model keeps track of them internally
+            left.transform.DOPunchScale(new Vector3(0.5f,0.5f,1), .1f, 0, 1);
+            right.transform.DOPunchScale(new Vector3(0.5f,0.5f,1), .1f, 0, 1);
             requests.Dequeue().callback(index + noneIndexOffset);
             if (requests.Count == 0)
             {
