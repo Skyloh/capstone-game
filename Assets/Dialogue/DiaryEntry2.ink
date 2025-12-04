@@ -1,7 +1,7 @@
 Read Document
 
 # speaker:Ambyss
-This one's different - smaller paper, different handwriting. Why wouldn't Dr. Ashburn write it?
+This one's different - seems to be written by a doctor named Vercheur. Why wouldn't Dr. Ashburn write it?
 
 # speaker:Nevaeh
 WAIT!
