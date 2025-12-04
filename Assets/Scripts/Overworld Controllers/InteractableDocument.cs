@@ -33,6 +33,8 @@ public class InteractableDocument : MonoBehaviour
     [SerializeField]
     private bool playFollowUpOnlyOnce = true;
 
+    [SerializeField] private EncounterSO m_initiatedCombat;
+
     private void Start()
     {
         // Snap to grid like NPCs do
@@ -76,11 +78,26 @@ public class InteractableDocument : MonoBehaviour
         else
         {
             documentManager.OpenDocument(documentTitle, documentContent, followUpDialogueInk, followUpDialogueID);
+            DialogueManager.OnDialogueComplete += CheckRunCombat;
         }
 
         if (canOnlyReadOnce)
         {
             hasBeenRead = true;
+        }
+    }
+
+    private void CheckRunCombat()
+    {
+        if (m_initiatedCombat != null)
+        {
+            var combat_kickoff = FindFirstObjectByType<CombatZoneManager>();
+            if (combat_kickoff == null)
+            {
+                Debug.LogError("CombatZoneManager not found in scene!");
+            }
+
+            combat_kickoff.StartCombat(m_initiatedCombat);
         }
     }
 }
