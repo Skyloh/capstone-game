@@ -137,6 +137,11 @@ namespace CombatSystem.View
             character.GetComponent<Animator>().Play("dead");
         }
 
+        public void PlayIdle()
+        {
+            character.GetComponent<Animator>().Play("idle");
+        }
+
         public Color highlightColor = Color.yellow;
         public Color focusColor = Color.white;
         public void Focus()
@@ -170,7 +175,7 @@ namespace CombatSystem.View
             {
                 Debug.unityLogger.Log("Health slider not set " + name);
             }
-            if(current == 0)
+            if(current <= 0)
             {
                 PlayDead();
                 healthSlider.gameObject.SetActive(false);
@@ -178,6 +183,7 @@ namespace CombatSystem.View
             }
             else
             {
+                PlayIdle();
                 healthSlider.gameObject.SetActive(true);
                 healthNumber.gameObject.SetActive(true);
             }

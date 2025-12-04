@@ -32,7 +32,8 @@ public class InventorySingleton : MonoBehaviour
         m_inventory.Add(new PotionItem());
         m_inventory.Add(new PotionItem());
         m_inventory.Add(new PotionItem());
-        
+        m_inventory.Add(new ReviveItem());
+
         for (int i = 0; i < m_inventory.Count; i++)
         {
             Debug.Log($"[InventorySingleton] Slot {i}: {m_inventory[i].GetAbilityData().Name}");
