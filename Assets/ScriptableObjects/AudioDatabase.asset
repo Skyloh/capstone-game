@@ -14,28 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_itemEntries:
   - key: attack
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: 86e051e09376cd343918e63d0c24402c, type: 3}
   - key: slice
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: e6df1b7268f27c2409a25149f6ce6d8c, type: 3}
   - key: stab
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: cd366f2bd569e4d49b89e5b6545ec0b0, type: 3}
   - key: break
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: 71334dcd7dcf3a04ba3527682356b4e9, type: 3}
   - key: ailment
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: c97797ae2d62033499050955bbaa0c36, type: 3}
   - key: protect
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: a698a41b67c8c99459711889431db552, type: 3}
   - key: fire_crackle
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: 1b62c3582aaf0a04baf1e35faa123193, type: 3}
   - key: aff_swap
     value: {fileID: 8300000, guid: 0736ac8b0c34b894ebead405a36abbd8, type: 3}
   - key: fire_impact
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: e18e29319b447ad459ad5e9e8f9c5fda, type: 3}
   - key: storm_impact
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: b8df6ce378344a247b6d1e1835ada3be, type: 3}
   - key: magic_poof
     value: {fileID: 8300000, guid: a9e40a5a5fa2c3c49831e9fe75694084, type: 3}
   - key: heal
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: fbbb916c5175adf45bff321ab6f8ef87, type: 3}
   - key: escape_fail
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: 6d96dcee8d169bf4485e9995c6bc40e5, type: 3}
