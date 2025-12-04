@@ -14,7 +14,7 @@ namespace CombatSystem.View
         [SerializeField] private CombatDataSO runtimeCombatData;
         [SerializeField] private AttackBannerUI attackBannerReference;
         [SerializeField] private HealthChangeDisplayManager healthChangeDisplayManager;
-        
+
 
 
         [Space]
@@ -43,7 +43,7 @@ namespace CombatSystem.View
         private VisualElement enemyInfo;
         private Button itemsButton;
         private ScrollView scrollView;
-        private Label attackLabel; 
+        private Label attackLabel;
         private bool itemsPageOpen = false;
 
         [SerializeField] private StatusUpdater enemyStatusUpdater;
@@ -53,7 +53,7 @@ namespace CombatSystem.View
 
         private IUnitSelector unitSelector;
         [SerializeField] private AffinityTargeter affinityTargeter;
-     
+
         private CombatUnit GetPlayerUnit(int player_index)
         {
             if (!combatManager.TrySelectUnit(0, 0, player_index, SelectionFlags.Ally, out var unit))
@@ -80,7 +80,7 @@ namespace CombatSystem.View
             combatManager = GetComponent<CombatManager>();
             unitSelector = GetComponent<UnitSelector>();
             InitializeCombat();
-        
+
 
         }
         public void InitializeCombat(/*probably take some values here at some point*/)
@@ -180,8 +180,8 @@ namespace CombatSystem.View
             unitSelector.EnemyHovered += OnEnemyHovered;
             // DisplayUnit(model.GetTeam(0).GetUnit(0));
             // DisplayUnit(GetPlayerUnit(0));
-            
-            itemsButton = ui.Q<Button>("Items");                     
+
+            itemsButton = ui.Q<Button>("Items");
             itemsButton.RegisterCallback<ClickEvent>(OnItemsPressed);
             itemsButton.RegisterCallback<MouseOverEvent>(
                 (moe) =>
@@ -414,7 +414,7 @@ namespace CombatSystem.View
                     StartActionSelection(previous);
                     ShowFleeButton();
                     break;
-                case BattleStates.ItemsMenu:  
+                case BattleStates.ItemsMenu:
                     break;
                 case BattleStates.EnemyTurn:
                     StartEnemyTurn(previous);
@@ -446,7 +446,7 @@ namespace CombatSystem.View
                     CleanUpActionSelection(next);
                     HideFleeButton();
                     break;
-                case BattleStates.ItemsMenu:  
+                case BattleStates.ItemsMenu:
                     scrollView.style.display = DisplayStyle.None;
                     break;
 
@@ -737,7 +737,7 @@ namespace CombatSystem.View
             itemsButton.style.display = DisplayStyle.Flex;
             itemsButton.SetEnabled(true);
 
-           
+
 
             if (selectedPlayer == -1)
             {
@@ -774,7 +774,7 @@ namespace CombatSystem.View
         private void CleanUpActionSelection(BattleStates next)
         {
             backToUnits.UnregisterCallback<ClickEvent>(TriggerUnitSelection);
-            itemsButton.style.display = DisplayStyle.None; 
+            itemsButton.style.display = DisplayStyle.None;
             for (int i = 0; i < 4; i++)
             {
                 attackCallbacks[i] = null;
@@ -838,6 +838,7 @@ namespace CombatSystem.View
                     confirmCallback = (ce) =>
                     {
                         HideConfirmButton();
+                        metadata_index = actionData.Action.GetAbilityData().RequiredMetadata.Count;
                         affinityTargeter.CancelRequests();
                         confirmCallback = null;
                         HideConfirmButton();
@@ -957,7 +958,7 @@ namespace CombatSystem.View
             {
                 action.style.display = DisplayStyle.None;
             }
-            
+
             if (itemsButton != null)
                 itemsButton.style.display = DisplayStyle.None;
         }
@@ -968,7 +969,7 @@ namespace CombatSystem.View
             {
                 action.style.display = DisplayStyle.Flex;
             }
-            
+
             if (itemsButton != null)
                 itemsButton.style.display = DisplayStyle.Flex;
         }
@@ -1008,8 +1009,8 @@ namespace CombatSystem.View
         {
             fleeButton.style.display = DisplayStyle.Flex;
         }
-        
-        
+
+
         private void OnItemsPressed(ClickEvent evt)
         {
             TriggerState(BattleStates.ItemsMenu);
@@ -1047,7 +1048,7 @@ namespace CombatSystem.View
                 scrollView.Add(b);
 
                 b.RegisterCallback<MouseOverEvent>(
-                    (moe) => 
+                    (moe) =>
                     UpdateActionDescriptionRaw(moe, "Choose an item:\n\n" + ability.GetAbilityData().Description));
             }
 
