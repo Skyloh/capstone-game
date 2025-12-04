@@ -28,13 +28,13 @@ MonoBehaviour:
   - key: fire_crackle
     value: {fileID: 0}
   - key: aff_swap
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: 0736ac8b0c34b894ebead405a36abbd8, type: 3}
   - key: fire_impact
     value: {fileID: 0}
   - key: storm_impact
     value: {fileID: 0}
   - key: magic_poof
-    value: {fileID: 0}
+    value: {fileID: 8300000, guid: a9e40a5a5fa2c3c49831e9fe75694084, type: 3}
   - key: heal
     value: {fileID: 0}
   - key: escape_fail
