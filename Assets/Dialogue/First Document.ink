@@ -1,4 +1,3 @@
-READING DOCUMENT
 # speaker:Flux
 They… were trying to manufacture elites here? Sunder, do you know anything about this?
 

@@ -1,5 +1,3 @@
-Read Document
-
 # speaker:Nevaeh
 That's horrific. What's the point of the serum if you lose yourself completely?
 

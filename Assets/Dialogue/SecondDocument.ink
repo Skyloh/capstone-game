@@ -1,4 +1,3 @@
-Read Doc
 
 # speaker:Ambyss
  Wow, Malignants; I’ve never heard that one before.
